@@ -1,0 +1,244 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CourseStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum LessonStatus {
+  LOCKED
+  AVAILABLE
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum MemoryType {
+  MISCONCEPTION
+  WEAKNESS
+  STRENGTH
+  PREFERENCE
+  LEARNING_NOTE
+}
+
+enum AiOperation {
+  COURSE_GENERATION
+  LESSON_GENERATION
+  TUTOR
+  MEMORY_EXTRACTION
+  EMBEDDING
+}
+
+enum AiRequestStatus {
+  SUCCESS
+  ERROR
+}
+
+model Course {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  goal        String
+  status      CourseStatus @default(DRAFT)
+
+  // The original prompt used to create the course.
+  prompt String
+
+  // Optional persistent instructions specific to this course.
+  instructions String?
+
+  modules Module[]
+
+  courseMemories CourseMemory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Module {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  objective   String?
+
+  // Determines module position inside the course.
+  order Int
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessons Lesson[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([courseId, order])
+  @@index([courseId])
+}
+
+model Lesson {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+
+  // What the student should know after this lesson.
+  objectives String[]
+
+  // Concepts the lesson is expected to teach.
+  concepts String[]
+
+  order Int
+
+  status LessonStatus @default(LOCKED)
+
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  // Generated only when the learner actually opens the lesson.
+  content LessonContent?
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  conversations  Conversation[]
+  courseMemories CourseMemory[]
+
+  @@unique([moduleId, order])
+  @@index([moduleId])
+}
+
+model LessonContent {
+  id String @id @default(cuid())
+
+  lessonId String @unique
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  // Initially we'll store generated structured lesson data as JSON.
+  // Later we can normalize pieces that deserve their own tables.
+  content Json
+
+  // Useful when prompts/models evolve.
+  generationVersion Int @default(1)
+
+  generatedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Conversation {
+  id String @id @default(cuid())
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([lessonId])
+}
+
+model Message {
+  id String @id @default(cuid())
+
+  role    MessageRole
+  content String
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model CourseMemory {
+  id String @id @default(cuid())
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessonId String?
+  lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  type MemoryType
+
+  content String
+
+  /**
+   * 1-5.
+   * Later this helps the context builder decide which memories
+   * deserve prompt space.
+   */
+  importance Int @default(3)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([lessonId])
+  @@index([courseId, type])
+}
+
+model AiUsage {
+  id String @id @default(cuid())
+
+  operation AiOperation
+  status    AiRequestStatus
+
+  model String
+
+  // OpenAI response/request identifier when available.
+  providerResponseId String?
+
+  // Exact input we sent.
+  input Json?
+
+  // Exact textual output when appropriate.
+  output String?
+
+  inputTokens  Int?
+  outputTokens Int?
+  totalTokens  Int?
+
+  // Useful later for cached-input analysis.
+  cachedInputTokens Int?
+
+  // Reasoning-token usage when reported by the model.
+  reasoningTokens Int?
+
+  // Wall-clock API request duration.
+  durationMs Int?
+
+  errorMessage String?
+
+  // Optional links back into Dana.
+  courseId       String?
+  lessonId       String?
+  conversationId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([operation, createdAt])
+  @@index([model, createdAt])
+  @@index([courseId, createdAt])
+  @@index([lessonId, createdAt])
+}

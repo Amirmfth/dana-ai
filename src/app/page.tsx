@@ -1,69 +1,112 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+import { createCourseAction } from "@/app/actions/courses";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { prisma } from "@/lib/db/prisma";
+
+export default async function HomePage() {
+  const courses = await prisma.course.findMany({
+    orderBy: { updatedAt: "desc" },
+    include: { modules: { include: { lessons: true } } },
+  });
+
+  const lessonCount = courses.reduce(
+    (total, course) => total + course.modules.reduce((sum, module) => sum + module.lessons.length, 0),
+    0,
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <main className="min-h-dvh bg-neutral-50 text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50">
+      <div className="mx-auto max-w-6xl px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
+        <header className="flex items-center justify-between gap-4">
+          <Link href="/" className="rounded-lg text-sm font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:focus-visible:outline-white">
+            Dana AI
+          </Link>
+          <ThemeToggle />
+        </header>
+
+        <section className="grid gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.78fr)] lg:items-center lg:py-20">
+          <div className="max-w-2xl">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+              Your learning studio
+            </p>
+            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+              Learn the thing you have been meaning to learn.
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+              Describe a goal and Dana turns it into a focused course, then stays with you in every lesson when you need another explanation.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3 text-sm text-neutral-600 dark:text-neutral-300">
+              <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 dark:border-neutral-800 dark:bg-neutral-900">Structured roadmap</span>
+              <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 dark:border-neutral-800 dark:bg-neutral-900">Lesson-aware tutor</span>
+            </div>
+          </div>
+
+          <form action={createCourseAction} className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7 dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-none">
+            <div className="mb-5">
+              <label htmlFor="learning-goal" className="text-lg font-semibold">Create a course</label>
+              <p id="learning-goal-help" className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+                Be specific about your starting point, goal, and what you want to practice.
+              </p>
+            </div>
+            <textarea
+              id="learning-goal"
+              name="prompt"
+              required
+              minLength={10}
+              rows={6}
+              aria-describedby="learning-goal-help"
+              placeholder="For example: Teach me German from B1 to B2, with grammar, vocabulary, writing, and practical conversation."
+              className="w-full resize-none rounded-2xl border border-neutral-300 bg-white p-4 text-base leading-6 text-neutral-950 outline-none transition placeholder:text-neutral-400 focus:border-neutral-950 focus:ring-2 focus:ring-neutral-950/15 dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-50 dark:placeholder:text-neutral-500 dark:focus:border-white dark:focus:ring-white/20"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs leading-5 text-neutral-500 dark:text-neutral-400">A clear goal creates a more useful plan.</p>
+              <button
+                type="submit"
+                className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 dark:focus-visible:outline-white"
+              >
+                Create course
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section aria-labelledby="courses-heading" className="border-t border-neutral-200 py-10 dark:border-neutral-800 sm:py-14">
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Your library</p>
+              <h2 id="courses-heading" className="mt-1 text-2xl font-semibold tracking-tight">Continue learning</h2>
+            </div>
+            {courses.length > 0 && <p className="text-sm text-neutral-500 dark:text-neutral-400">{courses.length} courses · {lessonCount} lessons</p>}
+          </div>
+
+          {courses.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-neutral-300 bg-white p-8 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
+              Your first course will appear here. Start with a learning goal above.
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {courses.map((course) => {
+                const courseLessonCount = course.modules.reduce((total, module) => total + module.lessons.length, 0);
+
+                return (
+                  <Link
+                    key={course.id}
+                    href={`/courses/${course.id}`}
+                    className="group flex min-h-52 flex-col rounded-2xl border border-neutral-200 bg-white p-6 transition hover:-translate-y-0.5 hover:border-neutral-400 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 motion-reduce:transform-none dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-600 dark:hover:shadow-none dark:focus-visible:outline-white"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Course</p>
+                    <h3 className="mt-3 text-lg font-semibold tracking-tight group-hover:underline group-hover:underline-offset-4">{course.title}</h3>
+                    {course.description && <p className="mt-3 line-clamp-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300">{course.description}</p>}
+                    <p className="mt-auto pt-6 text-sm font-medium text-neutral-500 dark:text-neutral-400">{course.modules.length} modules · {courseLessonCount} lessons</p>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
   );
 }

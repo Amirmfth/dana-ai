@@ -32,7 +32,16 @@ export async function getOrGenerateLesson(
    */
   const context = await buildLessonContext(lessonId);
 
-  const generated = await generateLesson(context);
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    select: { module: { select: { courseId: true } } },
+  });
+
+  if (!lesson) {
+    throw new Error("Lesson not found.");
+  }
+
+  const generated = await generateLesson(context, lesson.module.courseId);
 
   /*
    * Persist it so refreshing/reopening does not invoke OpenAI again.

@@ -16,11 +16,15 @@ function vectorToSql(vector: number[]) {
 export async function embedMemory({
   memoryId,
   content,
+  courseId,
+  lessonId,
 }: {
   memoryId: string;
   content: string;
+  courseId: string;
+  lessonId?: string;
 }) {
-  const embedding = await createEmbedding(content);
+  const embedding = await createEmbedding({ text: content, courseId, lessonId });
 
   const vector = vectorToSql(embedding);
 
@@ -40,7 +44,7 @@ export async function findRelevantMemories({
   query: string;
   limit?: number;
 }): Promise<RelevantMemory[]> {
-  const embedding = await createEmbedding(query);
+  const embedding = await createEmbedding({ text: query, courseId });
 
   const vector = vectorToSql(embedding);
 

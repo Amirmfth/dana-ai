@@ -1,12 +1,14 @@
 import { zodTextFormat } from "openai/helpers/zod";
 
-import { openai } from "@/lib/ai/client";
+import { createTrackedResponse } from "@/lib/ai/tracked-response";
 import { CoursePlan, coursePlanSchema } from "./schemas/course";
 
-export async function generateCoursePlan(
-  userPrompt: string,
-): Promise<CoursePlan> {
-  const response = await openai.responses.parse({
+export async function generateCoursePlan(userPrompt: string): Promise<{
+  plan: CoursePlan;
+  providerResponseId: string;
+}> {
+  const response = await createTrackedResponse({
+    operation: "COURSE_GENERATION",
     model: "gpt-5.6-terra",
 
     reasoning: {
@@ -60,9 +62,8 @@ The resulting curriculum is the persistent roadmap for the course.
     },
   });
 
-  if (!response.output_parsed) {
-    throw new Error("The AI did not return a valid course plan.");
-  }
-
-  return response.output_parsed;
+  return {
+    plan: coursePlanSchema.parse(JSON.parse(response.output_text)),
+    providerResponseId: response.id,
+  };
 }

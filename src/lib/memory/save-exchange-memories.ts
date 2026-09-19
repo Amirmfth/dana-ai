@@ -33,6 +33,7 @@ export async function saveExchangeMemories({
 
   const extracted = await extractMemories({
     lessonId,
+    courseId,
 
     exchange: {
       user: userMessage,
@@ -86,6 +87,8 @@ export async function saveExchangeMemories({
       await embedMemory({
         memoryId: created.id,
         content: memory.content,
+        courseId,
+        lessonId,
       });
     } catch (error) {
       /*

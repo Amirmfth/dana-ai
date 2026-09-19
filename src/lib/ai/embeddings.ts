@@ -1,24 +1,21 @@
-import { openai } from "@/lib/ai/client";
+import { createTrackedEmbedding } from "@/lib/ai/tracked-embedding";
 
-export async function createEmbedding(
-  text: string,
-): Promise<number[]> {
+export async function createEmbedding({
+  text,
+  courseId,
+  lessonId,
+  conversationId,
+}: {
+  text: string;
+  courseId?: string;
+  lessonId?: string;
+  conversationId?: string;
+}): Promise<number[]> {
   const value = text.trim();
 
   if (!value) {
     throw new Error("Cannot embed empty text.");
   }
 
-  const response = await openai.embeddings.create({
-    model: "text-embedding-3-small",
-    input: value,
-  });
-
-  const embedding = response.data[0]?.embedding;
-
-  if (!embedding) {
-    throw new Error("Embedding generation failed.");
-  }
-
-  return embedding;
+  return createTrackedEmbedding({ input: value, courseId, lessonId, conversationId });
 }

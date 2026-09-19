@@ -8,8 +8,7 @@ export async function createCourse(userPrompt: string) {
     throw new Error("Please describe what you want to learn in more detail.");
   }
 
-  const plan = await generateCoursePlan(prompt);
-  console.log(plan)
+  const { plan, providerResponseId } = await generateCoursePlan(prompt);
 
   const course = await prisma.course.create({
     data: {
@@ -50,6 +49,11 @@ export async function createCourse(userPrompt: string) {
         },
       },
     },
+  });
+
+  await prisma.aiUsage.updateMany({
+    where: { providerResponseId },
+    data: { courseId: course.id },
   });
 
   return course;

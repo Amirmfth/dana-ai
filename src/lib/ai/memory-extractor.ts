@@ -1,6 +1,6 @@
 import { zodTextFormat } from "openai/helpers/zod";
 
-import { openai } from "@/lib/ai/client";
+import { createTrackedResponse } from "@/lib/ai/tracked-response";
 import { buildTutorContext } from "@/lib/ai/tutor-context";
 import { memoryExtractionSchema } from "@/lib/ai/schemas/memory";
 
@@ -11,14 +11,17 @@ type Exchange = {
 
 export async function extractMemories({
   lessonId,
+  courseId,
   exchange,
 }: {
   lessonId: string;
+  courseId: string;
   exchange: Exchange;
 }) {
   const lessonContext = await buildTutorContext(lessonId);
 
-  const response = await openai.responses.parse({
+  const response = await createTrackedResponse({
+    operation: "MEMORY_EXTRACTION",
     model: "gpt-5.6-luna",
 
     reasoning: {
@@ -87,7 +90,10 @@ ${exchange.assistant}
     text: {
       format: zodTextFormat(memoryExtractionSchema, "memory_extraction"),
     },
+
+    courseId,
+    lessonId,
   });
 
-  return response.output_parsed?.memories ?? [];
+  return memoryExtractionSchema.parse(JSON.parse(response.output_text)).memories;
 }

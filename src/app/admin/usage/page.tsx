@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { prisma } from "@/lib/db/prisma";
 
 const COST_PER_MILLION_TOKENS = {
@@ -142,6 +144,7 @@ export default async function UsagePage() {
                 Duration
               </th>
               <th className="p-4">Status</th>
+              <th className="p-4"><span className="sr-only">Inspect</span></th>
             </tr>
           </thead>
 
@@ -200,6 +203,15 @@ export default async function UsagePage() {
 
                 <td className="p-4">
                   {item.status}
+                </td>
+
+                <td className="p-4 text-right">
+                  <Link
+                    href={`/admin/usage/${item.id}`}
+                    className="font-medium text-neutral-700 underline underline-offset-4 hover:text-neutral-950"
+                  >
+                    Inspect
+                  </Link>
                 </td>
               </tr>
             ))}

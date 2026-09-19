@@ -1,6 +1,6 @@
 import { zodTextFormat } from "openai/helpers/zod";
 
-import { openai } from "@/lib/ai/client";
+import { createTrackedResponse } from "@/lib/ai/tracked-response";
 import {
   lessonContentSchema,
   type GeneratedLessonContent,
@@ -9,8 +9,10 @@ import type { LessonContext } from "@/lib/ai/lesson-context";
 
 export async function generateLesson(
   context: LessonContext,
+  courseId: string,
 ): Promise<GeneratedLessonContent> {
-  const response = await openai.responses.parse({
+  const response = await createTrackedResponse({
+    operation: "LESSON_GENERATION",
     model: "gpt-5.6-luna",
 
     reasoning: {
@@ -132,11 +134,10 @@ ${JSON.stringify(context, null, 2)}
     text: {
       format: zodTextFormat(lessonContentSchema, "lesson_content"),
     },
+
+    courseId,
+    lessonId: context.currentLesson.id,
   });
 
-  if (!response.output_parsed) {
-    throw new Error("The AI did not return valid lesson content.");
-  }
-
-  return response.output_parsed;
+  return lessonContentSchema.parse(JSON.parse(response.output_text));
 }

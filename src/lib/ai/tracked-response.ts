@@ -26,8 +26,6 @@ type TrackedResponseOptions = {
   conversationId?: string;
 };
 
-type CompletedResponse = Awaited<ReturnType<typeof openai.responses.create>>;
-
 async function saveSuccess({
   response,
   startedAt,

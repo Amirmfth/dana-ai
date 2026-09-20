@@ -41,10 +41,10 @@ export function estimateLessonMinutes(input: EstimateInput) {
 
   const readingMinutes =
     words === null
-      ? 6 + input.objectivesCount * 1.5 + input.conceptsCount * 0.75
-      : words / 180;
+      ? 5 + input.objectivesCount * 1.5 + input.conceptsCount * 0.5
+      : words / 220;
 
-  const practiceMinutes = input.exerciseCount * 1.5;
+  const practiceMinutes = input.exerciseCount * 1;
 
   return Math.max(8, Math.min(90, Math.ceil(readingMinutes + practiceMinutes)));
 }

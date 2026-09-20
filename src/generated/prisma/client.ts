@@ -92,6 +92,21 @@ export type Exercise = Prisma.ExerciseModel
  */
 export type ExerciseAttempt = Prisma.ExerciseAttemptModel
 /**
+ * Model QuizRun
+ * 
+ */
+export type QuizRun = Prisma.QuizRunModel
+/**
+ * Model LearningEvent
+ * 
+ */
+export type LearningEvent = Prisma.LearningEventModel
+/**
+ * Model StudyTime
+ * 
+ */
+export type StudyTime = Prisma.StudyTimeModel
+/**
  * Model AiRequestWindow
  * 
  */

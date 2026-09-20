@@ -123,11 +123,3 @@ ALTER TABLE "ExerciseAttempt"
 
 CREATE INDEX "ExerciseAttempt_quizRunId_createdAt_idx"
   ON "ExerciseAttempt"("quizRunId", "createdAt");
-
-ALTER TABLE "QuizRun" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "LearningEvent" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "StudyTime" ENABLE ROW LEVEL SECURITY;
-
-REVOKE ALL ON TABLE "QuizRun" FROM anon, authenticated;
-REVOKE ALL ON TABLE "LearningEvent" FROM anon, authenticated;
-REVOKE ALL ON TABLE "StudyTime" FROM anon, authenticated;

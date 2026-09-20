@@ -5,11 +5,13 @@ export async function createEmbedding({
   courseId,
   lessonId,
   conversationId,
+  userId,
 }: {
   text: string;
   courseId?: string;
   lessonId?: string;
   conversationId?: string;
+  userId?: string;
 }): Promise<number[]> {
   const value = text.trim();
 
@@ -17,5 +19,11 @@ export async function createEmbedding({
     throw new Error("Cannot embed empty text.");
   }
 
-  return createTrackedEmbedding({ input: value, courseId, lessonId, conversationId });
+  return createTrackedEmbedding({
+    input: value,
+    courseId,
+    lessonId,
+    conversationId,
+    userId,
+  });
 }

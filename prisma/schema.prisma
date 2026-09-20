@@ -153,7 +153,6 @@ model Course {
   studyTime            StudyTime[]
   curriculumRevisions  CurriculumRevision[]
   assessments          Assessment[]
-  assessments          Assessment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -173,6 +172,7 @@ model Module {
 
   lessons              Lesson[]
   curriculumRevisions  CurriculumRevision[]
+  assessments          Assessment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -216,6 +216,7 @@ model Lesson {
   prerequisites        LessonPrerequisite[] @relation("LessonPrerequisites")
   requiredFor          LessonPrerequisite[] @relation("RequiredLessonPrerequisites")
   assessments          Assessment[]
+  assessmentQuestions  AssessmentQuestion[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

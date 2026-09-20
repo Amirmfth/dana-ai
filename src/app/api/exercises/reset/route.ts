@@ -24,7 +24,10 @@ export async function POST(request: NextRequest) {
         id: body.lessonId,
         module: { course: { ownerId: user.id } },
       },
-      select: { id: true },
+      select: {
+        id: true,
+        activeQuizVersionId: true,
+      },
     });
 
     if (!lesson) {
@@ -51,7 +54,18 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const run = await startNewQuizRun(user.id, body.lessonId);
+    if (!lesson.activeQuizVersionId) {
+      return Response.json(
+        { error: "Quiz has not been generated yet." },
+        { status: 409 },
+      );
+    }
+
+    const run = await startNewQuizRun(
+      user.id,
+      body.lessonId,
+      lesson.activeQuizVersionId,
+    );
 
     return Response.json({ success: true, quizRunId: run.id });
   } catch (error) {

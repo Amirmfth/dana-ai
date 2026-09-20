@@ -9,49 +9,36 @@ import {
 import { prisma } from "@/lib/db/prisma";
 
 export async function getOrGenerateLesson(
+  userId: string,
   lessonId: string,
 ): Promise<GeneratedLessonContent> {
-  /*
-   * First check whether this lesson was already generated.
-   */
-  const existing = await prisma.lessonContent.findUnique({
+  const lesson = await prisma.lesson.findFirst({
     where: {
-      lessonId,
+      id: lessonId,
+      status: { not: "LOCKED" },
+      module: { course: { ownerId: userId } },
+    },
+    select: {
+      module: { select: { courseId: true } },
+      content: true,
     },
   });
 
-  if (existing) {
-    return lessonContentSchema.parse(existing.content);
-  }
-
-  /*
-   * No content yet.
-   *
-   * Build the minimum useful context and ask the teaching model
-   * to generate the lesson.
-   */
-  const context = await buildLessonContext(lessonId);
-
-  const lesson = await prisma.lesson.findUnique({
-    where: { id: lessonId },
-    select: { module: { select: { courseId: true } } },
-  });
-
   if (!lesson) {
-    throw new Error("Lesson not found.");
+    throw new Error("Lesson not found or locked.");
   }
 
-  const generated = await generateLesson(context, lesson.module.courseId);
+  if (lesson.content) {
+    return lessonContentSchema.parse(lesson.content.content);
+  }
 
-  /*
-   * Persist it so refreshing/reopening does not invoke OpenAI again.
-   */
+  const context = await buildLessonContext(lessonId);
+  const generated = await generateLesson(context, lesson.module.courseId, userId);
+
   await prisma.lessonContent.create({
     data: {
       lessonId,
-
       content: generated as Prisma.InputJsonValue,
-
       generationVersion: 1,
     },
   });

@@ -3,11 +3,12 @@ import { zodTextFormat } from "openai/helpers/zod";
 import { createTrackedResponse } from "@/lib/ai/tracked-response";
 import { CoursePlan, coursePlanSchema } from "./schemas/course";
 
-export async function generateCoursePlan(userPrompt: string): Promise<{
+export async function generateCoursePlan(userId: string, userPrompt: string): Promise<{
   plan: CoursePlan;
   providerResponseId: string;
 }> {
   const response = await createTrackedResponse({
+    userId,
     operation: "COURSE_GENERATION",
     model: "gpt-5.6-terra",
 

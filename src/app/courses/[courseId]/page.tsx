@@ -5,12 +5,14 @@ import { CourseContinueCard } from "@/components/courses/course-continue-card";
 import { CourseCurriculum } from "@/components/courses/course-curriculum";
 import { MobileCourseAction } from "@/components/courses/mobile-course-action";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 
 export default async function CoursePage({ params }: PageProps<"/courses/[courseId]">) {
+  const user = await requireUser();
   const { courseId } = await params;
-  const course = await prisma.course.findUnique({
-    where: { id: courseId },
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, ownerId: user.id },
     include: {
       modules: {
         orderBy: { order: "asc" },

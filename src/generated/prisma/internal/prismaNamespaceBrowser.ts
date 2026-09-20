@@ -60,7 +60,9 @@ export const ModelName = {
   CourseMemory: 'CourseMemory',
   AiUsage: 'AiUsage',
   Exercise: 'Exercise',
-  ExerciseAttempt: 'ExerciseAttempt'
+  ExerciseAttempt: 'ExerciseAttempt',
+  AiRequestWindow: 'AiRequestWindow',
+  UserPrivacySettings: 'UserPrivacySettings'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -81,6 +83,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const CourseScalarFieldEnum = {
   id: 'id',
+  ownerId: 'ownerId',
   title: 'title',
   description: 'description',
   goal: 'goal',
@@ -175,6 +178,7 @@ export type CourseMemoryScalarFieldEnum = (typeof CourseMemoryScalarFieldEnum)[k
 
 export const AiUsageScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   operation: 'operation',
   status: 'status',
   model: 'model',
@@ -223,6 +227,28 @@ export const ExerciseAttemptScalarFieldEnum = {
 } as const
 
 export type ExerciseAttemptScalarFieldEnum = (typeof ExerciseAttemptScalarFieldEnum)[keyof typeof ExerciseAttemptScalarFieldEnum]
+
+
+export const AiRequestWindowScalarFieldEnum = {
+  id: 'id',
+  scopeKey: 'scopeKey',
+  operation: 'operation',
+  windowStart: 'windowStart',
+  count: 'count'
+} as const
+
+export type AiRequestWindowScalarFieldEnum = (typeof AiRequestWindowScalarFieldEnum)[keyof typeof AiRequestWindowScalarFieldEnum]
+
+
+export const UserPrivacySettingsScalarFieldEnum = {
+  userId: 'userId',
+  storeAiPayloads: 'storeAiPayloads',
+  retentionDays: 'retentionDays',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserPrivacySettingsScalarFieldEnum = (typeof UserPrivacySettingsScalarFieldEnum)[keyof typeof UserPrivacySettingsScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { LessonContent } from "@/components/lessons/lesson-content";
 import { LessonTableOfContents } from "@/components/lessons/lesson-table-of-contents";
 import { LessonWorkspace } from "@/components/lessons/lesson-workspace";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 import { getOrGenerateLesson } from "@/lib/lessons/get-or-generate-lesson";
 import { markLessonStarted } from "@/lib/lessons/progress";
@@ -20,10 +21,11 @@ type LessonPageProps = {
 };
 
 export default async function LessonPage({ params }: LessonPageProps) {
+  const user = await requireUser();
   const { courseId, lessonId } = await params;
 
   const lessonInfo = await prisma.lesson.findFirst({
-    where: { id: lessonId, module: { courseId } },
+    where: { id: lessonId, module: { courseId, course: { ownerId: user.id } } },
     include: { module: true },
   });
 
@@ -31,9 +33,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
     notFound();
   }
 
-  if (lessonInfo.status !== "LOCKED") {
-    await markLessonStarted(lessonId);
+  if (lessonInfo.status === "LOCKED") {
+    redirect(`/courses/${courseId}`);
   }
+
+  await markLessonStarted(user.id, lessonId);
 
   const conversation = await prisma.conversation.findFirst({
     where: {
@@ -65,8 +69,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
       }
     : undefined;
 
-  const lesson = await getOrGenerateLesson(lessonId);
-  const exercises = await getOrGenerateQuiz(lessonId);
+  const lesson = await getOrGenerateLesson(user.id, lessonId);
+  const exercises = await getOrGenerateQuiz(user.id, lessonId);
   const quizExercises = exercises.map((exercise) => {
     const latestAttempt = exercise.attempts[0];
 

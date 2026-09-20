@@ -1,11 +1,16 @@
 import Link from "next/link";
 
 import { createCourseAction } from "@/app/actions/courses";
+import { signOutAction } from "@/app/auth/actions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 
 export default async function HomePage() {
+  const user = await requireUser();
+
   const courses = await prisma.course.findMany({
+    where: { ownerId: user.id },
     orderBy: { updatedAt: "desc" },
     include: { modules: { include: { lessons: true } } },
   });
@@ -22,7 +27,17 @@ export default async function HomePage() {
           <Link href="/" className="rounded-lg text-sm font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:focus-visible:outline-white">
             Dana AI
           </Link>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <Link href="/settings/privacy" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
+              Privacy
+            </Link>
+            <form action={signOutAction}>
+              <button type="submit" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
+                Sign out
+              </button>
+            </form>
+            <ThemeToggle />
+          </div>
         </header>
 
         <section className="grid gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.78fr)] lg:items-center lg:py-20">

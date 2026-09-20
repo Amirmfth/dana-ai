@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dana AI
 
-## Getting Started
+Dana AI turns a learning goal into an AI-generated course with lessons, quizzes, tutor conversations, learner memory, progress tracking, and AI usage observability.
 
-First, run the development server:
+## Local setup
+
+Required environment variables:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+DATABASE_URL=
+OPENAI_API_KEY=
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+
+# Optional Phase 1 safety overrides.
+AI_USER_DAILY_USD_LIMIT=2
+AI_GLOBAL_DAILY_USD_LIMIT=20
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npx prisma generate
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Authentication and authorization
 
-## Learn More
+Phase 1 uses Supabase Auth with email + password. Application data remains accessed from the server through Prisma, while Supabase Auth is the identity provider.
 
-To learn more about Next.js, take a look at the following resources:
+Course ownership is stored as the Supabase Auth user UUID. Server routes and actions enforce ownership even though Prisma connects with a privileged database connection.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Admin authorization uses the server-controlled Supabase `app_metadata.role` claim. User-editable `user_metadata` is never trusted for authorization.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+To promote an account to admin after creating it, set its Auth app metadata to:
 
-## Deploy on Vercel
+```json
+{ "role": "admin" }
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Use the Supabase Dashboard/Admin API for this operation. Do not put the role in user metadata.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Database migration
+
+The Phase 1 migration is:
+
+```
+prisma/migrations/20260920143000_phase1_security_auth/migration.sql
+```
+
+It intentionally removes the current application rows before adding mandatory ownership because the pre-Phase-1 data is test data.
+
+Do **not** apply this migration to a deployment still running the pre-Phase-1 code. The schema and application branch must be released together.
+
+The migration also enables RLS on all exposed application tables. Data API writes are denied by default; ownership-scoped read policies are provided, and server-side mutations continue through Prisma.
+
+## AI safety
+
+User-facing AI operations are protected by database-backed request windows plus daily per-user and global spend guards.
+
+Default limits:
+
+- Course generation: 5/user/hour, 25 globally/hour
+- Lesson generation: 20/user/hour, 100 globally/hour
+- Quiz generation: 30/user/hour, 150 globally/hour
+- Tutor: 60/user/10 minutes, 300 globally/10 minutes
+- Daily spend: $2/user, $20 globally unless overridden by environment variables
+
+## AI payload privacy
+
+Exact AI prompts and responses are **not stored by default**. Users can opt in from `/settings/privacy` and choose 7, 30, or 90 day retention. Operational metadata such as model, token counts, duration, and status remains available for usage controls and debugging.
+
+## Validation
+
+```bash
+npm test
+npm run lint
+npm run build
+```

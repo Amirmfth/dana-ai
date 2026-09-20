@@ -781,12 +781,6 @@ export type $CourseMemoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     lessonId: string | null
     type: $Enums.MemoryType
     content: string
-    /**
-     * *
-     *    * 1-5.
-     *    * Later this helps the context builder decide which memories
-     *    * deserve prompt space.
-     */
     importance: number
     createdAt: Date
     updatedAt: Date

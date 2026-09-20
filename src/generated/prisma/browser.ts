@@ -67,3 +67,13 @@ export type Exercise = Prisma.ExerciseModel
  * 
  */
 export type ExerciseAttempt = Prisma.ExerciseAttemptModel
+/**
+ * Model AiRequestWindow
+ * 
+ */
+export type AiRequestWindow = Prisma.AiRequestWindowModel
+/**
+ * Model UserPrivacySettings
+ * 
+ */
+export type UserPrivacySettings = Prisma.UserPrivacySettingsModel

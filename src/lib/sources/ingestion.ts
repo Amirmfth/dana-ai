@@ -179,7 +179,11 @@ export async function ingestFileSource({
 }: { ownerId: string; courseId?: string; file: File }) {
   await assertAiRequestAllowed(ownerId, "SOURCE_INGESTION");
 
-  const type = file.type === "application/pdf" ? "PDF" : "TEXT";
+  const type =
+    file.type === "application/pdf" ||
+    file.name.toLowerCase().endsWith(".pdf")
+      ? "PDF"
+      : "TEXT";
   const source = await createSourceRecord({
     ownerId, courseId, type, title: file.name || "Uploaded source",
     mimeType: file.type, byteSize: file.size,

@@ -162,16 +162,3 @@ CREATE UNIQUE INDEX "AssessmentAnswer_assessmentRunId_questionId_key"
 CREATE INDEX "AssessmentAnswer_questionId_createdAt_idx"
   ON "AssessmentAnswer"("questionId", "createdAt");
 
-ALTER TABLE "LessonPrerequisite" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "Assessment" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "AssessmentVersion" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "AssessmentQuestion" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "AssessmentRun" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "AssessmentAnswer" ENABLE ROW LEVEL SECURITY;
-
-REVOKE ALL ON TABLE "LessonPrerequisite" FROM anon, authenticated;
-REVOKE ALL ON TABLE "Assessment" FROM anon, authenticated;
-REVOKE ALL ON TABLE "AssessmentVersion" FROM anon, authenticated;
-REVOKE ALL ON TABLE "AssessmentQuestion" FROM anon, authenticated;
-REVOKE ALL ON TABLE "AssessmentRun" FROM anon, authenticated;
-REVOKE ALL ON TABLE "AssessmentAnswer" FROM anon, authenticated;

@@ -71,7 +71,13 @@ export const ModelName = {
   GenerationJob: 'GenerationJob',
   CourseTemplate: 'CourseTemplate',
   RegenerationLock: 'RegenerationLock',
-  CurriculumRevision: 'CurriculumRevision'
+  CurriculumRevision: 'CurriculumRevision',
+  LessonPrerequisite: 'LessonPrerequisite',
+  Assessment: 'Assessment',
+  AssessmentVersion: 'AssessmentVersion',
+  AssessmentQuestion: 'AssessmentQuestion',
+  AssessmentRun: 'AssessmentRun',
+  AssessmentAnswer: 'AssessmentAnswer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -99,6 +105,10 @@ export const CourseScalarFieldEnum = {
   status: 'status',
   prompt: 'prompt',
   instructions: 'instructions',
+  currentLevel: 'currentLevel',
+  targetLevel: 'targetLevel',
+  weeklyStudyMinutes: 'weeklyStudyMinutes',
+  learningStyle: 'learningStyle',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -128,6 +138,9 @@ export const LessonScalarFieldEnum = {
   concepts: 'concepts',
   order: 'order',
   status: 'status',
+  difficulty: 'difficulty',
+  isOptional: 'isOptional',
+  completionMethod: 'completionMethod',
   moduleId: 'moduleId',
   activeContentVersionId: 'activeContentVersionId',
   activeQuizVersionId: 'activeQuizVersionId',
@@ -390,6 +403,83 @@ export const CurriculumRevisionScalarFieldEnum = {
 } as const
 
 export type CurriculumRevisionScalarFieldEnum = (typeof CurriculumRevisionScalarFieldEnum)[keyof typeof CurriculumRevisionScalarFieldEnum]
+
+
+export const LessonPrerequisiteScalarFieldEnum = {
+  lessonId: 'lessonId',
+  prerequisiteLessonId: 'prerequisiteLessonId',
+  createdAt: 'createdAt'
+} as const
+
+export type LessonPrerequisiteScalarFieldEnum = (typeof LessonPrerequisiteScalarFieldEnum)[keyof typeof LessonPrerequisiteScalarFieldEnum]
+
+
+export const AssessmentScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  moduleId: 'moduleId',
+  lessonId: 'lessonId',
+  type: 'type',
+  title: 'title',
+  passingScore: 'passingScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AssessmentScalarFieldEnum = (typeof AssessmentScalarFieldEnum)[keyof typeof AssessmentScalarFieldEnum]
+
+
+export const AssessmentVersionScalarFieldEnum = {
+  id: 'id',
+  assessmentId: 'assessmentId',
+  version: 'version',
+  createdAt: 'createdAt'
+} as const
+
+export type AssessmentVersionScalarFieldEnum = (typeof AssessmentVersionScalarFieldEnum)[keyof typeof AssessmentVersionScalarFieldEnum]
+
+
+export const AssessmentQuestionScalarFieldEnum = {
+  id: 'id',
+  assessmentVersionId: 'assessmentVersionId',
+  targetLessonId: 'targetLessonId',
+  type: 'type',
+  order: 'order',
+  question: 'question',
+  data: 'data',
+  answerKey: 'answerKey',
+  explanation: 'explanation',
+  concepts: 'concepts',
+  createdAt: 'createdAt'
+} as const
+
+export type AssessmentQuestionScalarFieldEnum = (typeof AssessmentQuestionScalarFieldEnum)[keyof typeof AssessmentQuestionScalarFieldEnum]
+
+
+export const AssessmentRunScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  assessmentVersionId: 'assessmentVersionId',
+  score: 'score',
+  total: 'total',
+  passed: 'passed',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type AssessmentRunScalarFieldEnum = (typeof AssessmentRunScalarFieldEnum)[keyof typeof AssessmentRunScalarFieldEnum]
+
+
+export const AssessmentAnswerScalarFieldEnum = {
+  id: 'id',
+  assessmentRunId: 'assessmentRunId',
+  questionId: 'questionId',
+  answer: 'answer',
+  result: 'result',
+  createdAt: 'createdAt'
+} as const
+
+export type AssessmentAnswerScalarFieldEnum = (typeof AssessmentAnswerScalarFieldEnum)[keyof typeof AssessmentAnswerScalarFieldEnum]
 
 
 export const SortOrder = {

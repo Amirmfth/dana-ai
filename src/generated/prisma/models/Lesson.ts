@@ -40,6 +40,9 @@ export type LessonMinAggregateOutputType = {
   description: string | null
   order: number | null
   status: $Enums.LessonStatus | null
+  difficulty: $Enums.LessonDifficulty | null
+  isOptional: boolean | null
+  completionMethod: $Enums.CompletionMethod | null
   moduleId: string | null
   activeContentVersionId: string | null
   activeQuizVersionId: string | null
@@ -55,6 +58,9 @@ export type LessonMaxAggregateOutputType = {
   description: string | null
   order: number | null
   status: $Enums.LessonStatus | null
+  difficulty: $Enums.LessonDifficulty | null
+  isOptional: boolean | null
+  completionMethod: $Enums.CompletionMethod | null
   moduleId: string | null
   activeContentVersionId: string | null
   activeQuizVersionId: string | null
@@ -72,6 +78,9 @@ export type LessonCountAggregateOutputType = {
   concepts: number
   order: number
   status: number
+  difficulty: number
+  isOptional: number
+  completionMethod: number
   moduleId: number
   activeContentVersionId: number
   activeQuizVersionId: number
@@ -97,6 +106,9 @@ export type LessonMinAggregateInputType = {
   description?: true
   order?: true
   status?: true
+  difficulty?: true
+  isOptional?: true
+  completionMethod?: true
   moduleId?: true
   activeContentVersionId?: true
   activeQuizVersionId?: true
@@ -112,6 +124,9 @@ export type LessonMaxAggregateInputType = {
   description?: true
   order?: true
   status?: true
+  difficulty?: true
+  isOptional?: true
+  completionMethod?: true
   moduleId?: true
   activeContentVersionId?: true
   activeQuizVersionId?: true
@@ -129,6 +144,9 @@ export type LessonCountAggregateInputType = {
   concepts?: true
   order?: true
   status?: true
+  difficulty?: true
+  isOptional?: true
+  completionMethod?: true
   moduleId?: true
   activeContentVersionId?: true
   activeQuizVersionId?: true
@@ -233,6 +251,9 @@ export type LessonGroupByOutputType = {
   concepts: string[]
   order: number
   status: $Enums.LessonStatus
+  difficulty: $Enums.LessonDifficulty
+  isOptional: boolean
+  completionMethod: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId: string | null
   activeQuizVersionId: string | null
@@ -273,6 +294,9 @@ export type LessonWhereInput = {
   concepts?: Prisma.StringNullableListFilter<"Lesson">
   order?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFilter<"Lesson"> | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFilter<"Lesson"> | boolean
+  completionMethod?: Prisma.EnumCompletionMethodNullableFilter<"Lesson"> | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFilter<"Lesson"> | string
   activeContentVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   activeQuizVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
@@ -293,6 +317,10 @@ export type LessonWhereInput = {
   contentVersions?: Prisma.LessonContentVersionListRelationFilter
   activeQuizVersion?: Prisma.XOR<Prisma.QuizVersionNullableScalarRelationFilter, Prisma.QuizVersionWhereInput> | null
   quizVersions?: Prisma.QuizVersionListRelationFilter
+  prerequisites?: Prisma.LessonPrerequisiteListRelationFilter
+  requiredFor?: Prisma.LessonPrerequisiteListRelationFilter
+  assessments?: Prisma.AssessmentListRelationFilter
+  assessmentQuestions?: Prisma.AssessmentQuestionListRelationFilter
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -303,6 +331,9 @@ export type LessonOrderByWithRelationInput = {
   concepts?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  difficulty?: Prisma.SortOrder
+  isOptional?: Prisma.SortOrder
+  completionMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   activeContentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   activeQuizVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -323,6 +354,10 @@ export type LessonOrderByWithRelationInput = {
   contentVersions?: Prisma.LessonContentVersionOrderByRelationAggregateInput
   activeQuizVersion?: Prisma.QuizVersionOrderByWithRelationInput
   quizVersions?: Prisma.QuizVersionOrderByRelationAggregateInput
+  prerequisites?: Prisma.LessonPrerequisiteOrderByRelationAggregateInput
+  requiredFor?: Prisma.LessonPrerequisiteOrderByRelationAggregateInput
+  assessments?: Prisma.AssessmentOrderByRelationAggregateInput
+  assessmentQuestions?: Prisma.AssessmentQuestionOrderByRelationAggregateInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -339,6 +374,9 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   concepts?: Prisma.StringNullableListFilter<"Lesson">
   order?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFilter<"Lesson"> | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFilter<"Lesson"> | boolean
+  completionMethod?: Prisma.EnumCompletionMethodNullableFilter<"Lesson"> | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFilter<"Lesson"> | string
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
@@ -357,6 +395,10 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   contentVersions?: Prisma.LessonContentVersionListRelationFilter
   activeQuizVersion?: Prisma.XOR<Prisma.QuizVersionNullableScalarRelationFilter, Prisma.QuizVersionWhereInput> | null
   quizVersions?: Prisma.QuizVersionListRelationFilter
+  prerequisites?: Prisma.LessonPrerequisiteListRelationFilter
+  requiredFor?: Prisma.LessonPrerequisiteListRelationFilter
+  assessments?: Prisma.AssessmentListRelationFilter
+  assessmentQuestions?: Prisma.AssessmentQuestionListRelationFilter
 }, "id" | "activeContentVersionId" | "activeQuizVersionId" | "moduleId_order">
 
 export type LessonOrderByWithAggregationInput = {
@@ -367,6 +409,9 @@ export type LessonOrderByWithAggregationInput = {
   concepts?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  difficulty?: Prisma.SortOrder
+  isOptional?: Prisma.SortOrder
+  completionMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   activeContentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   activeQuizVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -392,6 +437,9 @@ export type LessonScalarWhereWithAggregatesInput = {
   concepts?: Prisma.StringNullableListFilter<"Lesson">
   order?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusWithAggregatesFilter<"Lesson"> | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyWithAggregatesFilter<"Lesson"> | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolWithAggregatesFilter<"Lesson"> | boolean
+  completionMethod?: Prisma.EnumCompletionMethodNullableWithAggregatesFilter<"Lesson"> | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
   activeContentVersionId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
   activeQuizVersionId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
@@ -409,6 +457,9 @@ export type LessonCreateInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -426,6 +477,10 @@ export type LessonCreateInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -436,6 +491,9 @@ export type LessonUncheckedCreateInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -453,6 +511,10 @@ export type LessonUncheckedCreateInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -463,6 +525,9 @@ export type LessonUpdateInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -480,6 +545,10 @@ export type LessonUpdateInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -490,6 +559,9 @@ export type LessonUncheckedUpdateInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -507,6 +579,10 @@ export type LessonUncheckedUpdateInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -517,6 +593,9 @@ export type LessonCreateManyInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -534,6 +613,9 @@ export type LessonUpdateManyMutationInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -548,6 +630,9 @@ export type LessonUncheckedUpdateManyInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -588,6 +673,9 @@ export type LessonCountOrderByAggregateInput = {
   concepts?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  difficulty?: Prisma.SortOrder
+  isOptional?: Prisma.SortOrder
+  completionMethod?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   activeContentVersionId?: Prisma.SortOrder
   activeQuizVersionId?: Prisma.SortOrder
@@ -607,6 +695,9 @@ export type LessonMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  difficulty?: Prisma.SortOrder
+  isOptional?: Prisma.SortOrder
+  completionMethod?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   activeContentVersionId?: Prisma.SortOrder
   activeQuizVersionId?: Prisma.SortOrder
@@ -622,6 +713,9 @@ export type LessonMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  difficulty?: Prisma.SortOrder
+  isOptional?: Prisma.SortOrder
+  completionMethod?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   activeContentVersionId?: Prisma.SortOrder
   activeQuizVersionId?: Prisma.SortOrder
@@ -707,6 +801,18 @@ export type LessonUpdateconceptsInput = {
 
 export type EnumLessonStatusFieldUpdateOperationsInput = {
   set?: $Enums.LessonStatus
+}
+
+export type EnumLessonDifficultyFieldUpdateOperationsInput = {
+  set?: $Enums.LessonDifficulty
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableEnumCompletionMethodFieldUpdateOperationsInput = {
+  set?: $Enums.CompletionMethod | null
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -921,6 +1027,66 @@ export type LessonUpdateOneRequiredWithoutGenerationJobsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutGenerationJobsInput, Prisma.LessonUpdateWithoutGenerationJobsInput>, Prisma.LessonUncheckedUpdateWithoutGenerationJobsInput>
 }
 
+export type LessonCreateNestedOneWithoutPrerequisitesInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutPrerequisitesInput, Prisma.LessonUncheckedCreateWithoutPrerequisitesInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutPrerequisitesInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonCreateNestedOneWithoutRequiredForInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutRequiredForInput, Prisma.LessonUncheckedCreateWithoutRequiredForInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutRequiredForInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutPrerequisitesNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutPrerequisitesInput, Prisma.LessonUncheckedCreateWithoutPrerequisitesInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutPrerequisitesInput
+  upsert?: Prisma.LessonUpsertWithoutPrerequisitesInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutPrerequisitesInput, Prisma.LessonUpdateWithoutPrerequisitesInput>, Prisma.LessonUncheckedUpdateWithoutPrerequisitesInput>
+}
+
+export type LessonUpdateOneRequiredWithoutRequiredForNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutRequiredForInput, Prisma.LessonUncheckedCreateWithoutRequiredForInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutRequiredForInput
+  upsert?: Prisma.LessonUpsertWithoutRequiredForInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutRequiredForInput, Prisma.LessonUpdateWithoutRequiredForInput>, Prisma.LessonUncheckedUpdateWithoutRequiredForInput>
+}
+
+export type LessonCreateNestedOneWithoutAssessmentsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentsInput, Prisma.LessonUncheckedCreateWithoutAssessmentsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutAssessmentsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneWithoutAssessmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentsInput, Prisma.LessonUncheckedCreateWithoutAssessmentsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutAssessmentsInput
+  upsert?: Prisma.LessonUpsertWithoutAssessmentsInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutAssessmentsInput, Prisma.LessonUpdateWithoutAssessmentsInput>, Prisma.LessonUncheckedUpdateWithoutAssessmentsInput>
+}
+
+export type LessonCreateNestedOneWithoutAssessmentQuestionsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentQuestionsInput, Prisma.LessonUncheckedCreateWithoutAssessmentQuestionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutAssessmentQuestionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneWithoutAssessmentQuestionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentQuestionsInput, Prisma.LessonUncheckedCreateWithoutAssessmentQuestionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutAssessmentQuestionsInput
+  upsert?: Prisma.LessonUpsertWithoutAssessmentQuestionsInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutAssessmentQuestionsInput, Prisma.LessonUpdateWithoutAssessmentQuestionsInput>, Prisma.LessonUncheckedUpdateWithoutAssessmentQuestionsInput>
+}
+
 export type LessonCreateWithoutModuleInput = {
   id?: string
   title: string
@@ -929,6 +1095,9 @@ export type LessonCreateWithoutModuleInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -945,6 +1114,10 @@ export type LessonCreateWithoutModuleInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutModuleInput = {
@@ -955,6 +1128,9 @@ export type LessonUncheckedCreateWithoutModuleInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
   createdAt?: Date | string
@@ -971,6 +1147,10 @@ export type LessonUncheckedCreateWithoutModuleInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutModuleInput = {
@@ -1010,6 +1190,9 @@ export type LessonScalarWhereInput = {
   concepts?: Prisma.StringNullableListFilter<"Lesson">
   order?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFilter<"Lesson"> | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFilter<"Lesson"> | boolean
+  completionMethod?: Prisma.EnumCompletionMethodNullableFilter<"Lesson"> | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFilter<"Lesson"> | string
   activeContentVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   activeQuizVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
@@ -1027,6 +1210,9 @@ export type LessonCreateWithoutContentInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1043,6 +1229,10 @@ export type LessonCreateWithoutContentInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutContentInput = {
@@ -1053,6 +1243,9 @@ export type LessonUncheckedCreateWithoutContentInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -1069,6 +1262,10 @@ export type LessonUncheckedCreateWithoutContentInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutContentInput = {
@@ -1095,6 +1292,9 @@ export type LessonUpdateWithoutContentInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1111,6 +1311,10 @@ export type LessonUpdateWithoutContentInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutContentInput = {
@@ -1121,6 +1325,9 @@ export type LessonUncheckedUpdateWithoutContentInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1137,6 +1344,10 @@ export type LessonUncheckedUpdateWithoutContentInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutContentVersionsInput = {
@@ -1147,6 +1358,9 @@ export type LessonCreateWithoutContentVersionsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1163,6 +1377,10 @@ export type LessonCreateWithoutContentVersionsInput = {
   activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutContentVersionsInput = {
@@ -1173,6 +1391,9 @@ export type LessonUncheckedCreateWithoutContentVersionsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -1189,6 +1410,10 @@ export type LessonUncheckedCreateWithoutContentVersionsInput = {
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutContentVersionsInput = {
@@ -1204,6 +1429,9 @@ export type LessonCreateWithoutActiveContentVersionInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1220,6 +1448,10 @@ export type LessonCreateWithoutActiveContentVersionInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutActiveContentVersionInput = {
@@ -1230,6 +1462,9 @@ export type LessonUncheckedCreateWithoutActiveContentVersionInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeQuizVersionId?: string | null
   createdAt?: Date | string
@@ -1246,6 +1481,10 @@ export type LessonUncheckedCreateWithoutActiveContentVersionInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutActiveContentVersionInput = {
@@ -1272,6 +1511,9 @@ export type LessonUpdateWithoutContentVersionsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1288,6 +1530,10 @@ export type LessonUpdateWithoutContentVersionsInput = {
   activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutContentVersionsInput = {
@@ -1298,6 +1544,9 @@ export type LessonUncheckedUpdateWithoutContentVersionsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1314,6 +1563,10 @@ export type LessonUncheckedUpdateWithoutContentVersionsInput = {
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUpsertWithoutActiveContentVersionInput = {
@@ -1335,6 +1588,9 @@ export type LessonUpdateWithoutActiveContentVersionInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1351,6 +1607,10 @@ export type LessonUpdateWithoutActiveContentVersionInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutActiveContentVersionInput = {
@@ -1361,6 +1621,9 @@ export type LessonUncheckedUpdateWithoutActiveContentVersionInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1377,6 +1640,10 @@ export type LessonUncheckedUpdateWithoutActiveContentVersionInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutConversationsInput = {
@@ -1387,6 +1654,9 @@ export type LessonCreateWithoutConversationsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1403,6 +1673,10 @@ export type LessonCreateWithoutConversationsInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutConversationsInput = {
@@ -1413,6 +1687,9 @@ export type LessonUncheckedCreateWithoutConversationsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -1429,6 +1706,10 @@ export type LessonUncheckedCreateWithoutConversationsInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutConversationsInput = {
@@ -1455,6 +1736,9 @@ export type LessonUpdateWithoutConversationsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1471,6 +1755,10 @@ export type LessonUpdateWithoutConversationsInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutConversationsInput = {
@@ -1481,6 +1769,9 @@ export type LessonUncheckedUpdateWithoutConversationsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1497,6 +1788,10 @@ export type LessonUncheckedUpdateWithoutConversationsInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutCourseMemoriesInput = {
@@ -1507,6 +1802,9 @@ export type LessonCreateWithoutCourseMemoriesInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1523,6 +1821,10 @@ export type LessonCreateWithoutCourseMemoriesInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
@@ -1533,6 +1835,9 @@ export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -1549,6 +1854,10 @@ export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutCourseMemoriesInput = {
@@ -1575,6 +1884,9 @@ export type LessonUpdateWithoutCourseMemoriesInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1591,6 +1903,10 @@ export type LessonUpdateWithoutCourseMemoriesInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
@@ -1601,6 +1917,9 @@ export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1617,6 +1936,10 @@ export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutExercisesInput = {
@@ -1627,6 +1950,9 @@ export type LessonCreateWithoutExercisesInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1643,6 +1969,10 @@ export type LessonCreateWithoutExercisesInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutExercisesInput = {
@@ -1653,6 +1983,9 @@ export type LessonUncheckedCreateWithoutExercisesInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -1669,6 +2002,10 @@ export type LessonUncheckedCreateWithoutExercisesInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutExercisesInput = {
@@ -1695,6 +2032,9 @@ export type LessonUpdateWithoutExercisesInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1711,6 +2051,10 @@ export type LessonUpdateWithoutExercisesInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutExercisesInput = {
@@ -1721,6 +2065,9 @@ export type LessonUncheckedUpdateWithoutExercisesInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1737,6 +2084,10 @@ export type LessonUncheckedUpdateWithoutExercisesInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutQuizRunsInput = {
@@ -1747,6 +2098,9 @@ export type LessonCreateWithoutQuizRunsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1763,6 +2117,10 @@ export type LessonCreateWithoutQuizRunsInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutQuizRunsInput = {
@@ -1773,6 +2131,9 @@ export type LessonUncheckedCreateWithoutQuizRunsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -1789,6 +2150,10 @@ export type LessonUncheckedCreateWithoutQuizRunsInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutQuizRunsInput = {
@@ -1815,6 +2180,9 @@ export type LessonUpdateWithoutQuizRunsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1831,6 +2199,10 @@ export type LessonUpdateWithoutQuizRunsInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutQuizRunsInput = {
@@ -1841,6 +2213,9 @@ export type LessonUncheckedUpdateWithoutQuizRunsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1857,6 +2232,10 @@ export type LessonUncheckedUpdateWithoutQuizRunsInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutQuizVersionsInput = {
@@ -1867,6 +2246,9 @@ export type LessonCreateWithoutQuizVersionsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1883,6 +2265,10 @@ export type LessonCreateWithoutQuizVersionsInput = {
   activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutQuizVersionsInput = {
@@ -1893,6 +2279,9 @@ export type LessonUncheckedCreateWithoutQuizVersionsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -1909,6 +2298,10 @@ export type LessonUncheckedCreateWithoutQuizVersionsInput = {
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutQuizVersionsInput = {
@@ -1924,6 +2317,9 @@ export type LessonCreateWithoutActiveQuizVersionInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1940,6 +2336,10 @@ export type LessonCreateWithoutActiveQuizVersionInput = {
   activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutActiveQuizVersionInput = {
@@ -1950,6 +2350,9 @@ export type LessonUncheckedCreateWithoutActiveQuizVersionInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   createdAt?: Date | string
@@ -1966,6 +2369,10 @@ export type LessonUncheckedCreateWithoutActiveQuizVersionInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutActiveQuizVersionInput = {
@@ -1992,6 +2399,9 @@ export type LessonUpdateWithoutQuizVersionsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2008,6 +2418,10 @@ export type LessonUpdateWithoutQuizVersionsInput = {
   activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutQuizVersionsInput = {
@@ -2018,6 +2432,9 @@ export type LessonUncheckedUpdateWithoutQuizVersionsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2034,6 +2451,10 @@ export type LessonUncheckedUpdateWithoutQuizVersionsInput = {
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUpsertWithoutActiveQuizVersionInput = {
@@ -2055,6 +2476,9 @@ export type LessonUpdateWithoutActiveQuizVersionInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2071,6 +2495,10 @@ export type LessonUpdateWithoutActiveQuizVersionInput = {
   activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutActiveQuizVersionInput = {
@@ -2081,6 +2509,9 @@ export type LessonUncheckedUpdateWithoutActiveQuizVersionInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2097,6 +2528,10 @@ export type LessonUncheckedUpdateWithoutActiveQuizVersionInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutLearningEventsInput = {
@@ -2107,6 +2542,9 @@ export type LessonCreateWithoutLearningEventsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -2123,6 +2561,10 @@ export type LessonCreateWithoutLearningEventsInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutLearningEventsInput = {
@@ -2133,6 +2575,9 @@ export type LessonUncheckedCreateWithoutLearningEventsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -2149,6 +2594,10 @@ export type LessonUncheckedCreateWithoutLearningEventsInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutLearningEventsInput = {
@@ -2175,6 +2624,9 @@ export type LessonUpdateWithoutLearningEventsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2191,6 +2643,10 @@ export type LessonUpdateWithoutLearningEventsInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutLearningEventsInput = {
@@ -2201,6 +2657,9 @@ export type LessonUncheckedUpdateWithoutLearningEventsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2217,6 +2676,10 @@ export type LessonUncheckedUpdateWithoutLearningEventsInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutStudyTimeInput = {
@@ -2227,6 +2690,9 @@ export type LessonCreateWithoutStudyTimeInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -2243,6 +2709,10 @@ export type LessonCreateWithoutStudyTimeInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutStudyTimeInput = {
@@ -2253,6 +2723,9 @@ export type LessonUncheckedCreateWithoutStudyTimeInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -2269,6 +2742,10 @@ export type LessonUncheckedCreateWithoutStudyTimeInput = {
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutStudyTimeInput = {
@@ -2295,6 +2772,9 @@ export type LessonUpdateWithoutStudyTimeInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2311,6 +2791,10 @@ export type LessonUpdateWithoutStudyTimeInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutStudyTimeInput = {
@@ -2321,6 +2805,9 @@ export type LessonUncheckedUpdateWithoutStudyTimeInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2337,6 +2824,10 @@ export type LessonUncheckedUpdateWithoutStudyTimeInput = {
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonCreateWithoutGenerationJobsInput = {
@@ -2347,6 +2838,9 @@ export type LessonCreateWithoutGenerationJobsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -2363,6 +2857,10 @@ export type LessonCreateWithoutGenerationJobsInput = {
   contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
   activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
   quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonUncheckedCreateWithoutGenerationJobsInput = {
@@ -2373,6 +2871,9 @@ export type LessonUncheckedCreateWithoutGenerationJobsInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
   moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
@@ -2389,6 +2890,10 @@ export type LessonUncheckedCreateWithoutGenerationJobsInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
   contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
   quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
 export type LessonCreateOrConnectWithoutGenerationJobsInput = {
@@ -2415,6 +2920,9 @@ export type LessonUpdateWithoutGenerationJobsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2431,6 +2939,10 @@ export type LessonUpdateWithoutGenerationJobsInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutGenerationJobsInput = {
@@ -2441,6 +2953,9 @@ export type LessonUncheckedUpdateWithoutGenerationJobsInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2457,9 +2972,13 @@ export type LessonUncheckedUpdateWithoutGenerationJobsInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
-export type LessonCreateManyModuleInput = {
+export type LessonCreateWithoutPrerequisitesInput = {
   id?: string
   title: string
   description?: string | null
@@ -2467,15 +2986,152 @@ export type LessonCreateManyModuleInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
+}
+
+export type LessonUncheckedCreateWithoutPrerequisitesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  moduleId: string
   activeContentVersionId?: string | null
   activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
   completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
 }
 
-export type LessonUpdateWithoutModuleInput = {
+export type LessonCreateOrConnectWithoutPrerequisitesInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutPrerequisitesInput, Prisma.LessonUncheckedCreateWithoutPrerequisitesInput>
+}
+
+export type LessonCreateWithoutRequiredForInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
+}
+
+export type LessonUncheckedCreateWithoutRequiredForInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
+}
+
+export type LessonCreateOrConnectWithoutRequiredForInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutRequiredForInput, Prisma.LessonUncheckedCreateWithoutRequiredForInput>
+}
+
+export type LessonUpsertWithoutPrerequisitesInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutPrerequisitesInput, Prisma.LessonUncheckedUpdateWithoutPrerequisitesInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutPrerequisitesInput, Prisma.LessonUncheckedCreateWithoutPrerequisitesInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutPrerequisitesInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutPrerequisitesInput, Prisma.LessonUncheckedUpdateWithoutPrerequisitesInput>
+}
+
+export type LessonUpdateWithoutPrerequisitesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2483,10 +3139,14 @@ export type LessonUpdateWithoutModuleInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
   content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
@@ -2499,9 +3159,12 @@ export type LessonUpdateWithoutModuleInput = {
   contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
   activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
   quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
 }
 
-export type LessonUncheckedUpdateWithoutModuleInput = {
+export type LessonUncheckedUpdateWithoutPrerequisitesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2509,6 +3172,10 @@ export type LessonUncheckedUpdateWithoutModuleInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2525,6 +3192,467 @@ export type LessonUncheckedUpdateWithoutModuleInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
   contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
   quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
+}
+
+export type LessonUpsertWithoutRequiredForInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutRequiredForInput, Prisma.LessonUncheckedUpdateWithoutRequiredForInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutRequiredForInput, Prisma.LessonUncheckedCreateWithoutRequiredForInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutRequiredForInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutRequiredForInput, Prisma.LessonUncheckedUpdateWithoutRequiredForInput>
+}
+
+export type LessonUpdateWithoutRequiredForInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutRequiredForInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
+}
+
+export type LessonCreateWithoutAssessmentsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionCreateNestedManyWithoutTargetLessonInput
+}
+
+export type LessonUncheckedCreateWithoutAssessmentsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedCreateNestedManyWithoutTargetLessonInput
+}
+
+export type LessonCreateOrConnectWithoutAssessmentsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentsInput, Prisma.LessonUncheckedCreateWithoutAssessmentsInput>
+}
+
+export type LessonUpsertWithoutAssessmentsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutAssessmentsInput, Prisma.LessonUncheckedUpdateWithoutAssessmentsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentsInput, Prisma.LessonUncheckedCreateWithoutAssessmentsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutAssessmentsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutAssessmentsInput, Prisma.LessonUncheckedUpdateWithoutAssessmentsInput>
+}
+
+export type LessonUpdateWithoutAssessmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutAssessmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
+}
+
+export type LessonCreateWithoutAssessmentQuestionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutAssessmentQuestionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutLessonInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteLessonInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutAssessmentQuestionsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentQuestionsInput, Prisma.LessonUncheckedCreateWithoutAssessmentQuestionsInput>
+}
+
+export type LessonUpsertWithoutAssessmentQuestionsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutAssessmentQuestionsInput, Prisma.LessonUncheckedUpdateWithoutAssessmentQuestionsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutAssessmentQuestionsInput, Prisma.LessonUncheckedCreateWithoutAssessmentQuestionsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutAssessmentQuestionsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutAssessmentQuestionsInput, Prisma.LessonUncheckedUpdateWithoutAssessmentQuestionsInput>
+}
+
+export type LessonUpdateWithoutAssessmentQuestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutAssessmentQuestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateManyModuleInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  difficulty?: $Enums.LessonDifficulty
+  isOptional?: boolean
+  completionMethod?: $Enums.CompletionMethod | null
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+}
+
+export type LessonUpdateWithoutModuleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUpdateManyWithoutTargetLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutModuleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+  prerequisites?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutLessonNestedInput
+  requiredFor?: Prisma.LessonPrerequisiteUncheckedUpdateManyWithoutPrerequisiteLessonNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutLessonNestedInput
+  assessmentQuestions?: Prisma.AssessmentQuestionUncheckedUpdateManyWithoutTargetLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutModuleInput = {
@@ -2535,6 +3663,9 @@ export type LessonUncheckedUpdateManyWithoutModuleInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  difficulty?: Prisma.EnumLessonDifficultyFieldUpdateOperationsInput | $Enums.LessonDifficulty
+  isOptional?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  completionMethod?: Prisma.NullableEnumCompletionMethodFieldUpdateOperationsInput | $Enums.CompletionMethod | null
   activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2558,6 +3689,10 @@ export type LessonCountOutputType = {
   studyTime: number
   contentVersions: number
   quizVersions: number
+  prerequisites: number
+  requiredFor: number
+  assessments: number
+  assessmentQuestions: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2570,6 +3705,10 @@ export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   studyTime?: boolean | LessonCountOutputTypeCountStudyTimeArgs
   contentVersions?: boolean | LessonCountOutputTypeCountContentVersionsArgs
   quizVersions?: boolean | LessonCountOutputTypeCountQuizVersionsArgs
+  prerequisites?: boolean | LessonCountOutputTypeCountPrerequisitesArgs
+  requiredFor?: boolean | LessonCountOutputTypeCountRequiredForArgs
+  assessments?: boolean | LessonCountOutputTypeCountAssessmentsArgs
+  assessmentQuestions?: boolean | LessonCountOutputTypeCountAssessmentQuestionsArgs
 }
 
 /**
@@ -2645,6 +3784,34 @@ export type LessonCountOutputTypeCountQuizVersionsArgs<ExtArgs extends runtime.T
   where?: Prisma.QuizVersionWhereInput
 }
 
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountPrerequisitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonPrerequisiteWhereInput
+}
+
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountRequiredForArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonPrerequisiteWhereInput
+}
+
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountAssessmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssessmentWhereInput
+}
+
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountAssessmentQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssessmentQuestionWhereInput
+}
+
 
 export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2654,6 +3821,9 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   concepts?: boolean
   order?: boolean
   status?: boolean
+  difficulty?: boolean
+  isOptional?: boolean
+  completionMethod?: boolean
   moduleId?: boolean
   activeContentVersionId?: boolean
   activeQuizVersionId?: boolean
@@ -2674,6 +3844,10 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   contentVersions?: boolean | Prisma.Lesson$contentVersionsArgs<ExtArgs>
   activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
   quizVersions?: boolean | Prisma.Lesson$quizVersionsArgs<ExtArgs>
+  prerequisites?: boolean | Prisma.Lesson$prerequisitesArgs<ExtArgs>
+  requiredFor?: boolean | Prisma.Lesson$requiredForArgs<ExtArgs>
+  assessments?: boolean | Prisma.Lesson$assessmentsArgs<ExtArgs>
+  assessmentQuestions?: boolean | Prisma.Lesson$assessmentQuestionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -2685,6 +3859,9 @@ export type LessonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   concepts?: boolean
   order?: boolean
   status?: boolean
+  difficulty?: boolean
+  isOptional?: boolean
+  completionMethod?: boolean
   moduleId?: boolean
   activeContentVersionId?: boolean
   activeQuizVersionId?: boolean
@@ -2705,6 +3882,9 @@ export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   concepts?: boolean
   order?: boolean
   status?: boolean
+  difficulty?: boolean
+  isOptional?: boolean
+  completionMethod?: boolean
   moduleId?: boolean
   activeContentVersionId?: boolean
   activeQuizVersionId?: boolean
@@ -2725,6 +3905,9 @@ export type LessonSelectScalar = {
   concepts?: boolean
   order?: boolean
   status?: boolean
+  difficulty?: boolean
+  isOptional?: boolean
+  completionMethod?: boolean
   moduleId?: boolean
   activeContentVersionId?: boolean
   activeQuizVersionId?: boolean
@@ -2734,7 +3917,7 @@ export type LessonSelectScalar = {
   completedAt?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "objectives" | "concepts" | "order" | "status" | "moduleId" | "activeContentVersionId" | "activeQuizVersionId" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "objectives" | "concepts" | "order" | "status" | "difficulty" | "isOptional" | "completionMethod" | "moduleId" | "activeContentVersionId" | "activeQuizVersionId" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
   content?: boolean | Prisma.Lesson$contentArgs<ExtArgs>
@@ -2749,6 +3932,10 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   contentVersions?: boolean | Prisma.Lesson$contentVersionsArgs<ExtArgs>
   activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
   quizVersions?: boolean | Prisma.Lesson$quizVersionsArgs<ExtArgs>
+  prerequisites?: boolean | Prisma.Lesson$prerequisitesArgs<ExtArgs>
+  requiredFor?: boolean | Prisma.Lesson$requiredForArgs<ExtArgs>
+  assessments?: boolean | Prisma.Lesson$assessmentsArgs<ExtArgs>
+  assessmentQuestions?: boolean | Prisma.Lesson$assessmentQuestionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2778,6 +3965,10 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     contentVersions: Prisma.$LessonContentVersionPayload<ExtArgs>[]
     activeQuizVersion: Prisma.$QuizVersionPayload<ExtArgs> | null
     quizVersions: Prisma.$QuizVersionPayload<ExtArgs>[]
+    prerequisites: Prisma.$LessonPrerequisitePayload<ExtArgs>[]
+    requiredFor: Prisma.$LessonPrerequisitePayload<ExtArgs>[]
+    assessments: Prisma.$AssessmentPayload<ExtArgs>[]
+    assessmentQuestions: Prisma.$AssessmentQuestionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2787,6 +3978,9 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     concepts: string[]
     order: number
     status: $Enums.LessonStatus
+    difficulty: $Enums.LessonDifficulty
+    isOptional: boolean
+    completionMethod: $Enums.CompletionMethod | null
     moduleId: string
     activeContentVersionId: string | null
     activeQuizVersionId: string | null
@@ -3201,6 +4395,10 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   contentVersions<T extends Prisma.Lesson$contentVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$contentVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonContentVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activeQuizVersion<T extends Prisma.Lesson$activeQuizVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$activeQuizVersionArgs<ExtArgs>>): Prisma.Prisma__QuizVersionClient<runtime.Types.Result.GetResult<Prisma.$QuizVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   quizVersions<T extends Prisma.Lesson$quizVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$quizVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  prerequisites<T extends Prisma.Lesson$prerequisitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$prerequisitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPrerequisitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  requiredFor<T extends Prisma.Lesson$requiredForArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$requiredForArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPrerequisitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assessments<T extends Prisma.Lesson$assessmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$assessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssessmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assessmentQuestions<T extends Prisma.Lesson$assessmentQuestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$assessmentQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssessmentQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3237,6 +4435,9 @@ export interface LessonFieldRefs {
   readonly concepts: Prisma.FieldRef<"Lesson", 'String[]'>
   readonly order: Prisma.FieldRef<"Lesson", 'Int'>
   readonly status: Prisma.FieldRef<"Lesson", 'LessonStatus'>
+  readonly difficulty: Prisma.FieldRef<"Lesson", 'LessonDifficulty'>
+  readonly isOptional: Prisma.FieldRef<"Lesson", 'Boolean'>
+  readonly completionMethod: Prisma.FieldRef<"Lesson", 'CompletionMethod'>
   readonly moduleId: Prisma.FieldRef<"Lesson", 'String'>
   readonly activeContentVersionId: Prisma.FieldRef<"Lesson", 'String'>
   readonly activeQuizVersionId: Prisma.FieldRef<"Lesson", 'String'>
@@ -3915,6 +5116,102 @@ export type Lesson$quizVersionsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.QuizVersionScalarFieldEnum | Prisma.QuizVersionScalarFieldEnum[]
+}
+
+/**
+ * Lesson.prerequisites
+ */
+export type Lesson$prerequisitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonPrerequisite
+   */
+  select?: Prisma.LessonPrerequisiteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonPrerequisite
+   */
+  omit?: Prisma.LessonPrerequisiteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonPrerequisiteInclude<ExtArgs> | null
+  where?: Prisma.LessonPrerequisiteWhereInput
+  orderBy?: Prisma.LessonPrerequisiteOrderByWithRelationInput | Prisma.LessonPrerequisiteOrderByWithRelationInput[]
+  cursor?: Prisma.LessonPrerequisiteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonPrerequisiteScalarFieldEnum | Prisma.LessonPrerequisiteScalarFieldEnum[]
+}
+
+/**
+ * Lesson.requiredFor
+ */
+export type Lesson$requiredForArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonPrerequisite
+   */
+  select?: Prisma.LessonPrerequisiteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonPrerequisite
+   */
+  omit?: Prisma.LessonPrerequisiteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonPrerequisiteInclude<ExtArgs> | null
+  where?: Prisma.LessonPrerequisiteWhereInput
+  orderBy?: Prisma.LessonPrerequisiteOrderByWithRelationInput | Prisma.LessonPrerequisiteOrderByWithRelationInput[]
+  cursor?: Prisma.LessonPrerequisiteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonPrerequisiteScalarFieldEnum | Prisma.LessonPrerequisiteScalarFieldEnum[]
+}
+
+/**
+ * Lesson.assessments
+ */
+export type Lesson$assessmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Assessment
+   */
+  select?: Prisma.AssessmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Assessment
+   */
+  omit?: Prisma.AssessmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssessmentInclude<ExtArgs> | null
+  where?: Prisma.AssessmentWhereInput
+  orderBy?: Prisma.AssessmentOrderByWithRelationInput | Prisma.AssessmentOrderByWithRelationInput[]
+  cursor?: Prisma.AssessmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssessmentScalarFieldEnum | Prisma.AssessmentScalarFieldEnum[]
+}
+
+/**
+ * Lesson.assessmentQuestions
+ */
+export type Lesson$assessmentQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssessmentQuestion
+   */
+  select?: Prisma.AssessmentQuestionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssessmentQuestion
+   */
+  omit?: Prisma.AssessmentQuestionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssessmentQuestionInclude<ExtArgs> | null
+  where?: Prisma.AssessmentQuestionWhereInput
+  orderBy?: Prisma.AssessmentQuestionOrderByWithRelationInput | Prisma.AssessmentQuestionOrderByWithRelationInput[]
+  cursor?: Prisma.AssessmentQuestionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssessmentQuestionScalarFieldEnum | Prisma.AssessmentQuestionScalarFieldEnum[]
 }
 
 /**

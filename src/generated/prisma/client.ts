@@ -146,3 +146,33 @@ export type RegenerationLock = Prisma.RegenerationLockModel
  * 
  */
 export type CurriculumRevision = Prisma.CurriculumRevisionModel
+/**
+ * Model LessonPrerequisite
+ * 
+ */
+export type LessonPrerequisite = Prisma.LessonPrerequisiteModel
+/**
+ * Model Assessment
+ * 
+ */
+export type Assessment = Prisma.AssessmentModel
+/**
+ * Model AssessmentVersion
+ * 
+ */
+export type AssessmentVersion = Prisma.AssessmentVersionModel
+/**
+ * Model AssessmentQuestion
+ * 
+ */
+export type AssessmentQuestion = Prisma.AssessmentQuestionModel
+/**
+ * Model AssessmentRun
+ * 
+ */
+export type AssessmentRun = Prisma.AssessmentRunModel
+/**
+ * Model AssessmentAnswer
+ * 
+ */
+export type AssessmentAnswer = Prisma.AssessmentAnswerModel

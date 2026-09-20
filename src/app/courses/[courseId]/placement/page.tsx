@@ -47,6 +47,9 @@ export default async function PlacementPage({
         where: { userId: user.id },
         orderBy: { startedAt: "desc" },
         take: 1,
+        include: {
+          answers: { select: { questionId: true } },
+        },
       },
     },
   });
@@ -56,6 +59,9 @@ export default async function PlacementPage({
   const run =
     latest ??
     (await getOrCreateAssessmentRun(user.id, fullVersion.id));
+  const answeredQuestionIds = new Set(
+    latest?.answers.map((answer) => answer.questionId) ?? [],
+  );
 
   const returnPath = "/courses/" + courseId + "/placement";
 
@@ -110,12 +116,14 @@ export default async function PlacementPage({
           <div className="mt-8">
             <AssessmentRunner
               runId={run.id}
-              questions={fullVersion.questions.map((question) => ({
-                id: question.id,
-                question: question.question,
-                options: optionsFrom(question.data),
-                order: question.order,
-              }))}
+              questions={fullVersion.questions
+                .filter((question) => !answeredQuestionIds.has(question.id))
+                .map((question) => ({
+                  id: question.id,
+                  question: question.question,
+                  options: optionsFrom(question.data),
+                  order: question.order,
+                }))}
             />
           </div>
         )}

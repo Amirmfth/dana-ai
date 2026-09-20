@@ -23,7 +23,7 @@ export const lessonDifficultySchema = z.enum([
 ]);
 
 export const lessonPlanSchema = z.object({
-  key: z.string().min(1).optional(),
+  key: z.string().min(1),
   title: z.string(),
   description: z.string(),
   objectives: z.array(z.string()),

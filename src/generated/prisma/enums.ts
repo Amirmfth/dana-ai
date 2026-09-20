@@ -138,3 +138,53 @@ export const CurriculumRevisionStatus = {
 } as const
 
 export type CurriculumRevisionStatus = (typeof CurriculumRevisionStatus)[keyof typeof CurriculumRevisionStatus]
+
+
+export const CourseLevel = {
+  BEGINNER: 'BEGINNER',
+  INTERMEDIATE: 'INTERMEDIATE',
+  ADVANCED: 'ADVANCED',
+  EXPERT: 'EXPERT'
+} as const
+
+export type CourseLevel = (typeof CourseLevel)[keyof typeof CourseLevel]
+
+
+export const LearningStyle = {
+  BALANCED: 'BALANCED',
+  PRACTICAL: 'PRACTICAL',
+  CONCEPTUAL: 'CONCEPTUAL',
+  PROJECT_BASED: 'PROJECT_BASED'
+} as const
+
+export type LearningStyle = (typeof LearningStyle)[keyof typeof LearningStyle]
+
+
+export const LessonDifficulty = {
+  INTRODUCTORY: 'INTRODUCTORY',
+  EASY: 'EASY',
+  MEDIUM: 'MEDIUM',
+  HARD: 'HARD',
+  ADVANCED: 'ADVANCED'
+} as const
+
+export type LessonDifficulty = (typeof LessonDifficulty)[keyof typeof LessonDifficulty]
+
+
+export const CompletionMethod = {
+  STUDIED: 'STUDIED',
+  TESTED_OUT: 'TESTED_OUT',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type CompletionMethod = (typeof CompletionMethod)[keyof typeof CompletionMethod]
+
+
+export const AssessmentType = {
+  PLACEMENT: 'PLACEMENT',
+  TEST_OUT: 'TEST_OUT',
+  MODULE: 'MODULE',
+  COURSE_FINAL: 'COURSE_FINAL'
+} as const
+
+export type AssessmentType = (typeof AssessmentType)[keyof typeof AssessmentType]

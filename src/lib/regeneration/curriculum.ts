@@ -188,7 +188,6 @@ export async function applyCurriculumRevision(
   const revision = await prisma.curriculumRevision.findFirst({
     where: {
       id: revisionId,
-      status: "DRAFT",
       course: { ownerId: userId },
     },
   });

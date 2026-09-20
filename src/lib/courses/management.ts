@@ -47,7 +47,7 @@ export async function courseToStructure(
         title: module.title,
         description: module.description,
         objective: module.objective,
-        lessons: courseModule.lessons.map((lesson) => ({
+        lessons: module.lessons.map((lesson) => ({
           title: lesson.title,
           description: lesson.description,
           objectives: lesson.objectives,
@@ -87,7 +87,7 @@ export async function createCourseFromStructure(
           objective: module.objective,
           order: moduleIndex + 1,
           lessons: {
-            create: courseModule.lessons.map((lesson, lessonIndex) => ({
+            create: module.lessons.map((lesson, lessonIndex) => ({
               title: lesson.title,
               description: lesson.description,
               objectives: lesson.objectives,
@@ -123,7 +123,7 @@ export async function normalizeCourseProgress(courseId: string) {
 
   if (!course) return;
 
-  const lessons = course.modules.flatMap((module) => courseModule.lessons);
+  const lessons = course.modules.flatMap((module) => module.lessons);
   const statuses = nextStatusesAfterStructureChange(lessons);
   const incompleteCount = statuses.filter(
     (lesson) => lesson.status !== "COMPLETED",

@@ -124,6 +124,10 @@ export async function fetchPublicSourceUrl(rawUrl: string) {
     }
 
     const raw = await response.text();
+    if (Buffer.byteLength(raw, "utf8") > 2 * 1024 * 1024) {
+      throw new Error("Source URL content is too large.");
+    }
+
     const contentType = response.headers.get("content-type") ?? "";
     const titleMatch = raw.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
 

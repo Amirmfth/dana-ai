@@ -117,6 +117,19 @@ Include:
 Keep this metadata compact and factual.
 Do not duplicate the entire lesson.
 
+SOURCE GROUNDING
+
+The context may contain sourceContext entries with stable markers such as [S1].
+When sourceContext is present:
+- treat those chunks as the primary evidence for source-specific factual claims;
+- do not invent claims that contradict or go beyond the supplied material unless they are clearly necessary general background;
+- cite supported statements inline with the supplied marker, for example [S1];
+- include a citations entry for every source chunk actually cited;
+- sourceChunkId must exactly match a provided sourceContext.sourceChunkId;
+- location should use the provided sourceContext.location.
+
+When sourceContext is empty, generate the lesson normally and leave citations empty.
+
 Do NOT generate a quiz yet. Assessment is handled separately.
         `.trim(),
       },

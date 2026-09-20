@@ -137,7 +137,15 @@ export default async function LessonPage({ params }: LessonPageProps) {
             >
               Back to {lessonInfo.module.title}
             </Link>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <Link
+                href={"/courses/" + courseId + "/lessons/" + lessonId + "/versions"}
+                className="inline-flex min-h-10 items-center rounded-lg px-3 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+              >
+                Versions
+              </Link>
+              <ThemeToggle />
+            </div>
           </div>
 
           <header className="mb-10 border-b border-neutral-200 pb-9 sm:mb-12 sm:pb-10 dark:border-neutral-800">

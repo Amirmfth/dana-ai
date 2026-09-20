@@ -1,6 +1,6 @@
 import { Prisma } from "@/generated/prisma/client";
 
-import { createEmbedding } from "@/lib/ai/embeddings";
+import { createEmbeddings } from "@/lib/ai/embeddings";
 import { prisma } from "@/lib/db/prisma";
 import { chunkSourceText, type TextChunk } from "@/lib/sources/chunking";
 import { extractPdfSource } from "@/lib/sources/pdf";
@@ -26,31 +26,47 @@ async function persistChunks({
     throw new Error("Source did not contain extractable text.");
   }
 
+  const rows = [];
   for (let index = 0; index < chunks.length; index += 1) {
     const chunk = chunks[index];
-    const row = await prisma.sourceChunk.create({
-      data: {
-        sourceId,
-        chunkIndex: index,
-        content: chunk.content,
-        pageStart: chunk.pageStart ?? null,
-        pageEnd: chunk.pageEnd ?? null,
-        heading: chunk.heading ?? null,
-      },
-    });
+    rows.push(
+      await prisma.sourceChunk.create({
+        data: {
+          sourceId,
+          chunkIndex: index,
+          content: chunk.content,
+          pageStart: chunk.pageStart ?? null,
+          pageEnd: chunk.pageEnd ?? null,
+          heading: chunk.heading ?? null,
+        },
+      }),
+    );
+  }
 
-    const embedding = await createEmbedding({
-      text: chunk.content,
+  const batchSize = 16;
+  for (let offset = 0; offset < rows.length; offset += batchSize) {
+    const rowBatch = rows.slice(offset, offset + batchSize);
+    const chunkBatch = chunks.slice(offset, offset + batchSize);
+    const embeddings = await createEmbeddings({
+      texts: chunkBatch.map((chunk) => chunk.content),
       userId: ownerId,
       courseId,
     });
-    const vector = vectorToSql(embedding);
 
-    await prisma.$executeRaw(Prisma.sql`
-      UPDATE "SourceChunk"
-      SET "embedding" = ${vector}::vector
-      WHERE "id" = ${row.id}
-    `);
+    if (embeddings.length !== rowBatch.length) {
+      throw new Error("Embedding batch returned an unexpected result count.");
+    }
+
+    await Promise.all(
+      rowBatch.map((row, index) => {
+        const vector = vectorToSql(embeddings[index]);
+        return prisma.$executeRaw(Prisma.sql`
+          UPDATE "SourceChunk"
+          SET "embedding" = ${vector}::vector
+          WHERE "id" = ${row.id}
+        `);
+      }),
+    );
   }
 }
 

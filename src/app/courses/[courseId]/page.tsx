@@ -77,6 +77,12 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
           </nav>
           <div className="flex items-center gap-2">
             <Link
+              href={"/courses/" + course.id + "/sources"}
+              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+            >
+              Sources
+            </Link>
+            <Link
               href={"/courses/" + course.id + "/assessments"}
               className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
             >

@@ -73,6 +73,12 @@ enum GenerationStatus {
   FAILED
 }
 
+enum LearningEventType {
+  LESSON_STARTED
+  LESSON_COMPLETED
+  QUIZ_COMPLETED
+}
+
 model Course {
   id           String       @id @default(cuid())
   ownerId      String       @db.Uuid
@@ -83,9 +89,11 @@ model Course {
   prompt       String
   instructions String?
 
-  modules        Module[]
-  courseMemories CourseMemory[]
-  templates      CourseTemplate[]
+  modules         Module[]
+  courseMemories  CourseMemory[]
+  templates       CourseTemplate[]
+  learningEvents  LearningEvent[]
+  studyTime       StudyTime[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -129,6 +137,9 @@ model Lesson {
   courseMemories  CourseMemory[]
   exercises       Exercise[]
   generationJobs  GenerationJob[]
+  quizRuns         QuizRun[]
+  learningEvents   LearningEvent[]
+  studyTime        StudyTime[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -260,12 +271,76 @@ model ExerciseAttempt {
   exerciseId String
   exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 
+  quizRunId String
+  quizRun   QuizRun @relation(fields: [quizRunId], references: [id], onDelete: Cascade)
+
   answer Json
   result AttemptResult
 
   createdAt DateTime @default(now())
 
   @@index([exerciseId, createdAt])
+  @@index([quizRunId, createdAt])
+}
+
+model QuizRun {
+  id String @id @default(cuid())
+  userId String @db.Uuid
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  attempts ExerciseAttempt[]
+
+  score Int?
+  total Int?
+
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+
+  @@index([userId, startedAt])
+  @@index([lessonId, startedAt])
+}
+
+model LearningEvent {
+  id String @id @default(cuid())
+  userId String @db.Uuid
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessonId String?
+  lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  type     LearningEventType
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([courseId, createdAt])
+  @@index([lessonId, createdAt])
+}
+
+model StudyTime {
+  id String @id @default(cuid())
+  userId String @db.Uuid
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  day     DateTime @db.Date
+  seconds Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, lessonId, day])
+  @@index([userId, day])
+  @@index([courseId, day])
 }
 
 model AiRequestWindow {

@@ -5,15 +5,20 @@ import { signOutAction } from "@/app/auth/actions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { getUserDashboard } from "@/lib/analytics/course";
+import { LearningDashboard } from "@/components/analytics/learning-dashboard";
 
 export default async function HomePage() {
   const user = await requireUser();
 
-  const courses = await prisma.course.findMany({
+  const [courses, dashboard] = await Promise.all([
+    prisma.course.findMany({
     where: { ownerId: user.id },
     orderBy: { updatedAt: "desc" },
-    include: { modules: { include: { lessons: true } } },
-  });
+      include: { modules: { include: { lessons: true } } },
+    }),
+    getUserDashboard(user.id),
+  ]);
 
   const activeCourses = courses.filter((course) => course.status !== "ARCHIVED");
   const archivedCourses = courses.filter((course) => course.status === "ARCHIVED");
@@ -92,6 +97,8 @@ export default async function HomePage() {
             </div>
           </form>
         </section>
+
+        <LearningDashboard dashboard={dashboard} />
 
         <section aria-labelledby="courses-heading" className="border-t border-neutral-200 py-10 dark:border-neutral-800 sm:py-14">
           <div className="mb-7 flex flex-wrap items-end justify-between gap-3">

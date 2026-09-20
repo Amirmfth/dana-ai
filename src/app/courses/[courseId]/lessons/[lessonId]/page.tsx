@@ -12,6 +12,8 @@ import { markLessonStarted } from "@/lib/lessons/progress";
 import { LessonCompletion } from "@/components/lessons/lesson-completion";
 import { getOrGenerateQuiz } from "@/lib/exercises/get-or-generate-quiz";
 import { LessonQuiz } from "@/components/exercises/lesson-quiz";
+import { LessonStudyTracker } from "@/components/analytics/lesson-study-tracker";
+import { estimateLessonMinutes } from "@/lib/analytics/estimates";
 
 type LessonPageProps = {
   params: Promise<{
@@ -70,8 +72,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
     : undefined;
 
   const lesson = await getOrGenerateLesson(user.id, lessonId);
-  const exercises = await getOrGenerateQuiz(user.id, lessonId);
-  const quizExercises = exercises.map((exercise) => {
+  const quiz = await getOrGenerateQuiz(user.id, lessonId);
+  const quizExercises = quiz.exercises.map((exercise) => {
     const latestAttempt = exercise.attempts[0];
 
     return {
@@ -108,6 +110,13 @@ export default async function LessonPage({ params }: LessonPageProps) {
         : [],
     };
   });
+  const estimatedMinutes = estimateLessonMinutes({
+    content: lesson,
+    objectivesCount: lessonInfo.objectives.length,
+    conceptsCount: lessonInfo.concepts.length,
+    exerciseCount: quiz.exercises.length,
+  });
+
   const tocSections = lesson.sections.map((section, index) => ({
     id: `lesson-section-${index}`,
     title: section.title || `Section ${index + 1}`,
@@ -118,6 +127,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
       id="main-content"
       className="min-h-dvh bg-white text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50"
     >
+      <LessonStudyTracker lessonId={lessonId} />
       <LessonWorkspace lessonId={lessonId} conversation={initialConversation}>
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:max-w-none lg:px-12 lg:pb-10">
           <div className="flex items-center justify-between gap-4">
@@ -135,6 +145,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
               <p className="mb-3 text-sm font-medium text-neutral-500 dark:text-neutral-400">
                 Module {lessonInfo.module.order}{" "}
                 <span aria-hidden="true">·</span> Lesson {lessonInfo.order}
+                <span aria-hidden="true"> · </span>~{estimatedMinutes} min
               </p>
 
               <h1 className="text-3xl font-semibold tracking-tight text-neutral-950 dark:text-white sm:text-4xl">
@@ -156,7 +167,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <div className="min-w-0">
             <div className="mx-auto w-full max-w-2xl">
               <LessonContent lesson={lesson} />
-              <LessonQuiz exercises={quizExercises} lessonId={lessonId} />
+              <LessonQuiz
+                exercises={quizExercises}
+                lessonId={lessonId}
+                quizRunId={quiz.run.id}
+              />
 
               <LessonCompletion
                 courseId={courseId}

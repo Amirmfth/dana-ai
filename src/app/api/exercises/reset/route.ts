@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 
 import { getCurrentUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { startNewQuizRun } from "@/lib/exercises/quiz-runs";
 
 type ResetRequest = { lessonId: string };
 
@@ -30,18 +31,9 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: "Lesson not found." }, { status: 404 });
     }
 
-    const exercises = await prisma.exercise.findMany({
-      where: { lessonId: body.lessonId },
-      select: { id: true },
-    });
+    const run = await startNewQuizRun(user.id, body.lessonId);
 
-    await prisma.exerciseAttempt.deleteMany({
-      where: {
-        exerciseId: { in: exercises.map((exercise) => exercise.id) },
-      },
-    });
-
-    return Response.json({ success: true });
+    return Response.json({ success: true, quizRunId: run.id });
   } catch (error) {
     console.error("Quiz reset failed:", error);
     return Response.json({ error: "Failed to reset quiz." }, { status: 500 });

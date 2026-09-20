@@ -35,6 +35,14 @@ export default async function ManageCoursePage({
 
   if (!course) notFound();
 
+  const allLessons = course.modules.flatMap((courseModule) =>
+    courseModule.lessons.map((lesson) => ({
+      id: lesson.id,
+      title: lesson.title,
+      moduleTitle: courseModule.title,
+    })),
+  );
+
   return (
     <main className="min-h-dvh bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
       <div className="mx-auto max-w-5xl px-5 py-8 sm:px-8 lg:px-10">
@@ -271,7 +279,8 @@ export default async function ManageCoursePage({
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <p className="text-xs font-medium text-neutral-500">
-                            Lesson {lesson.order} · {lesson.status}
+                            Lesson {lesson.order} · {lesson.status} · {lesson.difficulty.toLowerCase()}
+                            {lesson.isOptional ? " · optional" : ""}
                           </p>
                           <h4 className="mt-1 font-semibold">{lesson.title}</h4>
                           {lesson.concepts.length > 0 && (
@@ -363,6 +372,52 @@ export default async function ManageCoursePage({
                               className={fieldClass}
                             />
                           </label>
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <label className="text-sm font-medium">
+                              Difficulty
+                              <select
+                                name="difficulty"
+                                defaultValue={lesson.difficulty}
+                                className={fieldClass}
+                              >
+                                <option value="INTRODUCTORY">Introductory</option>
+                                <option value="EASY">Easy</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HARD">Hard</option>
+                                <option value="ADVANCED">Advanced</option>
+                              </select>
+                            </label>
+                            <label className="flex items-center gap-2 self-end pb-3 text-sm font-medium">
+                              <input
+                                type="checkbox"
+                                name="isOptional"
+                                defaultChecked={lesson.isOptional}
+                              />
+                              Optional / skippable
+                            </label>
+                          </div>
+                          <label className="text-sm font-medium">
+                            Prerequisites
+                            <span className="mt-1 block text-xs font-normal text-neutral-500">
+                              Select zero or more lessons. Cycles are rejected.
+                            </span>
+                            <select
+                              name="prerequisiteIds"
+                              multiple
+                              defaultValue={lesson.prerequisites.map(
+                                (item) => item.prerequisiteLessonId,
+                              )}
+                              className={fieldClass + " min-h-32"}
+                            >
+                              {allLessons
+                                .filter((item) => item.id !== lesson.id)
+                                .map((item) => (
+                                  <option key={item.id} value={item.id}>
+                                    {item.moduleTitle} · {item.title}
+                                  </option>
+                                ))}
+                            </select>
+                          </label>
                           <label className="text-sm font-medium">
                             Concepts
                             <span className="mt-1 block text-xs font-normal text-neutral-500">
@@ -422,6 +477,26 @@ export default async function ManageCoursePage({
                         Concepts
                         <textarea name="concepts" rows={3} className={fieldClass} />
                       </label>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <label className="text-sm font-medium">
+                          Difficulty
+                          <select
+                            name="difficulty"
+                            defaultValue="MEDIUM"
+                            className={fieldClass}
+                          >
+                            <option value="INTRODUCTORY">Introductory</option>
+                            <option value="EASY">Easy</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="HARD">Hard</option>
+                            <option value="ADVANCED">Advanced</option>
+                          </select>
+                        </label>
+                        <label className="flex items-center gap-2 self-end pb-3 text-sm font-medium">
+                          <input type="checkbox" name="isOptional" />
+                          Optional / skippable
+                        </label>
+                      </div>
                       <button className={primaryButtonClass}>Add lesson</button>
                     </form>
                   </details>

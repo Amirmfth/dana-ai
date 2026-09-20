@@ -40,12 +40,23 @@ export async function uploadSourceFile(
     throw new Error("Source files must be between 1 byte and 8 MB.");
   }
 
+  const lowerName = file.name.toLowerCase();
+  const mimeType =
+    file.type ||
+    (lowerName.endsWith(".pdf")
+      ? "application/pdf"
+      : lowerName.endsWith(".md")
+        ? "text/markdown"
+        : lowerName.endsWith(".txt")
+          ? "text/plain"
+          : "");
+
   const allowed = new Set([
     "application/pdf",
     "text/plain",
     "text/markdown",
   ]);
-  if (!allowed.has(file.type)) {
+  if (!allowed.has(mimeType)) {
     throw new Error("Only PDF, plain text, and Markdown files are supported.");
   }
 
@@ -57,7 +68,7 @@ export async function uploadSourceFile(
     {
       method: "POST",
       headers: {
-        "Content-Type": file.type || "application/octet-stream",
+        "Content-Type": mimeType,
         "x-upsert": "false",
       },
       body: file,

@@ -73,12 +73,14 @@ export async function activateLessonContentVersion(userId: string, lessonId: str
     where: { id: versionId, lessonId, lesson: { module: { course: { ownerId: userId } } } },
   });
   if (!version) throw new Error("Lesson version not found.");
-  lessonContentSchema.parse(version.content);
+  const parsed = lessonContentSchema.parse(version.content);
+  const content = parsed as Prisma.InputJsonValue;
+
   await prisma.$transaction([
     prisma.lessonContent.upsert({
       where: { lessonId },
-      create: { lessonId, content: version.content, generationVersion: version.version },
-      update: { content: version.content, generationVersion: version.version, generatedAt: new Date() },
+      create: { lessonId, content, generationVersion: version.version },
+      update: { content, generationVersion: version.version, generatedAt: new Date() },
     }),
     prisma.lesson.update({ where: { id: lessonId }, data: { activeContentVersionId: version.id } }),
   ]);

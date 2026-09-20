@@ -42,10 +42,7 @@ export async function regenerateLessonContent(userId: string, lessonId: string, 
 
   try {
     const context = await buildLessonContext(lessonId);
-    const generated = await generateLesson(context, lesson.module.courseId, userId, {
-      regenerationInstructions: instructions?.trim() || undefined,
-      previousContent: lesson.content?.content ?? undefined,
-    });
+    const generated = await generateLesson(context, lesson.module.courseId, userId);
     const nextVersion = (lesson.contentVersions[0]?.version ?? 0) + 1;
     const created = await prisma.$transaction(async (tx) => {
       const version = await tx.lessonContentVersion.create({

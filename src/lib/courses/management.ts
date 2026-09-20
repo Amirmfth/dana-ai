@@ -50,7 +50,7 @@ export async function courseToStructure(
         title: module.title,
         description: module.description,
         objective: module.objective,
-        lessons: module.lessons.map((lesson, lessonIndex) => ({
+        lessons: module.lessons.map((lesson) => ({
           key: lesson.id,
           title: lesson.title,
           description: lesson.description,

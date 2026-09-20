@@ -38,11 +38,16 @@ async function persistCitations(
     },
     select: {
       id: true,
-      module: { select: { courseId: true } },
+      pageStart: true,
+      pageEnd: true,
+      heading: true,
+      source: {
+        select: { title: true },
+      },
     },
   });
 
-  const valid = new Set(validChunks.map((chunk) => chunk.id));
+  const valid = new Map(validChunks.map((chunk) => [chunk.id, chunk]));
   const rows = citations
     .filter((citation) => valid.has(citation.sourceChunkId))
     .filter(
@@ -74,7 +79,10 @@ async function persistCitations(
 export async function persistInitialLessonVersion(userId: string, lessonId: string, generated: unknown) {
   const lesson = await prisma.lesson.findFirst({
     where: { id: lessonId, module: { course: { ownerId: userId } } },
-    select: { id: true },
+    select: {
+      id: true,
+      module: { select: { courseId: true } },
+    },
   });
   if (!lesson) throw new Error("Lesson not found.");
   const parsed = lessonContentSchema.parse(generated);

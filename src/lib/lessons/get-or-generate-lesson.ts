@@ -1,11 +1,9 @@
-import { Prisma } from "@/generated/prisma/client";
-
-import { buildLessonContext } from "@/lib/ai/lesson-context";
-import { generateLesson } from "@/lib/ai/lesson-generator";
 import {
   lessonContentSchema,
   type GeneratedLessonContent,
 } from "@/lib/ai/schemas/lesson";
+import { buildLessonContext } from "@/lib/ai/lesson-context";
+import { generateLesson } from "@/lib/ai/lesson-generator";
 import { prisma } from "@/lib/db/prisma";
 import {
   claimGeneration,
@@ -14,6 +12,7 @@ import {
   markObservedGenerationReady,
   waitForGeneratedValue,
 } from "@/lib/generation/coordinator";
+import { persistInitialLessonVersion } from "@/lib/regeneration/lesson";
 
 async function loadLessonContent(lessonId: string) {
   const existing = await prisma.lessonContent.findUnique({
@@ -68,16 +67,11 @@ export async function getOrGenerateLesson(
       lesson.module.courseId,
       userId,
     );
-
-    const persisted = await prisma.lessonContent.upsert({
-      where: { lessonId },
-      create: {
-        lessonId,
-        content: generated as Prisma.InputJsonValue,
-        generationVersion: 1,
-      },
-      update: {},
-    });
+    const persisted = await persistInitialLessonVersion(
+      userId,
+      lessonId,
+      generated,
+    );
 
     await markGenerationReady(
       lessonId,
@@ -85,7 +79,7 @@ export async function getOrGenerateLesson(
       claimToken,
     );
 
-    return lessonContentSchema.parse(persisted.content);
+    return persisted;
   } catch (error) {
     await markGenerationFailed(
       lessonId,

@@ -422,6 +422,12 @@ export async function ensureModuleAssessment(
     return assessment.versions[0];
   }
 
+  const requiredLessons = courseModule.lessons.filter(
+    (lesson) => !lesson.isOptional,
+  );
+  const assessmentLessons =
+    requiredLessons.length > 0 ? requiredLessons : courseModule.lessons;
+
   const generated = await generateModuleAssessment(
     userId,
     courseId,
@@ -430,16 +436,8 @@ export async function ensureModuleAssessment(
       title: courseModule.title,
       objective: courseModule.objective,
     },
-    courseModule.lessons
-      .filter((lesson) => !lesson.isOptional)
-      .map(lessonTarget),
+    assessmentLessons.map(lessonTarget),
   );
-
-  const requiredLessons = courseModule.lessons.filter(
-    (lesson) => !lesson.isOptional,
-  );
-  const assessmentLessons =
-    requiredLessons.length > 0 ? requiredLessons : courseModule.lessons;
 
   if (generated.questions.length < 5) {
     throw new Error("Module assessment must contain at least five questions.");
@@ -577,9 +575,11 @@ export async function ensureCourseFinalAssessment(
       id: courseModule.id,
       title: courseModule.title,
       objective: courseModule.objective,
-      lessons: courseModule.lessons
-        .filter((lesson) => !lesson.isOptional)
-        .map(lessonTarget),
+      lessons: (
+        courseModule.lessons.some((lesson) => !lesson.isOptional)
+          ? courseModule.lessons.filter((lesson) => !lesson.isOptional)
+          : courseModule.lessons
+      ).map(lessonTarget),
     })),
   );
 

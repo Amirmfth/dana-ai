@@ -453,8 +453,6 @@ async function latestModuleAssessmentPassed(
     where: { courseId, moduleId, type: "MODULE" },
     include: {
       versions: {
-        orderBy: { version: "desc" },
-        take: 1,
         include: {
           runs: {
             where: {
@@ -469,7 +467,9 @@ async function latestModuleAssessmentPassed(
     },
   });
 
-  return Boolean(assessment?.versions[0]?.runs[0]);
+  return Boolean(
+    assessment?.versions.some((version) => Boolean(version.runs[0])),
+  );
 }
 
 export async function getCourseFinalEligibility(

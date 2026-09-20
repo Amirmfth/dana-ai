@@ -16,7 +16,7 @@ export async function getCourseAnalytics(userId: string, courseId: string) {
             orderBy: { order: "asc" },
             include: {
               content: { select: { content: true } },
-              exercises: { select: { id: true } },
+              exercises: { select: { id: true, quizVersionId: true } },
             },
           },
         },
@@ -218,7 +218,7 @@ export async function getUserDashboard(userId: string) {
             orderBy: { order: "asc" },
             include: {
               content: { select: { content: true } },
-              exercises: { select: { id: true } },
+              exercises: { select: { id: true, quizVersionId: true } },
             },
           },
         },

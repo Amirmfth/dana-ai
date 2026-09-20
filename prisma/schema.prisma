@@ -160,6 +160,14 @@ model Lesson {
   learningEvents   LearningEvent[]
   studyTime        StudyTime[]
 
+  activeContentVersionId String? @unique
+  activeContentVersion   LessonContentVersion? @relation("ActiveLessonContentVersion", fields: [activeContentVersionId], references: [id], onDelete: SetNull)
+  contentVersions        LessonContentVersion[] @relation("LessonContentVersions")
+
+  activeQuizVersionId String? @unique
+  activeQuizVersion   QuizVersion? @relation("ActiveLessonQuizVersion", fields: [activeQuizVersionId], references: [id], onDelete: SetNull)
+  quizVersions        QuizVersion[] @relation("LessonQuizVersions")
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   startedAt   DateTime?

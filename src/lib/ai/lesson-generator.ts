@@ -10,8 +10,10 @@ import type { LessonContext } from "@/lib/ai/lesson-context";
 export async function generateLesson(
   context: LessonContext,
   courseId: string,
+  userId: string,
 ): Promise<GeneratedLessonContent> {
   const response = await createTrackedResponse({
+    userId,
     operation: "LESSON_GENERATION",
     model: "gpt-5.6-luna",
 

@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -68,23 +63,21 @@ enum AttemptResult {
 
 model Course {
   id          String       @id @default(cuid())
+  ownerId     String       @db.Uuid
   title       String
   description String?
   goal        String
   status      CourseStatus @default(DRAFT)
-
-  // The original prompt used to create the course.
-  prompt String
-
-  // Optional persistent instructions specific to this course.
+  prompt      String
   instructions String?
 
-  modules Module[]
-
+  modules        Module[]
   courseMemories CourseMemory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([ownerId, updatedAt])
 }
 
 model Module {
@@ -92,9 +85,7 @@ model Module {
   title       String
   description String?
   objective   String?
-
-  // Determines module position inside the course.
-  order Int
+  order       Int
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -112,30 +103,23 @@ model Lesson {
   id          String  @id @default(cuid())
   title       String
   description String?
-
-  // What the student should know after this lesson.
-  objectives String[]
-
-  // Concepts the lesson is expected to teach.
-  concepts String[]
-
-  order Int
-
-  status LessonStatus @default(LOCKED)
+  objectives  String[]
+  concepts    String[]
+  order       Int
+  status      LessonStatus @default(LOCKED)
 
   moduleId String
   module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
-  // Generated only when the learner actually opens the lesson.
-  content LessonContent?
+  content         LessonContent?
+  conversations   Conversation[]
+  courseMemories  CourseMemory[]
+  exercises       Exercise[]
 
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  startedAt      DateTime?
-  completedAt    DateTime?
-  conversations  Conversation[]
-  courseMemories CourseMemory[]
-  exercises      Exercise[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  startedAt   DateTime?
+  completedAt DateTime?
 
   @@unique([moduleId, order])
   @@index([moduleId])
@@ -147,15 +131,10 @@ model LessonContent {
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
-  // Initially we'll store generated structured lesson data as JSON.
-  // Later we can normalize pieces that deserve their own tables.
-  content Json
-
-  // Useful when prompts/models evolve.
-  generationVersion Int @default(1)
-
-  generatedAt DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  content           Json
+  generationVersion Int      @default(1)
+  generatedAt       DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Conversation {
@@ -173,8 +152,7 @@ model Conversation {
 }
 
 model Message {
-  id String @id @default(cuid())
-
+  id      String      @id @default(cuid())
   role    MessageRole
   content String
 
@@ -195,16 +173,9 @@ model CourseMemory {
   lessonId String?
   lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
 
-  type MemoryType
-
-  content String
-
-  /**
-   * 1-5.
-   * Later this helps the context builder decide which memories
-   * deserve prompt space.
-   */
-  importance Int @default(3)
+  type       MemoryType
+  content    String
+  importance Int        @default(3)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -215,44 +186,32 @@ model CourseMemory {
 }
 
 model AiUsage {
-  id String @id @default(cuid())
+  id     String @id @default(cuid())
+  userId String @db.Uuid
 
   operation AiOperation
   status    AiRequestStatus
+  model     String
 
-  model String
-
-  // OpenAI response/request identifier when available.
   providerResponseId String?
+  input              Json?
+  output             String?
 
-  // Exact input we sent.
-  input Json?
-
-  // Exact textual output when appropriate.
-  output String?
-
-  inputTokens  Int?
-  outputTokens Int?
-  totalTokens  Int?
-
-  // Useful later for cached-input analysis.
+  inputTokens       Int?
+  outputTokens      Int?
+  totalTokens       Int?
   cachedInputTokens Int?
+  reasoningTokens   Int?
+  durationMs        Int?
+  errorMessage      String?
 
-  // Reasoning-token usage when reported by the model.
-  reasoningTokens Int?
-
-  // Wall-clock API request duration.
-  durationMs Int?
-
-  errorMessage String?
-
-  // Optional links back into Dana.
   courseId       String?
   lessonId       String?
   conversationId String?
 
   createdAt DateTime @default(now())
 
+  @@index([userId, createdAt])
   @@index([createdAt])
   @@index([operation, createdAt])
   @@index([model, createdAt])
@@ -261,28 +220,17 @@ model AiUsage {
 }
 
 model Exercise {
-  id String @id @default(cuid())
-
+  id       String       @id @default(cuid())
   lessonId String
-  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-
-  type ExerciseType
-
-  order Int
-
+  lesson   Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  type     ExerciseType
+  order    Int
   question String
-
-  // Presentation data specific to the exercise type.
-  data Json
-
-  // Hidden deterministic grading data.
-  answerKey Json
-
+  data       Json
+  answerKey  Json
   explanation String
-
-  concepts String[]
-
-  attempts ExerciseAttempt[]
+  concepts    String[]
+  attempts    ExerciseAttempt[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -297,12 +245,29 @@ model ExerciseAttempt {
   exerciseId String
   exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 
-  // Different exercise types need different answer shapes.
   answer Json
-
   result AttemptResult
 
   createdAt DateTime @default(now())
 
   @@index([exerciseId, createdAt])
+}
+
+model AiRequestWindow {
+  id          String      @id @default(cuid())
+  scopeKey    String
+  operation   AiOperation
+  windowStart DateTime
+  count       Int         @default(0)
+
+  @@unique([scopeKey, operation, windowStart])
+  @@index([windowStart])
+}
+
+model UserPrivacySettings {
+  userId          String   @id @db.Uuid
+  storeAiPayloads Boolean  @default(false)
+  retentionDays   Int      @default(30)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

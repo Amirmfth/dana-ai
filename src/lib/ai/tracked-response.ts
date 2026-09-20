@@ -1,6 +1,11 @@
-import { prisma } from "@/lib/db/prisma";
-import { openai } from "@/lib/ai/client";
 import type { Response as OpenAIResponse } from "openai/resources/responses/responses";
+import { Prisma } from "@/generated/prisma/client";
+
+import { assertAiRequestAllowed } from "@/lib/ai/guard";
+import { aiPayloadForStorage, getPrivacySettings } from "@/lib/ai/privacy";
+import { resolveAiUsageUserId } from "@/lib/ai/usage-user";
+import { openai } from "@/lib/ai/client";
+import { prisma } from "@/lib/db/prisma";
 
 type AiOperation =
   | "COURSE_GENERATION"
@@ -8,76 +13,84 @@ type AiOperation =
   | "TUTOR"
   | "MEMORY_EXTRACTION"
   | "QUIZ_GENERATION";
-  
+
 type TrackedResponseOptions = {
   operation: AiOperation;
-
   model: string;
-
   input: Parameters<typeof openai.responses.create>[0]["input"];
-
   reasoning?: {
     effort: "none" | "low" | "medium" | "high" | "xhigh";
   };
-
   text?: Parameters<typeof openai.responses.create>[0]["text"];
-
+  userId?: string;
   courseId?: string;
   lessonId?: string;
   conversationId?: string;
 };
 
+const guardedOperations = new Set<AiOperation>([
+  "COURSE_GENERATION",
+  "LESSON_GENERATION",
+  "TUTOR",
+  "QUIZ_GENERATION",
+]);
+
+async function contextFor(options: TrackedResponseOptions) {
+  const userId = await resolveAiUsageUserId(options);
+  const privacy = await getPrivacySettings(userId);
+
+  if (guardedOperations.has(options.operation)) {
+    await assertAiRequestAllowed(
+      userId,
+      options.operation as
+        | "COURSE_GENERATION"
+        | "LESSON_GENERATION"
+        | "QUIZ_GENERATION"
+        | "TUTOR",
+    );
+  }
+
+  return { userId, privacy };
+}
+
 async function saveSuccess({
   response,
   startedAt,
-  operation,
-  model,
-  input,
-  courseId,
-  lessonId,
-  conversationId,
+  options,
+  userId,
+  storeAiPayloads,
 }: {
   response: OpenAIResponse;
   startedAt: number;
-  operation: AiOperation;
-  model: string;
-  input: TrackedResponseOptions["input"];
-  courseId?: string;
-  lessonId?: string;
-  conversationId?: string;
+  options: TrackedResponseOptions;
+  userId: string;
+  storeAiPayloads: boolean;
 }) {
-  const durationMs = Date.now() - startedAt;
+  const input = aiPayloadForStorage(
+    JSON.parse(JSON.stringify(options.input)),
+    { storeAiPayloads, retentionDays: 30 },
+  );
 
   await prisma.aiUsage.create({
     data: {
-      operation,
+      userId,
+      operation: options.operation,
       status: "SUCCESS",
-
-      model,
-
+      model: options.model,
       providerResponseId: response.id,
-
-      input: JSON.parse(JSON.stringify(input)),
-
-      output: response.output_text || null,
-
+      input: input === null ? Prisma.DbNull : (input as Prisma.InputJsonValue),
+      output: storeAiPayloads ? response.output_text || null : null,
       inputTokens: response.usage?.input_tokens ?? null,
-
       outputTokens: response.usage?.output_tokens ?? null,
-
       totalTokens: response.usage?.total_tokens ?? null,
-
       cachedInputTokens:
         response.usage?.input_tokens_details?.cached_tokens ?? null,
-
       reasoningTokens:
         response.usage?.output_tokens_details?.reasoning_tokens ?? null,
-
-      durationMs,
-
-      courseId,
-      lessonId,
-      conversationId,
+      durationMs: Date.now() - startedAt,
+      courseId: options.courseId,
+      lessonId: options.lessonId,
+      conversationId: options.conversationId,
     },
   });
 }
@@ -85,74 +98,56 @@ async function saveSuccess({
 async function saveError({
   error,
   startedAt,
-  operation,
-  model,
-  input,
-  courseId,
-  lessonId,
-  conversationId,
+  options,
+  userId,
+  storeAiPayloads,
 }: {
   error: unknown;
   startedAt: number;
-  operation: AiOperation;
-  model: string;
-  input: TrackedResponseOptions["input"];
-  courseId?: string;
-  lessonId?: string;
-  conversationId?: string;
+  options: TrackedResponseOptions;
+  userId: string;
+  storeAiPayloads: boolean;
 }) {
-  const durationMs = Date.now() - startedAt;
+  const input = aiPayloadForStorage(
+    JSON.parse(JSON.stringify(options.input)),
+    { storeAiPayloads, retentionDays: 30 },
+  );
 
   await prisma.aiUsage.create({
     data: {
-      operation,
+      userId,
+      operation: options.operation,
       status: "ERROR",
-
-      model,
-
-      input: JSON.parse(JSON.stringify(input)),
-
-      durationMs,
-
+      model: options.model,
+      input: input === null ? Prisma.DbNull : (input as Prisma.InputJsonValue),
+      durationMs: Date.now() - startedAt,
       errorMessage:
         error instanceof Error ? error.message : "Unknown AI request error",
-
-      courseId,
-      lessonId,
-      conversationId,
+      courseId: options.courseId,
+      lessonId: options.lessonId,
+      conversationId: options.conversationId,
     },
   });
 }
 
-export async function createTrackedResponse({
-  operation,
-  model,
-  input,
-  reasoning,
-  text,
-  courseId,
-  lessonId,
-  conversationId,
-}: TrackedResponseOptions) {
+export async function createTrackedResponse(options: TrackedResponseOptions) {
   const startedAt = Date.now();
+  const { userId, privacy } = await contextFor(options);
 
   try {
     const response = await openai.responses.create({
-      model,
-      input,
-      reasoning,
-      text,
+      model: options.model,
+      input: options.input,
+      reasoning: options.reasoning,
+      text: options.text,
     });
 
     await saveSuccess({
       response,
       startedAt,
-      operation,
-      model,
-      input,
-      courseId,
-      lessonId,
-      conversationId,
+      options,
+      userId,
+      storeAiPayloads: privacy.storeAiPayloads,
     });
 
     return response;
@@ -160,36 +155,24 @@ export async function createTrackedResponse({
     await saveError({
       error,
       startedAt,
-      operation,
-      model,
-      input,
-      courseId,
-      lessonId,
-      conversationId,
+      options,
+      userId,
+      storeAiPayloads: privacy.storeAiPayloads,
     });
-
     throw error;
   }
 }
 
-export async function createTrackedResponseStream({
-  operation,
-  model,
-  input,
-  reasoning,
-  text,
-  courseId,
-  lessonId,
-  conversationId,
-}: TrackedResponseOptions) {
+export async function createTrackedResponseStream(options: TrackedResponseOptions) {
   const startedAt = Date.now();
+  const { userId, privacy } = await contextFor(options);
 
   try {
     const stream = await openai.responses.create({
-      model,
-      input,
-      reasoning,
-      text,
+      model: options.model,
+      input: options.input,
+      reasoning: options.reasoning,
+      text: options.text,
       stream: true,
     });
 
@@ -197,38 +180,26 @@ export async function createTrackedResponseStream({
 
     return {
       stream,
-
       async complete(response: OpenAIResponse) {
         if (tracked) return;
-
         tracked = true;
-
         await saveSuccess({
           response,
           startedAt,
-          operation,
-          model,
-          input,
-          courseId,
-          lessonId,
-          conversationId,
+          options,
+          userId,
+          storeAiPayloads: privacy.storeAiPayloads,
         });
       },
-
       async fail(error: unknown) {
         if (tracked) return;
-
         tracked = true;
-
         await saveError({
           error,
           startedAt,
-          operation,
-          model,
-          input,
-          courseId,
-          lessonId,
-          conversationId,
+          options,
+          userId,
+          storeAiPayloads: privacy.storeAiPayloads,
         });
       },
     };
@@ -236,14 +207,10 @@ export async function createTrackedResponseStream({
     await saveError({
       error,
       startedAt,
-      operation,
-      model,
-      input,
-      courseId,
-      lessonId,
-      conversationId,
+      options,
+      userId,
+      storeAiPayloads: privacy.storeAiPayloads,
     });
-
     throw error;
   }
 }

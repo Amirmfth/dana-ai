@@ -6,11 +6,14 @@ import { lessonContentSchema } from "@/lib/ai/schemas/lesson";
 import { prisma } from "@/lib/db/prisma";
 
 export async function generateLessonQuiz(
+  userId: string,
   lessonId: string,
 ): Promise<LessonQuiz> {
-  const lesson = await prisma.lesson.findUnique({
+  const lesson = await prisma.lesson.findFirst({
     where: {
       id: lessonId,
+      status: { not: "LOCKED" },
+      module: { course: { ownerId: userId } },
     },
 
     include: {
@@ -123,6 +126,7 @@ ${JSON.stringify(parsedLesson)}
   ];
 
   const response = await createTrackedResponse({
+    userId,
     operation: "QUIZ_GENERATION",
 
     model: "gpt-5.6-luna",

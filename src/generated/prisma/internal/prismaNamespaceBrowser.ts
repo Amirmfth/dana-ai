@@ -62,7 +62,8 @@ export const ModelName = {
   Exercise: 'Exercise',
   ExerciseAttempt: 'ExerciseAttempt',
   AiRequestWindow: 'AiRequestWindow',
-  UserPrivacySettings: 'UserPrivacySettings'
+  UserPrivacySettings: 'UserPrivacySettings',
+  GenerationJob: 'GenerationJob'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -249,6 +250,23 @@ export const UserPrivacySettingsScalarFieldEnum = {
 } as const
 
 export type UserPrivacySettingsScalarFieldEnum = (typeof UserPrivacySettingsScalarFieldEnum)[keyof typeof UserPrivacySettingsScalarFieldEnum]
+
+
+export const GenerationJobScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  kind: 'kind',
+  status: 'status',
+  claimToken: 'claimToken',
+  attemptCount: 'attemptCount',
+  errorMessage: 'errorMessage',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GenerationJobScalarFieldEnum = (typeof GenerationJobScalarFieldEnum)[keyof typeof GenerationJobScalarFieldEnum]
 
 
 export const SortOrder = {

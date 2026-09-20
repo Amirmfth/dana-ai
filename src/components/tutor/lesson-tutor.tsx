@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -413,21 +413,26 @@ function TutorSurface({
     });
   }, [messages, isLoading, hasStartedStreaming]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const textarea = composerInputRef.current;
-
     if (!textarea) return;
 
     const minHeight = 56;
     const maxHeight = 160;
 
-    textarea.style.height = "0px";
-    textarea.style.height = `${Math.min(
-      Math.max(textarea.scrollHeight, minHeight),
-      maxHeight,
-    )}px`;
-    textarea.style.overflowY =
-      textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+    // Empty composer always has its minimum height.
+    if (input.length === 0) {
+      textarea.style.height = `${minHeight}px`;
+      textarea.style.overflowY = "hidden";
+      return;
+    }
+
+    textarea.style.height = `${minHeight}px`;
+
+    const contentHeight = textarea.scrollHeight;
+
+    textarea.style.height = `${Math.min(contentHeight, maxHeight)}px`;
+    textarea.style.overflowY = contentHeight > maxHeight ? "auto" : "hidden";
   }, [input]);
 
   return (
@@ -534,7 +539,7 @@ function TutorSurface({
             placeholder="Ask anything about this lesson"
             rows={1}
             disabled={isLoading}
-            className="min-h-14 max-h-40 w-full resize-none overflow-y-hidden bg-transparent px-4 py-4 pr-16 text-base leading-6 text-neutral-950 outline-none placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-60 dark:text-white dark:placeholder:text-neutral-400"
+            className="[min-h-14 max-h-40 w-full resize-none overflow-y-hidden bg-transparent px-4 py-4 pr-16 text-base leading-6 text-neutral-950 outline-none placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-60 dark:text-white dark:placeholder:text-neutral-400"
           />
           <button
             type="submit"

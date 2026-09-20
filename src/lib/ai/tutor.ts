@@ -15,9 +15,15 @@ export async function askTutor({
   conversationId: string;
   messages: TutorMessage[];
 }) {
-  const context = await buildTutorContext(lessonId);
-
   const recentMessages = messages.slice(-8);
+  const latestUserMessage =
+    [...recentMessages].reverse().find((message) => message.role === "user")
+      ?.content ?? "";
+
+  const context = await buildTutorContext(
+    lessonId,
+    latestUserMessage,
+  );
 
   const input = [
     {
@@ -38,6 +44,9 @@ Teaching rules:
 - Do not repeat large parts of the lesson.
 - Prefer concise conversational answers.
 - Ask a short follow-up question only when it meaningfully helps learning.
+- If sourceContext is present, use it as primary evidence for source-specific factual claims.
+- Cite source-backed claims with the supplied markers such as [S1].
+- Never invent a citation marker that is not present in sourceContext.
       `.trim(),
     },
 

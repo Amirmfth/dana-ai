@@ -93,6 +93,42 @@ export async function POST(request: NextRequest) {
 
     const encoder = new TextEncoder();
 
+    let finishMemoryTask!: (
+      exchange:
+        | {
+            lessonId: string;
+            userMessage: string;
+            assistantMessage: string;
+          }
+        | null,
+    ) => void;
+
+    const memoryTask = new Promise<
+      | {
+          lessonId: string;
+          userMessage: string;
+          assistantMessage: string;
+        }
+      | null
+    >((resolve) => {
+      finishMemoryTask = resolve;
+    });
+
+    after(async () => {
+      const exchange = await memoryTask;
+
+      if (!exchange) return;
+
+      try {
+        await saveExchangeMemories(exchange);
+      } catch (error) {
+        console.error(
+          "Tutor memory enrichment failed:",
+          error,
+        );
+      }
+    });
+
     const responseStream = new ReadableStream<Uint8Array>({
       async start(controller) {
         let answer = "";
@@ -126,26 +162,16 @@ export async function POST(request: NextRequest) {
               },
             });
 
-            const exchange = {
+            finishMemoryTask({
               lessonId,
               userMessage: message,
               assistantMessage: answer,
-            };
-
-            after(async () => {
-              try {
-                await saveExchangeMemories(exchange);
-              } catch (error) {
-                console.error(
-                  "Tutor memory enrichment failed:",
-                  error,
-                );
-              }
             });
           }
 
           controller.close();
         } catch (error) {
+          finishMemoryTask(null);
           console.error("Tutor stream failed:", error);
           await tracked.fail(error);
           controller.error(error);

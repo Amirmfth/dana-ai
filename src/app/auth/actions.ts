@@ -42,14 +42,17 @@ export async function signInAction(formData: FormData) {
 export async function signUpAction(formData: FormData) {
   const { email, password } = readCredentials(formData);
 
+  let signedIn = false;
+
   try {
     const result = await signUpWithPassword(email, password);
-
-    if (!result.signedIn) {
-      redirect("/login?message=check_email");
-    }
+    signedIn = result.signedIn;
   } catch {
     redirect("/signup?error=signup_failed");
+  }
+
+  if (!signedIn) {
+    redirect("/login?message=check_email");
   }
 
   redirect("/");

@@ -158,7 +158,7 @@ export async function updateModuleAction(
   formData: FormData,
 ) {
   const user = await requireUser();
-  const module = await prisma.module.findFirst({
+  const courseModule = await prisma.module.findFirst({
     where: {
       id: moduleId,
       courseId,
@@ -166,7 +166,7 @@ export async function updateModuleAction(
     },
     select: { id: true },
   });
-  if (!module) throw new Error("Module not found.");
+  if (!courseModule) throw new Error("Module not found.");
 
   await prisma.module.update({
     where: { id: moduleId },
@@ -208,8 +208,8 @@ export async function deleteModuleAction(
   const course = await getOwnedCourse(user.id, courseId);
   if (!course) throw new Error("Course not found.");
 
-  const module = course.modules.find((item) => item.id === moduleId);
-  if (!module) throw new Error("Module not found.");
+  const courseModule = course.modules.find((item) => item.id === moduleId);
+  if (!courseModule) throw new Error("Module not found.");
 
   await prisma.module.delete({ where: { id: moduleId } });
 
@@ -232,7 +232,7 @@ export async function createLessonAction(
   formData: FormData,
 ) {
   const user = await requireUser();
-  const module = await prisma.module.findFirst({
+  const courseModule = await prisma.module.findFirst({
     where: {
       id: moduleId,
       courseId,
@@ -243,7 +243,7 @@ export async function createLessonAction(
     },
   });
 
-  if (!module) throw new Error("Module not found.");
+  if (!courseModule) throw new Error("Module not found.");
 
   await prisma.lesson.create({
     data: {
@@ -252,7 +252,7 @@ export async function createLessonAction(
       description: parseNullableText(formData.get("description"), 2000),
       objectives: parseLineList(formData.get("objectives")),
       concepts: parseLineList(formData.get("concepts")),
-      order: module.lessons.length + 1,
+      order: courseModule.lessons.length + 1,
       status: "LOCKED",
     },
   });
@@ -302,7 +302,7 @@ export async function moveLessonAction(
   direction: -1 | 1,
 ) {
   const user = await requireUser();
-  const module = await prisma.module.findFirst({
+  const courseModule = await prisma.module.findFirst({
     where: {
       id: moduleId,
       courseId,
@@ -312,9 +312,9 @@ export async function moveLessonAction(
       lessons: { orderBy: { order: "asc" } },
     },
   });
-  if (!module) throw new Error("Module not found.");
+  if (!courseModule) throw new Error("Module not found.");
 
-  const ids = module.lessons.map((lesson) => lesson.id);
+  const ids = courseModule.lessons.map((lesson) => lesson.id);
   const index = ids.indexOf(lessonId);
   const nextIndex = index + direction;
 
@@ -331,7 +331,7 @@ export async function deleteLessonAction(
   lessonId: string,
 ) {
   const user = await requireUser();
-  const module = await prisma.module.findFirst({
+  const courseModule = await prisma.module.findFirst({
     where: {
       id: moduleId,
       courseId,
@@ -341,14 +341,14 @@ export async function deleteLessonAction(
       lessons: { orderBy: { order: "asc" } },
     },
   });
-  if (!module) throw new Error("Module not found.");
+  if (!courseModule) throw new Error("Module not found.");
 
-  const lesson = module.lessons.find((item) => item.id === lessonId);
+  const lesson = courseModule.lessons.find((item) => item.id === lessonId);
   if (!lesson) throw new Error("Lesson not found.");
 
   await prisma.lesson.delete({ where: { id: lessonId } });
 
-  const remaining = module.lessons
+  const remaining = courseModule.lessons
     .filter((item) => item.id !== lessonId)
     .map((item) => item.id);
 

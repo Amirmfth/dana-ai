@@ -71,7 +71,7 @@ export async function createCourseFromStructure(
     ? structure.course.title + options.titleSuffix
     : structure.course.title;
 
-  return prisma.course.create({
+  const course = await prisma.course.create({
     data: {
       ownerId: userId,
       title,
@@ -93,16 +93,17 @@ export async function createCourseFromStructure(
               objectives: lesson.objectives,
               concepts: lesson.concepts,
               order: lessonIndex + 1,
-              status:
-                moduleIndex === 0 && lessonIndex === 0
-                  ? "AVAILABLE"
-                  : "LOCKED",
+              status: "LOCKED",
             })),
           },
         })),
       },
     },
   });
+
+  await normalizeCourseProgress(course.id);
+
+  return course;
 }
 
 export async function normalizeCourseProgress(courseId: string) {

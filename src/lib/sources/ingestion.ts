@@ -204,6 +204,16 @@ export async function deleteCourseSource(ownerId: string, sourceId: string) {
   const source = await prisma.courseSource.findFirst({ where: { id: sourceId, ownerId } });
   if (!source) throw new Error("Source not found.");
 
+  const citationCount = await prisma.lessonCitation.count({
+    where: { sourceChunk: { sourceId: source.id } },
+  });
+
+  if (citationCount > 0) {
+    throw new Error(
+      "This source is cited by generated lesson versions and cannot be deleted.",
+    );
+  }
+
   if (source.storagePath) await deleteSourceFile(source.storagePath);
   await prisma.courseSource.delete({ where: { id: source.id } });
 }

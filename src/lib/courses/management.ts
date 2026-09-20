@@ -170,7 +170,7 @@ export async function reorderModules(
     for (let index = 0; index < orderedIds.length; index += 1) {
       await tx.module.update({
         where: { id: orderedIds[index] },
-        data: { order: 10000 + index },
+        data: { order: -(index + 1) },
       });
     }
 
@@ -217,7 +217,7 @@ export async function reorderLessons(
     for (let index = 0; index < orderedIds.length; index += 1) {
       await tx.lesson.update({
         where: { id: orderedIds[index] },
-        data: { order: 10000 + index },
+        data: { order: -(index + 1) },
       });
     }
 

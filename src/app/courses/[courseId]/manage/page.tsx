@@ -63,6 +63,12 @@ export default async function ManageCoursePage({
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
+              href={"/courses/" + course.id + "/sources"}
+              className={buttonClass}
+            >
+              Sources
+            </Link>
+            <Link
               href={"/courses/" + course.id + "/regenerate"}
               className={buttonClass}
             >

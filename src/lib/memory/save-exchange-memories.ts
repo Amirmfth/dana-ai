@@ -70,6 +70,7 @@ export async function saveExchangeMemories({
 
       const nearest = await findNearestMemory({
         courseId,
+        type: memory.type,
         embedding,
       });
 

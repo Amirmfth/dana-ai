@@ -60,7 +60,7 @@ export async function regenerateQuiz(userId: string, lessonId: string, instructi
   if (!claimToken) throw new Error("Quiz regeneration is already in progress.");
 
   try {
-    const quiz = await generateLessonQuiz(userId, lessonId, instructions?.trim() || undefined);
+    const quiz = await generateLessonQuiz(userId, lessonId);
     const version = await persistQuizVersion(
       lessonId,
       (lesson.quizVersions[0]?.version ?? 0) + 1,

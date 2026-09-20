@@ -10,6 +10,7 @@ import {
 export async function regenerateCoursePlan(
   userId: string,
   currentStructure: unknown,
+  sourceContext: unknown[] = [],
 ): Promise<CoursePlan> {
   const response = await createTrackedResponse({
     userId,
@@ -26,7 +27,11 @@ export async function regenerateCoursePlan(
         role: "user",
         content:
           "Current curriculum:\n\n" +
-          JSON.stringify(currentStructure, null, 2),
+          JSON.stringify(currentStructure, null, 2) +
+          (sourceContext.length
+            ? "\n\nSOURCE CONTEXT\n\n" +
+              JSON.stringify(sourceContext, null, 2)
+            : ""),
       },
     ],
     text: {
@@ -41,6 +46,7 @@ export async function regenerateModulePlan(
   userId: string,
   currentModule: unknown,
   courseContext: unknown,
+  sourceContext: unknown[] = [],
 ) {
   const response = await createTrackedResponse({
     userId,
@@ -59,7 +65,11 @@ export async function regenerateModulePlan(
           "Course context:\n\n" +
           JSON.stringify(courseContext, null, 2) +
           "\n\nCurrent module:\n\n" +
-          JSON.stringify(currentModule, null, 2),
+          JSON.stringify(currentModule, null, 2) +
+          (sourceContext.length
+            ? "\n\nSOURCE CONTEXT\n\n" +
+              JSON.stringify(sourceContext, null, 2)
+            : ""),
       },
     ],
     text: {

@@ -59,6 +59,7 @@ CREATE TABLE "LessonCitation" (
   "id" TEXT NOT NULL,
   "lessonContentVersionId" TEXT NOT NULL,
   "sourceChunkId" TEXT NOT NULL,
+  "marker" TEXT NOT NULL,
   "location" TEXT NOT NULL,
   "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT "LessonCitation_pkey" PRIMARY KEY ("id"),
@@ -70,8 +71,8 @@ CREATE TABLE "LessonCitation" (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE UNIQUE INDEX "LessonCitation_lessonContentVersionId_sourceChunkId_location_key"
-  ON "LessonCitation"("lessonContentVersionId", "sourceChunkId", "location");
+CREATE UNIQUE INDEX "LessonCitation_lessonContentVersionId_sourceChunkId_marker_key"
+  ON "LessonCitation"("lessonContentVersionId", "sourceChunkId", "marker");
 CREATE INDEX "LessonCitation_lessonContentVersionId_idx"
   ON "LessonCitation"("lessonContentVersionId");
 CREATE INDEX "LessonCitation_sourceChunkId_idx"

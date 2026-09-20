@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { CourseContinueCard } from "@/components/courses/course-continue-card";
+import { CourseCurriculum } from "@/components/courses/course-curriculum";
+import { MobileCourseAction } from "@/components/courses/mobile-course-action";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { prisma } from "@/lib/db/prisma";
 
-type CoursePageProps = {
-  params: Promise<{ courseId: string }>;
-};
-
-export default async function CoursePage({ params }: CoursePageProps) {
+export default async function CoursePage({ params }: PageProps<"/courses/[courseId]">) {
   const { courseId } = await params;
   const course = await prisma.course.findUnique({
     where: { id: courseId },
@@ -22,78 +21,101 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   if (!course) notFound();
 
-  const lessonCount = course.modules.reduce((total, module) => total + module.lessons.length, 0);
+  const lessons = course.modules.flatMap((module) => module.lessons.map((lesson) => ({ lesson, module })));
+  const lessonCount = lessons.length;
+  const completedCount = lessons.filter(({ lesson }) => lesson.status === "COMPLETED").length;
+  const activeEntry =
+    lessons.find(({ lesson }) => lesson.status === "IN_PROGRESS") ??
+    (completedCount > 0 ? lessons.find(({ lesson }) => lesson.status === "AVAILABLE") : undefined);
+  const nextEntry = activeEntry ?? lessons[0];
+  const hasProgress = completedCount > 0 || Boolean(activeEntry);
+  const nextLessonHref = nextEntry ? `/courses/${course.id}/lessons/${nextEntry.lesson.id}` : undefined;
+  const curriculumModules = course.modules.map((module) => ({
+    id: module.id,
+    title: module.title,
+    description: module.description,
+    objective: module.objective,
+    order: module.order,
+    lessons: module.lessons.map((lesson) => ({
+      id: lesson.id,
+      title: lesson.title,
+      description: lesson.description,
+      concepts: lesson.concepts,
+      order: lesson.order,
+      status: lesson.status,
+    })),
+  }));
 
   return (
     <main className="min-h-dvh bg-neutral-50 text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50">
-      <div className="mx-auto max-w-6xl px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
-        <header className="flex items-center justify-between gap-4">
-          <Link
-            href="/"
-            className="inline-flex min-h-11 items-center text-sm font-semibold text-neutral-600 underline-offset-4 transition hover:text-neutral-950 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white"
-          >
-            Back to courses
+      <header className="sticky top-0 z-40 border-b border-neutral-200/80 bg-neutral-50/90 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/90 lg:static lg:border-b-0 lg:bg-transparent lg:backdrop-blur-none dark:lg:bg-transparent">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-8 lg:h-20 lg:px-10">
+          <Link href="/" aria-label="Back to courses" className="flex min-h-11 min-w-11 items-center gap-2 rounded-lg text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
+            <ArrowLeftIcon />
+            <span className="hidden lg:inline">Courses</span>
           </Link>
-          <ThemeToggle />
-        </header>
+          <p className="min-w-0 flex-1 truncate text-center text-sm font-semibold tracking-tight lg:hidden">{course.title}</p>
+          <nav aria-label="Breadcrumb" className="hidden min-w-0 flex-1 items-center gap-2 text-sm lg:flex">
+            <Link href="/" className="text-neutral-500 transition hover:text-neutral-950 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:text-neutral-400 dark:hover:text-white dark:focus-visible:outline-white">Courses</Link>
+            <span aria-hidden="true" className="text-neutral-300 dark:text-neutral-700">/</span>
+            <span aria-current="page" className="truncate font-medium text-neutral-800 dark:text-neutral-200">{course.title}</span>
+          </nav>
+          <ThemeToggle compact />
+        </div>
+      </header>
 
-        <section className="border-b border-neutral-200 py-12 sm:py-16 dark:border-neutral-800">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">Learning path</p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">{course.title}</h1>
-          {course.description && <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-600 dark:text-neutral-300">{course.description}</p>}
-          <div className="mt-7 flex flex-wrap gap-3 text-sm font-medium text-neutral-600 dark:text-neutral-300">
-            <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 dark:border-neutral-800 dark:bg-neutral-900">{course.modules.length} modules</span>
-            <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 dark:border-neutral-800 dark:bg-neutral-900">{lessonCount} lessons</span>
+      <div className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10 lg:pb-16">
+        <section className="grid gap-8 border-b border-neutral-200 py-8 dark:border-neutral-800 sm:py-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(21rem,0.75fr)] lg:items-center lg:gap-16 lg:py-16">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Learning path</p>
+            <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[-0.035em] text-balance sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">{course.title}</h1>
+            {course.description && <p className="mt-4 max-w-2xl line-clamp-3 text-base leading-7 text-neutral-600 dark:text-neutral-300 sm:text-lg sm:leading-8">{course.description}</p>}
+            <p className="mt-5 text-sm font-medium text-neutral-500 dark:text-neutral-400">
+              {course.modules.length} {course.modules.length === 1 ? "module" : "modules"}<span aria-hidden="true"> · </span>{lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
+            </p>
+            {course.description && (
+              <details className="group mt-5 max-w-2xl text-sm text-neutral-600 dark:text-neutral-300">
+                <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-md font-semibold text-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-200 dark:focus-visible:outline-white [&::-webkit-details-marker]:hidden">
+                  More about this course <ChevronIcon />
+                </summary>
+                <p className="pb-2 leading-7">{course.description}</p>
+              </details>
+            )}
           </div>
+
+          <CourseContinueCard actionHref={nextLessonHref} completedCount={completedCount} hasProgress={hasProgress} lessonCount={lessonCount} lessonTitle={nextEntry?.lesson.title} moduleOrder={nextEntry?.module.order} moduleTitle={nextEntry?.module.title} />
         </section>
 
-        <section aria-labelledby="course-outline" className="py-10 sm:py-14">
-          <div className="mb-8">
-            <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Course outline</p>
-            <h2 id="course-outline" className="mt-1 text-2xl font-semibold tracking-tight">Choose where to begin</h2>
-          </div>
+        <nav aria-label="Course sections" className="sticky top-14 z-30 -mx-5 flex gap-6 overflow-x-auto border-b border-neutral-200 bg-neutral-50/95 px-5 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/95 sm:-mx-8 sm:px-8 lg:top-0 lg:mx-0 lg:px-0">
+          <a href="#curriculum" className="flex min-h-14 shrink-0 items-center border-b-2 border-neutral-950 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-neutral-950 dark:border-white dark:focus-visible:outline-white">Curriculum</a>
+          <a href="#about" className="flex min-h-14 shrink-0 items-center border-b-2 border-transparent text-sm font-medium text-neutral-500 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-neutral-950 dark:text-neutral-400 dark:hover:text-white dark:focus-visible:outline-white">About</a>
+        </nav>
 
-          <div className="space-y-8">
-            {course.modules.map((module) => (
-              <section key={module.id} className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7 dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-none">
-                <header className="mb-5 flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Module {module.order}</p>
-                    <h3 className="mt-2 text-xl font-semibold tracking-tight">{module.title}</h3>
-                    {module.description && <p className="mt-2 max-w-2xl leading-7 text-neutral-600 dark:text-neutral-300">{module.description}</p>}
-                  </div>
-                  <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">{module.lessons.length} lessons</span>
-                </header>
+        <CourseCurriculum courseId={course.id} modules={curriculumModules} />
 
-                <ol className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800">
-                  {module.lessons.map((lesson) => (
-                    <li key={lesson.id} className="border-b border-neutral-200 last:border-b-0 dark:border-neutral-800">
-                      <Link
-                        href={`/courses/${course.id}/lessons/${lesson.id}`}
-                        className="group flex min-h-20 items-start gap-4 p-4 transition hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-neutral-950 dark:hover:bg-neutral-800/70 dark:focus-visible:outline-white sm:p-5"
-                      >
-                        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-sm font-semibold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">{lesson.order}</span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block font-semibold group-hover:underline group-hover:underline-offset-4">{lesson.title}</span>
-                          {lesson.description && <span className="mt-1 block text-sm leading-6 text-neutral-600 dark:text-neutral-300">{lesson.description}</span>}
-                          {lesson.concepts.length > 0 && (
-                            <span className="mt-3 flex flex-wrap gap-2">
-                              {lesson.concepts.map((concept) => (
-                                <span key={concept} className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">{concept}</span>
-                              ))}
-                            </span>
-                          )}
-                        </span>
-                        <span aria-hidden="true" className="pt-1 text-neutral-400 transition group-hover:translate-x-0.5 group-hover:text-neutral-950 motion-reduce:transform-none dark:group-hover:text-white">→</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            ))}
+        <section id="about" aria-labelledby="about-heading" className="scroll-mt-32 border-t border-neutral-200 py-10 dark:border-neutral-800 sm:py-14">
+          <div className="grid gap-6 lg:grid-cols-[minmax(12rem,0.35fr)_minmax(0,0.65fr)] lg:gap-16">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">About</p>
+              <h2 id="about-heading" className="mt-2 text-2xl font-semibold tracking-tight">Your learning goal</h2>
+            </div>
+            <div className="max-w-2xl space-y-4 text-base leading-7 text-neutral-600 dark:text-neutral-300">
+              <p>{course.goal}</p>
+              {course.description && <p>{course.description}</p>}
+            </div>
           </div>
         </section>
       </div>
+
+      {nextEntry && nextLessonHref && <MobileCourseAction actionHref={nextLessonHref} actionLabel={hasProgress ? "Continue" : "Start"} lessonTitle={nextEntry.lesson.title} sourceId="course-primary-action" />}
     </main>
   );
+}
+
+function ArrowLeftIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-5 shrink-0"><path d="m15 18-6-6 6-6M9 12h11" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
+function ChevronIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" className="size-4 transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"><path d="m6 8 4 4 4-4" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }

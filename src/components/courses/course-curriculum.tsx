@@ -10,6 +10,10 @@ type Lesson = {
   concepts: string[];
   order: number;
   status: "LOCKED" | "AVAILABLE" | "IN_PROGRESS" | "COMPLETED";
+  difficulty: "INTRODUCTORY" | "EASY" | "MEDIUM" | "HARD" | "ADVANCED";
+  isOptional: boolean;
+  completionMethod: "STUDIED" | "TESTED_OUT" | "SKIPPED" | null;
+  prerequisiteCount: number;
 };
 
 type CourseModule = {
@@ -219,12 +223,19 @@ function LessonRow({ courseId, lesson }: { courseId: string; lesson: Lesson }) {
 
         <span className="mt-1 block truncate text-xs text-neutral-500 dark:text-neutral-400">
           {isCompleted
-            ? "Completed"
+            ? lesson.completionMethod === "TESTED_OUT"
+              ? "Tested out"
+              : lesson.completionMethod === "SKIPPED"
+                ? "Skipped"
+                : "Completed"
             : isCurrent
               ? "In progress"
               : isLocked
                 ? "Locked"
                 : topicPreview || lesson.description || "Open lesson"}
+          {" · "}{lesson.difficulty.toLowerCase()}
+          {lesson.isOptional ? " · optional" : ""}
+          {lesson.prerequisiteCount > 1 ? " · " + lesson.prerequisiteCount + " prerequisites" : ""}
 
           {!isCompleted && !isCurrent && !isLocked && remainingTopics > 0
             ? ` +${remainingTopics}`
@@ -243,9 +254,22 @@ function LessonRow({ courseId, lesson }: { courseId: string; lesson: Lesson }) {
   return (
     <li className="border-b border-neutral-200 last:border-b-0 dark:border-neutral-800">
       {isLocked ? (
-        <div className="grid min-h-16 cursor-not-allowed grid-cols-[2rem_minmax(0,1fr)_2.25rem] items-center gap-3 rounded-lg px-2 py-3 opacity-70 sm:min-h-18 sm:grid-cols-[2.25rem_minmax(0,1fr)_auto] sm:px-3">
-          {content}
-        </div>
+        <Link
+          href={"/courses/" + courseId + "/lessons/" + lesson.id + "/test-out"}
+          className="grid min-h-16 grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3 rounded-lg px-2 py-3 opacity-80 transition hover:bg-neutral-100 dark:hover:bg-neutral-800/70 sm:min-h-18 sm:grid-cols-[2.25rem_minmax(0,1fr)_auto] sm:px-3"
+          title="This lesson is locked. Take a test-out assessment to demonstrate mastery."
+        >
+          <LessonMarker order={lesson.order} status={lesson.status} />
+          <span className="min-w-0">
+            <span className="block text-sm font-semibold leading-5 text-neutral-500 dark:text-neutral-400">
+              {lesson.title}
+            </span>
+            <span className="mt-1 block truncate text-xs text-neutral-500">
+              Locked · {lesson.difficulty.toLowerCase()} · test out available
+            </span>
+          </span>
+          <span className="text-xs font-semibold text-neutral-500">Test out</span>
+        </Link>
       ) : (
         <Link
           href={`/courses/${courseId}/lessons/${lesson.id}`}

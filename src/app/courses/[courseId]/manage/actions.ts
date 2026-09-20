@@ -19,6 +19,7 @@ import {
   parseNullableText,
 } from "@/lib/courses/structure";
 import { prisma } from "@/lib/db/prisma";
+import { hasPrerequisiteCycle } from "@/lib/progression/prerequisites";
 
 function requiredText(
   value: FormDataEntryValue | null,
@@ -245,17 +246,36 @@ export async function createLessonAction(
 
   if (!courseModule) throw new Error("Module not found.");
 
-  await prisma.lesson.create({
+  const difficultyRaw = formData.get("difficulty");
+  const difficulty =
+    typeof difficultyRaw === "string" &&
+    ["INTRODUCTORY", "EASY", "MEDIUM", "HARD", "ADVANCED"].includes(difficultyRaw)
+      ? difficultyRaw as "INTRODUCTORY" | "EASY" | "MEDIUM" | "HARD" | "ADVANCED"
+      : "MEDIUM";
+
+  const created = await prisma.lesson.create({
     data: {
       moduleId,
       title: requiredText(formData.get("title"), "Lesson title", 200),
       description: parseNullableText(formData.get("description"), 2000),
       objectives: parseLineList(formData.get("objectives")),
       concepts: parseLineList(formData.get("concepts")),
+      difficulty,
+      isOptional: formData.get("isOptional") === "on",
       order: courseModule.lessons.length + 1,
       status: "LOCKED",
     },
   });
+
+  const previous = courseModule.lessons.at(-1);
+  if (previous) {
+    await prisma.lessonPrerequisite.create({
+      data: {
+        lessonId: created.id,
+        prerequisiteLessonId: previous.id,
+      },
+    });
+  }
 
   await normalizeCourseProgress(courseId);
   revalidateCourse(courseId);
@@ -281,16 +301,79 @@ export async function updateLessonAction(
   });
   if (!lesson) throw new Error("Lesson not found.");
 
-  await prisma.lesson.update({
-    where: { id: lessonId },
-    data: {
-      title: requiredText(formData.get("title"), "Lesson title", 200),
-      description: parseNullableText(formData.get("description"), 2000),
-      objectives: parseLineList(formData.get("objectives")),
-      concepts: parseLineList(formData.get("concepts")),
-    },
+  const difficultyRaw = formData.get("difficulty");
+  const difficulty =
+    typeof difficultyRaw === "string" &&
+    ["INTRODUCTORY", "EASY", "MEDIUM", "HARD", "ADVANCED"].includes(difficultyRaw)
+      ? difficultyRaw as "INTRODUCTORY" | "EASY" | "MEDIUM" | "HARD" | "ADVANCED"
+      : "MEDIUM";
+
+  const prerequisiteIds = formData
+    .getAll("prerequisiteIds")
+    .filter((value): value is string => typeof value === "string")
+    .filter((value) => value !== lessonId);
+
+  await prisma.$transaction(async (tx) => {
+    const valid = await tx.lesson.findMany({
+      where: {
+        id: { in: prerequisiteIds },
+        module: { courseId },
+      },
+      select: { id: true },
+    });
+
+    if (valid.length !== new Set(prerequisiteIds).size) {
+      throw new Error("One or more prerequisites are invalid.");
+    }
+
+    await tx.lesson.update({
+      where: { id: lessonId },
+      data: {
+        title: requiredText(formData.get("title"), "Lesson title", 200),
+        description: parseNullableText(formData.get("description"), 2000),
+        objectives: parseLineList(formData.get("objectives")),
+        concepts: parseLineList(formData.get("concepts")),
+        difficulty,
+        isOptional: formData.get("isOptional") === "on",
+      },
+    });
+
+    await tx.lessonPrerequisite.deleteMany({ where: { lessonId } });
+
+    if (prerequisiteIds.length > 0) {
+      await tx.lessonPrerequisite.createMany({
+        data: prerequisiteIds.map((prerequisiteLessonId) => ({
+          lessonId,
+          prerequisiteLessonId,
+        })),
+      });
+    }
+
+    const graphLessons = await tx.lesson.findMany({
+      where: { module: { courseId } },
+      select: {
+        id: true,
+        prerequisites: {
+          select: { prerequisiteLessonId: true },
+        },
+      },
+    });
+
+    const cyclic = hasPrerequisiteCycle(
+      graphLessons.map((item) => ({
+        id: item.id,
+        prerequisiteIds: item.prerequisites.map(
+          (edge) => edge.prerequisiteLessonId,
+        ),
+      })),
+    );
+
+    if (cyclic) {
+      throw new Error("Prerequisites cannot contain a cycle.");
+    }
   });
 
+  await normalizeCourseProgress(courseId);
   revalidateCourse(courseId);
   revalidatePath("/courses/" + courseId + "/lessons/" + lessonId);
 }

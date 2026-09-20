@@ -14,6 +14,7 @@ import { getOrGenerateQuiz } from "@/lib/exercises/get-or-generate-quiz";
 import { LessonQuiz } from "@/components/exercises/lesson-quiz";
 import { LessonStudyTracker } from "@/components/analytics/lesson-study-tracker";
 import { estimateLessonMinutes } from "@/lib/analytics/estimates";
+import { skipLessonAction } from "@/app/actions/lessons";
 
 type LessonPageProps = {
   params: Promise<{
@@ -154,6 +155,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
                 Module {lessonInfo.module.order}{" "}
                 <span aria-hidden="true">·</span> Lesson {lessonInfo.order}
                 <span aria-hidden="true"> · </span>~{estimatedMinutes} min
+                <span aria-hidden="true"> · </span>{lessonInfo.difficulty.toLowerCase()}
+                {lessonInfo.isOptional ? " · optional" : ""}
               </p>
 
               <h1 className="text-3xl font-semibold tracking-tight text-neutral-950 dark:text-white sm:text-4xl">
@@ -174,6 +177,23 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
           <div className="min-w-0">
             <div className="mx-auto w-full max-w-2xl">
+              <div className="mb-6 flex flex-wrap gap-2">
+                <Link
+                  href={"/courses/" + courseId + "/lessons/" + lessonId + "/test-out"}
+                  className="inline-flex min-h-10 items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700"
+                >
+                  Test out of this lesson
+                </Link>
+                {lessonInfo.isOptional && lessonInfo.status !== "COMPLETED" && (
+                  <form action={skipLessonAction}>
+                    <input type="hidden" name="courseId" value={courseId} />
+                    <input type="hidden" name="lessonId" value={lessonId} />
+                    <button className="min-h-10 rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700">
+                      Skip optional lesson
+                    </button>
+                  </form>
+                )}
+              </div>
               <LessonContent lesson={lesson} />
               <LessonQuiz
                 exercises={quizExercises}

@@ -31,6 +31,26 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: "Lesson not found." }, { status: 404 });
     }
 
+    const activeRuns = await prisma.quizRun.findMany({
+      where: {
+        userId: user.id,
+        lessonId: body.lessonId,
+        completedAt: null,
+      },
+      select: { id: true },
+    });
+
+    if (activeRuns.length > 0) {
+      await prisma.quizRun.updateMany({
+        where: {
+          id: { in: activeRuns.map((run) => run.id) },
+        },
+        data: {
+          completedAt: new Date(),
+        },
+      });
+    }
+
     const run = await startNewQuizRun(user.id, body.lessonId);
 
     return Response.json({ success: true, quizRunId: run.id });

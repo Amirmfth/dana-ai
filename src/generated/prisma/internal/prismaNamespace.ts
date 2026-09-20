@@ -409,7 +409,8 @@ export const ModelName = {
   ExerciseAttempt: 'ExerciseAttempt',
   AiRequestWindow: 'AiRequestWindow',
   UserPrivacySettings: 'UserPrivacySettings',
-  GenerationJob: 'GenerationJob'
+  GenerationJob: 'GenerationJob',
+  CourseTemplate: 'CourseTemplate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "course" | "module" | "lesson" | "lessonContent" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt" | "aiRequestWindow" | "userPrivacySettings" | "generationJob"
+    modelProps: "course" | "module" | "lesson" | "lessonContent" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt" | "aiRequestWindow" | "userPrivacySettings" | "generationJob" | "courseTemplate"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1391,6 +1392,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CourseTemplate: {
+      payload: Prisma.$CourseTemplatePayload<ExtArgs>
+      fields: Prisma.CourseTemplateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CourseTemplateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CourseTemplateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>
+        }
+        findFirst: {
+          args: Prisma.CourseTemplateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CourseTemplateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>
+        }
+        findMany: {
+          args: Prisma.CourseTemplateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>[]
+        }
+        create: {
+          args: Prisma.CourseTemplateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>
+        }
+        createMany: {
+          args: Prisma.CourseTemplateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CourseTemplateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>[]
+        }
+        delete: {
+          args: Prisma.CourseTemplateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>
+        }
+        update: {
+          args: Prisma.CourseTemplateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>
+        }
+        deleteMany: {
+          args: Prisma.CourseTemplateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CourseTemplateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CourseTemplateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>[]
+        }
+        upsert: {
+          args: Prisma.CourseTemplateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseTemplatePayload>
+        }
+        aggregate: {
+          args: Prisma.CourseTemplateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCourseTemplate>
+        }
+        groupBy: {
+          args: Prisma.CourseTemplateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseTemplateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CourseTemplateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseTemplateCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1615,6 +1690,20 @@ export const GenerationJobScalarFieldEnum = {
 } as const
 
 export type GenerationJobScalarFieldEnum = (typeof GenerationJobScalarFieldEnum)[keyof typeof GenerationJobScalarFieldEnum]
+
+
+export const CourseTemplateScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  sourceCourseId: 'sourceCourseId',
+  name: 'name',
+  description: 'description',
+  structure: 'structure',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseTemplateScalarFieldEnum = (typeof CourseTemplateScalarFieldEnum)[keyof typeof CourseTemplateScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2051,6 +2140,7 @@ export type GlobalOmitConfig = {
   aiRequestWindow?: Prisma.AiRequestWindowOmit
   userPrivacySettings?: Prisma.UserPrivacySettingsOmit
   generationJob?: Prisma.GenerationJobOmit
+  courseTemplate?: Prisma.CourseTemplateOmit
 }
 
 /* Types for Logging */

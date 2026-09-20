@@ -106,3 +106,8 @@ export type UserPrivacySettings = Prisma.UserPrivacySettingsModel
  * 
  */
 export type GenerationJob = Prisma.GenerationJobModel
+/**
+ * Model CourseTemplate
+ * 
+ */
+export type CourseTemplate = Prisma.CourseTemplateModel

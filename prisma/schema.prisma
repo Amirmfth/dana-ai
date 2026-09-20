@@ -85,6 +85,7 @@ model Course {
 
   modules        Module[]
   courseMemories CourseMemory[]
+  templates      CourseTemplate[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -306,4 +307,22 @@ model GenerationJob {
 
   @@unique([lessonId, kind])
   @@index([status, updatedAt])
+}
+
+
+model CourseTemplate {
+  id             String   @id @default(cuid())
+  ownerId        String   @db.Uuid
+  sourceCourseId String?
+  sourceCourse   Course?  @relation(fields: [sourceCourseId], references: [id], onDelete: SetNull)
+
+  name        String
+  description String?
+  structure   Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId, updatedAt])
+  @@index([sourceCourseId])
 }

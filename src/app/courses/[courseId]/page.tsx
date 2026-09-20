@@ -62,11 +62,24 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
             <span aria-hidden="true" className="text-neutral-300 dark:text-neutral-700">/</span>
             <span aria-current="page" className="truncate font-medium text-neutral-800 dark:text-neutral-200">{course.title}</span>
           </nav>
-          <ThemeToggle compact />
+          <div className="flex items-center gap-2">
+            <Link
+              href={"/courses/" + course.id + "/manage"}
+              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+            >
+              Manage
+            </Link>
+            <ThemeToggle compact />
+          </div>
         </div>
       </header>
 
       <div className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10 lg:pb-16">
+        {course.status === "ARCHIVED" && (
+          <div className="mt-5 rounded-xl border border-neutral-300 bg-neutral-100 px-4 py-3 text-sm font-medium text-neutral-700 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
+            This course is archived. You can restore it from Manage.
+          </div>
+        )}
         <section className="grid gap-8 border-b border-neutral-200 py-8 dark:border-neutral-800 sm:py-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(21rem,0.75fr)] lg:items-center lg:gap-16 lg:py-16">
           <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Learning path</p>

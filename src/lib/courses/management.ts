@@ -50,11 +50,17 @@ export async function courseToStructure(
         title: module.title,
         description: module.description,
         objective: module.objective,
-        lessons: module.lessons.map((lesson) => ({
+        lessons: module.lessons.map((lesson, lessonIndex) => ({
+          key: lesson.id,
           title: lesson.title,
           description: lesson.description,
           objectives: lesson.objectives,
           concepts: lesson.concepts,
+          difficulty: lesson.difficulty,
+          isOptional: lesson.isOptional,
+          prerequisiteKeys: lesson.prerequisites.map(
+            (item) => item.prerequisiteLessonId,
+          ),
         })),
       })),
     },
@@ -95,6 +101,8 @@ export async function createCourseFromStructure(
               description: lesson.description,
               objectives: lesson.objectives,
               concepts: lesson.concepts,
+              difficulty: lesson.difficulty,
+              isOptional: lesson.isOptional,
               order: lessonIndex + 1,
               status: "LOCKED",
             })),
@@ -103,6 +111,49 @@ export async function createCourseFromStructure(
       },
     },
   });
+
+  const createdCourse = await getOwnedCourse(userId, course.id);
+  if (!createdCourse) throw new Error("Created course could not be loaded.");
+
+  const plannedLessons = structure.course.modules.flatMap(
+    (courseModule) => courseModule.lessons,
+  );
+  const createdLessons = createdCourse.modules.flatMap(
+    (courseModule) => courseModule.lessons,
+  );
+  const keyMap = new Map<string, string>();
+
+  plannedLessons.forEach((lesson, index) => {
+    keyMap.set(lesson.key ?? "lesson-" + (index + 1), createdLessons[index].id);
+  });
+
+  const edges = plannedLessons.flatMap((lesson, index) => {
+    const lessonId = createdLessons[index].id;
+    const resolved = lesson.prerequisiteKeys
+      .map((key) => keyMap.get(key))
+      .filter((id): id is string => Boolean(id) && id !== lessonId);
+
+    if (resolved.length > 0) {
+      return [...new Set(resolved)].map((prerequisiteLessonId) => ({
+        lessonId,
+        prerequisiteLessonId,
+      }));
+    }
+
+    return index > 0
+      ? [{
+          lessonId,
+          prerequisiteLessonId: createdLessons[index - 1].id,
+        }]
+      : [];
+  });
+
+  if (edges.length > 0) {
+    await prisma.lessonPrerequisite.createMany({
+      data: edges,
+      skipDuplicates: true,
+    });
+  }
 
   await normalizeCourseProgress(course.id);
 
@@ -118,6 +169,11 @@ export async function normalizeCourseProgress(courseId: string) {
         include: {
           lessons: {
             orderBy: { order: "asc" },
+            include: {
+              prerequisites: {
+                select: { prerequisiteLessonId: true },
+              },
+            },
           },
         },
       },

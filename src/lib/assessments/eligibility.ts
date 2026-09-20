@@ -7,7 +7,7 @@ export function moduleAssessmentEligible(
   lessons: ModuleEligibilityLesson[],
 ) {
   const required = lessons.filter((lesson) => !lesson.isOptional);
-  return required.length > 0 && required.every(
+  return lessons.length > 0 && required.every(
     (lesson) => lesson.status === "COMPLETED",
   );
 }

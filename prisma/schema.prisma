@@ -41,6 +41,7 @@ enum AiOperation {
   MEMORY_EXTRACTION
   EMBEDDING
   QUIZ_GENERATION
+  SOURCE_INGESTION
 }
 
 enum AiRequestStatus {
@@ -131,6 +132,18 @@ enum AssessmentType {
   COURSE_FINAL
 }
 
+enum SourceType {
+  PDF
+  TEXT
+  URL
+}
+
+enum SourceStatus {
+  PROCESSING
+  READY
+  FAILED
+}
+
 model Course {
   id           String       @id @default(cuid())
   ownerId      String       @db.Uuid
@@ -153,6 +166,7 @@ model Course {
   studyTime            StudyTime[]
   curriculumRevisions  CurriculumRevision[]
   assessments          Assessment[]
+  sources              CourseSource[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -249,6 +263,7 @@ model LessonContentVersion {
   version      Int
   content      Json
   instructions String?
+  citations    LessonCitation[]
   createdAt    DateTime @default(now())
 
   @@unique([lessonId, version])
@@ -682,4 +697,72 @@ model AssessmentAnswer {
 
   @@unique([assessmentRunId, questionId])
   @@index([questionId, createdAt])
+}
+
+
+model CourseSource {
+  id      String @id @default(cuid())
+  ownerId String @db.Uuid
+
+  courseId String?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  type        SourceType
+  status      SourceStatus @default(PROCESSING)
+  title       String
+  originalUrl String?
+  storagePath String?
+  mimeType    String?
+  byteSize    Int?
+  errorMessage String?
+  metadata    Json?
+
+  chunks SourceChunk[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId, updatedAt])
+  @@index([courseId, updatedAt])
+  @@index([status, updatedAt])
+}
+
+model SourceChunk {
+  id String @id @default(cuid())
+
+  sourceId String
+  source   CourseSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  chunkIndex Int
+  content    String
+  pageStart  Int?
+  pageEnd    Int?
+  heading    String?
+  metadata   Json?
+  embedding  Unsupported("vector(1536)")?
+
+  citations LessonCitation[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([sourceId, chunkIndex])
+  @@index([sourceId])
+}
+
+model LessonCitation {
+  id String @id @default(cuid())
+
+  lessonContentVersionId String
+  lessonContentVersion   LessonContentVersion @relation(fields: [lessonContentVersionId], references: [id], onDelete: Cascade)
+
+  sourceChunkId String
+  sourceChunk   SourceChunk @relation(fields: [sourceChunkId], references: [id], onDelete: Cascade)
+
+  location String
+
+  createdAt DateTime @default(now())
+
+  @@unique([lessonContentVersionId, sourceChunkId, location])
+  @@index([lessonContentVersionId])
+  @@index([sourceChunkId])
 }

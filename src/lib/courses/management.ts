@@ -1,9 +1,7 @@
 import { Prisma } from "@/generated/prisma/client";
 
-import {
-  nextStatusesAfterStructureChange,
-  validateExactOrder,
-} from "@/lib/courses/curriculum";
+import { validateExactOrder } from "@/lib/courses/curriculum";
+import { nextStatusesFromPrerequisites } from "@/lib/progression/prerequisites";
 import {
   courseStructureSchema,
   type CourseStructure,
@@ -19,6 +17,11 @@ export async function getOwnedCourse(userId: string, courseId: string) {
         include: {
           lessons: {
             orderBy: { order: "asc" },
+            include: {
+              prerequisites: {
+                select: { prerequisiteLessonId: true },
+              },
+            },
           },
         },
       },
@@ -124,7 +127,15 @@ export async function normalizeCourseProgress(courseId: string) {
   if (!course) return;
 
   const lessons = course.modules.flatMap((module) => module.lessons);
-  const statuses = nextStatusesAfterStructureChange(lessons);
+  const statuses = nextStatusesFromPrerequisites(
+    lessons.map((lesson) => ({
+      id: lesson.id,
+      status: lesson.status,
+      prerequisiteIds: lesson.prerequisites.map(
+        (item) => item.prerequisiteLessonId,
+      ),
+    })),
+  );
   const incompleteCount = statuses.filter(
     (lesson) => lesson.status !== "COMPLETED",
   ).length;

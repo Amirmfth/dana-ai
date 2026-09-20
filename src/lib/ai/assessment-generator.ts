@@ -36,7 +36,7 @@ export async function generatePlacementAssessment(
       {
         role: "system",
         content:
-          "Create a placement assessment using only objective multiple-choice questions. Test prerequisite knowledge, not trivia. Each question must target exactly one supplied lesson ID. Use four options and exactly one correct answer. Cover foundational lessons across the curriculum. Do not assume generated lesson prose exists.",
+          "Create a placement assessment using only objective multiple-choice questions. Test prerequisite knowledge, not trivia. Select up to 10 foundational lessons and create two distinct questions for each selected lesson when possible. Each question must target exactly one supplied lesson ID. Use four options and exactly one correct answer. Do not assume generated lesson prose exists.",
       },
       {
         role: "user",

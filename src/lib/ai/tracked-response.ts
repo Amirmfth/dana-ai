@@ -12,7 +12,8 @@ type AiOperation =
   | "LESSON_GENERATION"
   | "TUTOR"
   | "MEMORY_EXTRACTION"
-  | "QUIZ_GENERATION";
+  | "QUIZ_GENERATION"
+  | "SOURCE_INGESTION";
 
 type TrackedResponseOptions = {
   operation: AiOperation;

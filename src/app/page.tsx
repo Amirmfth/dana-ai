@@ -15,7 +15,10 @@ export default async function HomePage() {
     include: { modules: { include: { lessons: true } } },
   });
 
-  const lessonCount = courses.reduce(
+  const activeCourses = courses.filter((course) => course.status !== "ARCHIVED");
+  const archivedCourses = courses.filter((course) => course.status === "ARCHIVED");
+
+  const lessonCount = activeCourses.reduce(
     (total, course) => total + course.modules.reduce((sum, module) => sum + module.lessons.length, 0),
     0,
   );
@@ -28,6 +31,9 @@ export default async function HomePage() {
             Dana AI
           </Link>
           <div className="flex items-center gap-2">
+            <Link href="/templates" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
+              Templates
+            </Link>
             <Link href="/settings/privacy" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
               Privacy
             </Link>
@@ -93,16 +99,16 @@ export default async function HomePage() {
               <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Your library</p>
               <h2 id="courses-heading" className="mt-1 text-2xl font-semibold tracking-tight">Continue learning</h2>
             </div>
-            {courses.length > 0 && <p className="text-sm text-neutral-500 dark:text-neutral-400">{courses.length} courses · {lessonCount} lessons</p>}
+            {activeCourses.length > 0 && <p className="text-sm text-neutral-500 dark:text-neutral-400">{activeCourses.length} courses · {lessonCount} lessons</p>}
           </div>
 
-          {courses.length === 0 ? (
+          {activeCourses.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-neutral-300 bg-white p-8 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
               Your first course will appear here. Start with a learning goal above.
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {courses.map((course) => {
+              {activeCourses.map((course) => {
                 const courseLessonCount = course.modules.reduce((total, module) => total + module.lessons.length, 0);
 
                 return (
@@ -121,6 +127,28 @@ export default async function HomePage() {
             </div>
           )}
         </section>
+
+        {archivedCourses.length > 0 && (
+          <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">
+            <details>
+              <summary className="cursor-pointer text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+                Archived courses ({archivedCourses.length})
+              </summary>
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                {archivedCourses.map((course) => (
+                  <Link
+                    key={course.id}
+                    href={"/courses/" + course.id}
+                    className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900"
+                  >
+                    <p className="font-semibold">{course.title}</p>
+                    <p className="mt-1 text-xs text-neutral-500">Archived</p>
+                  </Link>
+                ))}
+              </div>
+            </details>
+          </section>
+        )}
       </div>
     </main>
   );

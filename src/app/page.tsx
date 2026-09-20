@@ -73,9 +73,49 @@ export default async function HomePage() {
             <div className="mb-5">
               <label htmlFor="learning-goal" className="text-lg font-semibold">Create a course</label>
               <p id="learning-goal-help" className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-                Be specific about your starting point, goal, and what you want to practice.
+                Tell Dana your goal, current level, available time, and preferred learning style.
               </p>
             </div>
+
+            <div className="mb-4 grid gap-3 sm:grid-cols-2">
+              <label className="text-sm font-medium">
+                Current level
+                <select name="currentLevel" defaultValue="BEGINNER" className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950">
+                  <option value="BEGINNER">Beginner</option>
+                  <option value="INTERMEDIATE">Intermediate</option>
+                  <option value="ADVANCED">Advanced</option>
+                  <option value="EXPERT">Expert</option>
+                </select>
+              </label>
+              <label className="text-sm font-medium">
+                Target level
+                <select name="targetLevel" defaultValue="INTERMEDIATE" className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950">
+                  <option value="BEGINNER">Beginner</option>
+                  <option value="INTERMEDIATE">Intermediate</option>
+                  <option value="ADVANCED">Advanced</option>
+                  <option value="EXPERT">Expert</option>
+                </select>
+              </label>
+              <label className="text-sm font-medium">
+                Weekly study time
+                <select name="weeklyStudyMinutes" defaultValue="300" className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950">
+                  <option value="120">2 hours / week</option>
+                  <option value="300">5 hours / week</option>
+                  <option value="600">10 hours / week</option>
+                  <option value="900">15 hours / week</option>
+                </select>
+              </label>
+              <label className="text-sm font-medium">
+                Learning style
+                <select name="learningStyle" defaultValue="BALANCED" className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950">
+                  <option value="BALANCED">Balanced</option>
+                  <option value="PRACTICAL">Practical</option>
+                  <option value="CONCEPTUAL">Conceptual</option>
+                  <option value="PROJECT_BASED">Project-based</option>
+                </select>
+              </label>
+            </div>
+
             <textarea
               id="learning-goal"
               name="prompt"

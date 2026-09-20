@@ -4,6 +4,7 @@ import { generateLesson } from "@/lib/ai/lesson-generator";
 import { lessonContentSchema } from "@/lib/ai/schemas/lesson";
 import { prisma } from "@/lib/db/prisma";
 import { claimRegeneration, failRegeneration, finishRegeneration } from "@/lib/regeneration/locks";
+import { sourceLocation } from "@/lib/sources/rag";
 
 async function persistCitations(
   tx: Prisma.TransactionClient,
@@ -59,7 +60,12 @@ async function persistCitations(
         lessonContentVersionId,
         sourceChunkId: citation.sourceChunkId,
         marker: citation.marker,
-        location: citation.location,
+        location: sourceLocation({
+          sourceTitle: valid.get(citation.sourceChunkId)!.source.title,
+          pageStart: valid.get(citation.sourceChunkId)!.pageStart,
+          pageEnd: valid.get(citation.sourceChunkId)!.pageEnd,
+          heading: valid.get(citation.sourceChunkId)!.heading,
+        }),
       })),
     });
   }

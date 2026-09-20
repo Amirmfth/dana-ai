@@ -16,7 +16,16 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
     include: {
       modules: {
         orderBy: { order: "asc" },
-        include: { lessons: { orderBy: { order: "asc" } } },
+        include: {
+          lessons: {
+            orderBy: { order: "asc" },
+            include: {
+              prerequisites: {
+                select: { prerequisiteLessonId: true },
+              },
+            },
+          },
+        },
       },
     },
   });
@@ -28,8 +37,8 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
   const completedCount = lessons.filter(({ lesson }) => lesson.status === "COMPLETED").length;
   const activeEntry =
     lessons.find(({ lesson }) => lesson.status === "IN_PROGRESS") ??
-    (completedCount > 0 ? lessons.find(({ lesson }) => lesson.status === "AVAILABLE") : undefined);
-  const nextEntry = activeEntry ?? lessons[0];
+    lessons.find(({ lesson }) => lesson.status === "AVAILABLE");
+  const nextEntry = activeEntry;
   const hasProgress = completedCount > 0 || Boolean(activeEntry);
   const nextLessonHref = nextEntry ? `/courses/${course.id}/lessons/${nextEntry.lesson.id}` : undefined;
   const curriculumModules = course.modules.map((module) => ({
@@ -45,6 +54,10 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
       concepts: lesson.concepts,
       order: lesson.order,
       status: lesson.status,
+      difficulty: lesson.difficulty,
+      isOptional: lesson.isOptional,
+      completionMethod: lesson.completionMethod,
+      prerequisiteCount: lesson.prerequisites.length,
     })),
   }));
 
@@ -63,6 +76,12 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
             <span aria-current="page" className="truncate font-medium text-neutral-800 dark:text-neutral-200">{course.title}</span>
           </nav>
           <div className="flex items-center gap-2">
+            <Link
+              href={"/courses/" + course.id + "/placement"}
+              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
+            >
+              Placement
+            </Link>
             <Link
               href={"/courses/" + course.id + "/analytics"}
               className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
@@ -93,6 +112,12 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
             {course.description && <p className="mt-4 max-w-2xl line-clamp-3 text-base leading-7 text-neutral-600 dark:text-neutral-300 sm:text-lg sm:leading-8">{course.description}</p>}
             <p className="mt-5 text-sm font-medium text-neutral-500 dark:text-neutral-400">
               {course.modules.length} {course.modules.length === 1 ? "module" : "modules"}<span aria-hidden="true"> · </span>{lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
+              {course.currentLevel && course.targetLevel && (
+                <>
+                  <span aria-hidden="true"> · </span>
+                  {course.currentLevel.toLowerCase()} → {course.targetLevel.toLowerCase()}
+                </>
+              )}
             </p>
             {course.description && (
               <details className="group mt-5 max-w-2xl text-sm text-neutral-600 dark:text-neutral-300">

@@ -81,3 +81,13 @@ export type CourseMemory = Prisma.CourseMemoryModel
  * 
  */
 export type AiUsage = Prisma.AiUsageModel
+/**
+ * Model Exercise
+ * 
+ */
+export type Exercise = Prisma.ExerciseModel
+/**
+ * Model ExerciseAttempt
+ * 
+ */
+export type ExerciseAttempt = Prisma.ExerciseAttemptModel

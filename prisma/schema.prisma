@@ -45,11 +45,25 @@ enum AiOperation {
   TUTOR
   MEMORY_EXTRACTION
   EMBEDDING
+  QUIZ_GENERATION
 }
 
 enum AiRequestStatus {
   SUCCESS
   ERROR
+}
+
+enum ExerciseType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  MULTIPLE_SELECT
+  MATCHING
+  ORDERING
+}
+
+enum AttemptResult {
+  CORRECT
+  INCORRECT
 }
 
 model Course {
@@ -117,8 +131,11 @@ model Lesson {
 
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+  startedAt      DateTime?
+  completedAt    DateTime?
   conversations  Conversation[]
   courseMemories CourseMemory[]
+  exercises      Exercise[]
 
   @@unique([moduleId, order])
   @@index([moduleId])
@@ -241,4 +258,51 @@ model AiUsage {
   @@index([model, createdAt])
   @@index([courseId, createdAt])
   @@index([lessonId, createdAt])
+}
+
+model Exercise {
+  id String @id @default(cuid())
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  type ExerciseType
+
+  order Int
+
+  question String
+
+  // Presentation data specific to the exercise type.
+  data Json
+
+  // Hidden deterministic grading data.
+  answerKey Json
+
+  explanation String
+
+  concepts String[]
+
+  attempts ExerciseAttempt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([lessonId, order])
+  @@index([lessonId])
+}
+
+model ExerciseAttempt {
+  id String @id @default(cuid())
+
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  // Different exercise types need different answer shapes.
+  answer Json
+
+  result AttemptResult
+
+  createdAt DateTime @default(now())
+
+  @@index([exerciseId, createdAt])
 }

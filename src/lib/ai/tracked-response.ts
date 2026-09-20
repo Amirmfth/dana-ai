@@ -6,8 +6,9 @@ type AiOperation =
   | "COURSE_GENERATION"
   | "LESSON_GENERATION"
   | "TUTOR"
-  | "MEMORY_EXTRACTION";
-
+  | "MEMORY_EXTRACTION"
+  | "QUIZ_GENERATION";
+  
 type TrackedResponseOptions = {
   operation: AiOperation;
 

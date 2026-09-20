@@ -58,7 +58,9 @@ export const ModelName = {
   Conversation: 'Conversation',
   Message: 'Message',
   CourseMemory: 'CourseMemory',
-  AiUsage: 'AiUsage'
+  AiUsage: 'AiUsage',
+  Exercise: 'Exercise',
+  ExerciseAttempt: 'ExerciseAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -116,7 +118,9 @@ export const LessonScalarFieldEnum = {
   status: 'status',
   moduleId: 'moduleId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
@@ -191,6 +195,34 @@ export const AiUsageScalarFieldEnum = {
 } as const
 
 export type AiUsageScalarFieldEnum = (typeof AiUsageScalarFieldEnum)[keyof typeof AiUsageScalarFieldEnum]
+
+
+export const ExerciseScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  type: 'type',
+  order: 'order',
+  question: 'question',
+  data: 'data',
+  answerKey: 'answerKey',
+  explanation: 'explanation',
+  concepts: 'concepts',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
+
+
+export const ExerciseAttemptScalarFieldEnum = {
+  id: 'id',
+  exerciseId: 'exerciseId',
+  answer: 'answer',
+  result: 'result',
+  createdAt: 'createdAt'
+} as const
+
+export type ExerciseAttemptScalarFieldEnum = (typeof ExerciseAttemptScalarFieldEnum)[keyof typeof ExerciseAttemptScalarFieldEnum]
 
 
 export const SortOrder = {

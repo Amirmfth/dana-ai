@@ -53,7 +53,8 @@ export const AiOperation = {
   LESSON_GENERATION: 'LESSON_GENERATION',
   TUTOR: 'TUTOR',
   MEMORY_EXTRACTION: 'MEMORY_EXTRACTION',
-  EMBEDDING: 'EMBEDDING'
+  EMBEDDING: 'EMBEDDING',
+  QUIZ_GENERATION: 'QUIZ_GENERATION'
 } as const
 
 export type AiOperation = (typeof AiOperation)[keyof typeof AiOperation]
@@ -65,3 +66,22 @@ export const AiRequestStatus = {
 } as const
 
 export type AiRequestStatus = (typeof AiRequestStatus)[keyof typeof AiRequestStatus]
+
+
+export const ExerciseType = {
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  TRUE_FALSE: 'TRUE_FALSE',
+  MULTIPLE_SELECT: 'MULTIPLE_SELECT',
+  MATCHING: 'MATCHING',
+  ORDERING: 'ORDERING'
+} as const
+
+export type ExerciseType = (typeof ExerciseType)[keyof typeof ExerciseType]
+
+
+export const AttemptResult = {
+  CORRECT: 'CORRECT',
+  INCORRECT: 'INCORRECT'
+} as const
+
+export type AttemptResult = (typeof AttemptResult)[keyof typeof AttemptResult]

@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "AiOperation" ADD VALUE 'QUIZ_GENERATION';

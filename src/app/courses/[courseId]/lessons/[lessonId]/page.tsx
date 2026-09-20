@@ -7,6 +7,10 @@ import { LessonWorkspace } from "@/components/lessons/lesson-workspace";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { prisma } from "@/lib/db/prisma";
 import { getOrGenerateLesson } from "@/lib/lessons/get-or-generate-lesson";
+import { markLessonStarted } from "@/lib/lessons/progress";
+import { LessonCompletion } from "@/components/lessons/lesson-completion";
+import { getOrGenerateQuiz } from "@/lib/exercises/get-or-generate-quiz";
+import { LessonQuiz } from "@/components/exercises/lesson-quiz";
 
 type LessonPageProps = {
   params: Promise<{
@@ -25,6 +29,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   if (!lessonInfo) {
     notFound();
+  }
+
+  if (lessonInfo.status !== "LOCKED") {
+    await markLessonStarted(lessonId);
   }
 
   const conversation = await prisma.conversation.findFirst({
@@ -58,6 +66,44 @@ export default async function LessonPage({ params }: LessonPageProps) {
     : undefined;
 
   const lesson = await getOrGenerateLesson(lessonId);
+  const exercises = await getOrGenerateQuiz(lessonId);
+  const quizExercises = exercises.map((exercise) => {
+    const latestAttempt = exercise.attempts[0];
+
+    return {
+      id: exercise.id,
+
+      type: exercise.type,
+
+      question: exercise.question,
+
+      data: exercise.data,
+
+      explanation: exercise.explanation,
+
+      order: exercise.order,
+
+      attempts: latestAttempt
+        ? [
+            {
+              id: latestAttempt.id,
+
+              answer: latestAttempt.answer,
+
+              result: latestAttempt.result,
+
+              createdAt: latestAttempt.createdAt.toISOString(),
+
+              /*
+               * Only expose the answer key after this
+               * exercise has already been answered.
+               */
+              answerKey: exercise.answerKey,
+            },
+          ]
+        : [],
+    };
+  });
   const tocSections = lesson.sections.map((section, index) => ({
     id: `lesson-section-${index}`,
     title: section.title || `Section ${index + 1}`,
@@ -106,6 +152,13 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <div className="min-w-0">
             <div className="mx-auto w-full max-w-2xl">
               <LessonContent lesson={lesson} />
+              <LessonQuiz exercises={quizExercises} lessonId={lessonId} />
+
+              <LessonCompletion
+                courseId={courseId}
+                lessonId={lessonId}
+                isCompleted={lessonInfo.status === "COMPLETED"}
+              />
             </div>
           </div>
         </div>

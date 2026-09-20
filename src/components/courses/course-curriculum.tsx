@@ -10,6 +10,10 @@ type Lesson = {
   concepts: string[];
   order: number;
   status: "LOCKED" | "AVAILABLE" | "IN_PROGRESS" | "COMPLETED";
+  difficulty: "INTRODUCTORY" | "EASY" | "MEDIUM" | "HARD" | "ADVANCED";
+  isOptional: boolean;
+  completionMethod: "STUDIED" | "TESTED_OUT" | "SKIPPED" | null;
+  prerequisiteCount: number;
 };
 
 type CourseModule = {
@@ -219,12 +223,19 @@ function LessonRow({ courseId, lesson }: { courseId: string; lesson: Lesson }) {
 
         <span className="mt-1 block truncate text-xs text-neutral-500 dark:text-neutral-400">
           {isCompleted
-            ? "Completed"
+            ? lesson.completionMethod === "TESTED_OUT"
+              ? "Tested out"
+              : lesson.completionMethod === "SKIPPED"
+                ? "Skipped"
+                : "Completed"
             : isCurrent
               ? "In progress"
               : isLocked
                 ? "Locked"
                 : topicPreview || lesson.description || "Open lesson"}
+          {" · "}{lesson.difficulty.toLowerCase()}
+          {lesson.isOptional ? " · optional" : ""}
+          {lesson.prerequisiteCount > 1 ? " · " + lesson.prerequisiteCount + " prerequisites" : ""}
 
           {!isCompleted && !isCurrent && !isLocked && remainingTopics > 0
             ? ` +${remainingTopics}`

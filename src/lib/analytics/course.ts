@@ -137,6 +137,32 @@ export async function getCourseAnalytics(userId: string, courseId: string) {
     }))
     .sort((a, b) => b.attempts - a.attempts || b.accuracy - a.accuracy);
 
+  const advancedAssessmentRuns = await prisma.assessmentRun.findMany({
+    where: {
+      userId,
+      completedAt: { not: null },
+      assessmentVersion: {
+        assessment: {
+          courseId,
+          type: { in: ["MODULE", "COURSE_FINAL"] },
+        },
+      },
+    },
+    orderBy: { completedAt: "desc" },
+    take: 30,
+    include: {
+      assessmentVersion: {
+        include: {
+          assessment: {
+            include: {
+              module: { select: { title: true } },
+            },
+          },
+        },
+      },
+    },
+  });
+
   const completedRuns = quizRuns.filter(
     (run) => run.total && run.total > 0 && run.score !== null,
   );
@@ -192,6 +218,17 @@ export async function getCourseAnalytics(userId: string, courseId: string) {
     lessonEstimates,
     remainingMinutes,
     latestActivity,
+    advancedAssessmentRuns: advancedAssessmentRuns.map((run) => ({
+      id: run.id,
+      type: run.assessmentVersion.assessment.type,
+      title: run.assessmentVersion.assessment.title,
+      moduleTitle: run.assessmentVersion.assessment.module?.title ?? null,
+      score: run.score ?? 0,
+      total: run.total ?? 0,
+      passed: Boolean(run.passed),
+      version: run.assessmentVersion.version,
+      completedAt: run.completedAt!,
+    })),
     events: events.map((event) => ({
       id: event.id,
       type: event.type,

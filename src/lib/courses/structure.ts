@@ -16,8 +16,12 @@ export const courseStructureSchema = z.object({
           z.object({
             title: z.string().trim().min(1).max(200),
             description: z.string().trim().max(2000).nullable(),
+            key: z.string().trim().min(1).optional(),
             objectives: z.array(z.string().trim().min(1).max(500)).max(30),
             concepts: z.array(z.string().trim().min(1).max(200)).max(50),
+            difficulty: z.enum(["INTRODUCTORY", "EASY", "MEDIUM", "HARD", "ADVANCED"]).default("MEDIUM"),
+            isOptional: z.boolean().default(false),
+            prerequisiteKeys: z.array(z.string()).default([]),
           }),
         ).max(200),
       }),

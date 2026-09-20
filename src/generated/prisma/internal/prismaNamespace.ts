@@ -408,7 +408,8 @@ export const ModelName = {
   Exercise: 'Exercise',
   ExerciseAttempt: 'ExerciseAttempt',
   AiRequestWindow: 'AiRequestWindow',
-  UserPrivacySettings: 'UserPrivacySettings'
+  UserPrivacySettings: 'UserPrivacySettings',
+  GenerationJob: 'GenerationJob'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "course" | "module" | "lesson" | "lessonContent" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt" | "aiRequestWindow" | "userPrivacySettings"
+    modelProps: "course" | "module" | "lesson" | "lessonContent" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt" | "aiRequestWindow" | "userPrivacySettings" | "generationJob"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1316,6 +1317,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GenerationJob: {
+      payload: Prisma.$GenerationJobPayload<ExtArgs>
+      fields: Prisma.GenerationJobFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GenerationJobFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GenerationJobFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>
+        }
+        findFirst: {
+          args: Prisma.GenerationJobFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GenerationJobFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>
+        }
+        findMany: {
+          args: Prisma.GenerationJobFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>[]
+        }
+        create: {
+          args: Prisma.GenerationJobCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>
+        }
+        createMany: {
+          args: Prisma.GenerationJobCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GenerationJobCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>[]
+        }
+        delete: {
+          args: Prisma.GenerationJobDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>
+        }
+        update: {
+          args: Prisma.GenerationJobUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>
+        }
+        deleteMany: {
+          args: Prisma.GenerationJobDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GenerationJobUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GenerationJobUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>[]
+        }
+        upsert: {
+          args: Prisma.GenerationJobUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationJobPayload>
+        }
+        aggregate: {
+          args: Prisma.GenerationJobAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGenerationJob>
+        }
+        groupBy: {
+          args: Prisma.GenerationJobGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GenerationJobGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GenerationJobCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GenerationJobCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1523,6 +1598,23 @@ export const UserPrivacySettingsScalarFieldEnum = {
 } as const
 
 export type UserPrivacySettingsScalarFieldEnum = (typeof UserPrivacySettingsScalarFieldEnum)[keyof typeof UserPrivacySettingsScalarFieldEnum]
+
+
+export const GenerationJobScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  kind: 'kind',
+  status: 'status',
+  claimToken: 'claimToken',
+  attemptCount: 'attemptCount',
+  errorMessage: 'errorMessage',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GenerationJobScalarFieldEnum = (typeof GenerationJobScalarFieldEnum)[keyof typeof GenerationJobScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1755,6 +1847,34 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'GenerationKind'
+ */
+export type EnumGenerationKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenerationKind'>
+    
+
+
+/**
+ * Reference to a field of type 'GenerationKind[]'
+ */
+export type ListEnumGenerationKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenerationKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'GenerationStatus'
+ */
+export type EnumGenerationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenerationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'GenerationStatus[]'
+ */
+export type ListEnumGenerationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenerationStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1930,6 +2050,7 @@ export type GlobalOmitConfig = {
   exerciseAttempt?: Prisma.ExerciseAttemptOmit
   aiRequestWindow?: Prisma.AiRequestWindowOmit
   userPrivacySettings?: Prisma.UserPrivacySettingsOmit
+  generationJob?: Prisma.GenerationJobOmit
 }
 
 /* Types for Logging */

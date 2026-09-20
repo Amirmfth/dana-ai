@@ -269,6 +269,7 @@ export type LessonWhereInput = {
   conversations?: Prisma.ConversationListRelationFilter
   courseMemories?: Prisma.CourseMemoryListRelationFilter
   exercises?: Prisma.ExerciseListRelationFilter
+  generationJobs?: Prisma.GenerationJobListRelationFilter
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -289,6 +290,7 @@ export type LessonOrderByWithRelationInput = {
   conversations?: Prisma.ConversationOrderByRelationAggregateInput
   courseMemories?: Prisma.CourseMemoryOrderByRelationAggregateInput
   exercises?: Prisma.ExerciseOrderByRelationAggregateInput
+  generationJobs?: Prisma.GenerationJobOrderByRelationAggregateInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -313,6 +315,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   conversations?: Prisma.ConversationListRelationFilter
   courseMemories?: Prisma.CourseMemoryListRelationFilter
   exercises?: Prisma.ExerciseListRelationFilter
+  generationJobs?: Prisma.GenerationJobListRelationFilter
 }, "id" | "moduleId_order">
 
 export type LessonOrderByWithAggregationInput = {
@@ -370,6 +373,7 @@ export type LessonCreateInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -389,6 +393,7 @@ export type LessonUncheckedCreateInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -408,6 +413,7 @@ export type LessonUpdateInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -427,6 +433,7 @@ export type LessonUncheckedUpdateInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -681,6 +688,20 @@ export type LessonUpdateOneRequiredWithoutExercisesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutExercisesInput, Prisma.LessonUpdateWithoutExercisesInput>, Prisma.LessonUncheckedUpdateWithoutExercisesInput>
 }
 
+export type LessonCreateNestedOneWithoutGenerationJobsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutGenerationJobsInput, Prisma.LessonUncheckedCreateWithoutGenerationJobsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutGenerationJobsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutGenerationJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutGenerationJobsInput, Prisma.LessonUncheckedCreateWithoutGenerationJobsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutGenerationJobsInput
+  upsert?: Prisma.LessonUpsertWithoutGenerationJobsInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutGenerationJobsInput, Prisma.LessonUpdateWithoutGenerationJobsInput>, Prisma.LessonUncheckedUpdateWithoutGenerationJobsInput>
+}
+
 export type LessonCreateWithoutModuleInput = {
   id?: string
   title: string
@@ -697,6 +718,7 @@ export type LessonCreateWithoutModuleInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutModuleInput = {
@@ -715,6 +737,7 @@ export type LessonUncheckedCreateWithoutModuleInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutModuleInput = {
@@ -777,6 +800,7 @@ export type LessonCreateWithoutContentInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutContentInput = {
@@ -795,6 +819,7 @@ export type LessonUncheckedCreateWithoutContentInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutContentInput = {
@@ -829,6 +854,7 @@ export type LessonUpdateWithoutContentInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutContentInput = {
@@ -847,6 +873,7 @@ export type LessonUncheckedUpdateWithoutContentInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutConversationsInput = {
@@ -865,6 +892,7 @@ export type LessonCreateWithoutConversationsInput = {
   content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutConversationsInput = {
@@ -883,6 +911,7 @@ export type LessonUncheckedCreateWithoutConversationsInput = {
   content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutConversationsInput = {
@@ -917,6 +946,7 @@ export type LessonUpdateWithoutConversationsInput = {
   content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutConversationsInput = {
@@ -935,6 +965,7 @@ export type LessonUncheckedUpdateWithoutConversationsInput = {
   content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutCourseMemoriesInput = {
@@ -953,6 +984,7 @@ export type LessonCreateWithoutCourseMemoriesInput = {
   content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
@@ -971,6 +1003,7 @@ export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
   content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
   exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutCourseMemoriesInput = {
@@ -1005,6 +1038,7 @@ export type LessonUpdateWithoutCourseMemoriesInput = {
   content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
@@ -1023,6 +1057,7 @@ export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
   content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutExercisesInput = {
@@ -1041,6 +1076,7 @@ export type LessonCreateWithoutExercisesInput = {
   content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutExercisesInput = {
@@ -1059,6 +1095,7 @@ export type LessonUncheckedCreateWithoutExercisesInput = {
   content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutExercisesInput = {
@@ -1093,6 +1130,7 @@ export type LessonUpdateWithoutExercisesInput = {
   content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutExercisesInput = {
@@ -1111,6 +1149,99 @@ export type LessonUncheckedUpdateWithoutExercisesInput = {
   content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutGenerationJobsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutGenerationJobsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  moduleId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutGenerationJobsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutGenerationJobsInput, Prisma.LessonUncheckedCreateWithoutGenerationJobsInput>
+}
+
+export type LessonUpsertWithoutGenerationJobsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutGenerationJobsInput, Prisma.LessonUncheckedUpdateWithoutGenerationJobsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutGenerationJobsInput, Prisma.LessonUncheckedCreateWithoutGenerationJobsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutGenerationJobsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutGenerationJobsInput, Prisma.LessonUncheckedUpdateWithoutGenerationJobsInput>
+}
+
+export type LessonUpdateWithoutGenerationJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutGenerationJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyModuleInput = {
@@ -1143,6 +1274,7 @@ export type LessonUpdateWithoutModuleInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutModuleInput = {
@@ -1161,6 +1293,7 @@ export type LessonUncheckedUpdateWithoutModuleInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
   exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutModuleInput = {
@@ -1186,12 +1319,14 @@ export type LessonCountOutputType = {
   conversations: number
   courseMemories: number
   exercises: number
+  generationJobs: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversations?: boolean | LessonCountOutputTypeCountConversationsArgs
   courseMemories?: boolean | LessonCountOutputTypeCountCourseMemoriesArgs
   exercises?: boolean | LessonCountOutputTypeCountExercisesArgs
+  generationJobs?: boolean | LessonCountOutputTypeCountGenerationJobsArgs
 }
 
 /**
@@ -1225,6 +1360,13 @@ export type LessonCountOutputTypeCountExercisesArgs<ExtArgs extends runtime.Type
   where?: Prisma.ExerciseWhereInput
 }
 
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountGenerationJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GenerationJobWhereInput
+}
+
 
 export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1244,6 +1386,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   conversations?: boolean | Prisma.Lesson$conversationsArgs<ExtArgs>
   courseMemories?: boolean | Prisma.Lesson$courseMemoriesArgs<ExtArgs>
   exercises?: boolean | Prisma.Lesson$exercisesArgs<ExtArgs>
+  generationJobs?: boolean | Prisma.Lesson$generationJobsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -1301,6 +1444,7 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   conversations?: boolean | Prisma.Lesson$conversationsArgs<ExtArgs>
   courseMemories?: boolean | Prisma.Lesson$courseMemoriesArgs<ExtArgs>
   exercises?: boolean | Prisma.Lesson$exercisesArgs<ExtArgs>
+  generationJobs?: boolean | Prisma.Lesson$generationJobsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1318,6 +1462,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     conversations: Prisma.$ConversationPayload<ExtArgs>[]
     courseMemories: Prisma.$CourseMemoryPayload<ExtArgs>[]
     exercises: Prisma.$ExercisePayload<ExtArgs>[]
+    generationJobs: Prisma.$GenerationJobPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1731,6 +1876,7 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   conversations<T extends Prisma.Lesson$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   courseMemories<T extends Prisma.Lesson$courseMemoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$courseMemoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseMemoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   exercises<T extends Prisma.Lesson$exercisesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$exercisesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExercisePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  generationJobs<T extends Prisma.Lesson$generationJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$generationJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GenerationJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2261,6 +2407,30 @@ export type Lesson$exercisesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ExerciseScalarFieldEnum | Prisma.ExerciseScalarFieldEnum[]
+}
+
+/**
+ * Lesson.generationJobs
+ */
+export type Lesson$generationJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GenerationJob
+   */
+  select?: Prisma.GenerationJobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GenerationJob
+   */
+  omit?: Prisma.GenerationJobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GenerationJobInclude<ExtArgs> | null
+  where?: Prisma.GenerationJobWhereInput
+  orderBy?: Prisma.GenerationJobOrderByWithRelationInput | Prisma.GenerationJobOrderByWithRelationInput[]
+  cursor?: Prisma.GenerationJobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GenerationJobScalarFieldEnum | Prisma.GenerationJobScalarFieldEnum[]
 }
 
 /**

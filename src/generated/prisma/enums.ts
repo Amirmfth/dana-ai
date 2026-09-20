@@ -85,3 +85,21 @@ export const AttemptResult = {
 } as const
 
 export type AttemptResult = (typeof AttemptResult)[keyof typeof AttemptResult]
+
+
+export const GenerationKind = {
+  LESSON_CONTENT: 'LESSON_CONTENT',
+  LESSON_QUIZ: 'LESSON_QUIZ'
+} as const
+
+export type GenerationKind = (typeof GenerationKind)[keyof typeof GenerationKind]
+
+
+export const GenerationStatus = {
+  NOT_STARTED: 'NOT_STARTED',
+  GENERATING: 'GENERATING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+} as const
+
+export type GenerationStatus = (typeof GenerationStatus)[keyof typeof GenerationStatus]

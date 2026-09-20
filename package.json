@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test src/lib/auth/authorization.test.ts src/lib/ai/privacy.test.ts src/lib/security/lesson-access.test.ts",
+    "test": "tsx --test src/lib/auth/authorization.test.ts src/lib/ai/privacy.test.ts src/lib/security/lesson-access.test.ts src/lib/generation/state.test.ts src/lib/memory/vector-memory.test.ts",
     "prebuild": "prisma generate",
     "pretest": "prisma generate"
   },

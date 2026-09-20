@@ -61,14 +61,26 @@ enum AttemptResult {
   INCORRECT
 }
 
+enum GenerationKind {
+  LESSON_CONTENT
+  LESSON_QUIZ
+}
+
+enum GenerationStatus {
+  NOT_STARTED
+  GENERATING
+  READY
+  FAILED
+}
+
 model Course {
-  id          String       @id @default(cuid())
-  ownerId     String       @db.Uuid
-  title       String
-  description String?
-  goal        String
-  status      CourseStatus @default(DRAFT)
-  prompt      String
+  id           String       @id @default(cuid())
+  ownerId      String       @db.Uuid
+  title        String
+  description  String?
+  goal         String
+  status       CourseStatus @default(DRAFT)
+  prompt       String
   instructions String?
 
   modules        Module[]
@@ -115,6 +127,7 @@ model Lesson {
   conversations   Conversation[]
   courseMemories  CourseMemory[]
   exercises       Exercise[]
+  generationJobs  GenerationJob[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -176,6 +189,7 @@ model CourseMemory {
   type       MemoryType
   content    String
   importance Int        @default(3)
+  embedding  Unsupported("vector(1536)")?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -220,14 +234,14 @@ model AiUsage {
 }
 
 model Exercise {
-  id       String       @id @default(cuid())
-  lessonId String
-  lesson   Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  type     ExerciseType
-  order    Int
-  question String
-  data       Json
-  answerKey  Json
+  id          String       @id @default(cuid())
+  lessonId    String
+  lesson      Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  type        ExerciseType
+  order       Int
+  question    String
+  data        Json
+  answerKey   Json
   explanation String
   concepts    String[]
   attempts    ExerciseAttempt[]
@@ -270,4 +284,26 @@ model UserPrivacySettings {
   retentionDays   Int      @default(30)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model GenerationJob {
+  id String @id @default(cuid())
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  kind       GenerationKind
+  status     GenerationStatus @default(NOT_STARTED)
+  claimToken String?
+
+  attemptCount Int @default(0)
+  errorMessage String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([lessonId, kind])
+  @@index([status, updatedAt])
 }

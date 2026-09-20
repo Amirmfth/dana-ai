@@ -7,6 +7,23 @@ import {
   type GeneratedLessonContent,
 } from "@/lib/ai/schemas/lesson";
 import { prisma } from "@/lib/db/prisma";
+import {
+  claimGeneration,
+  markGenerationFailed,
+  markGenerationReady,
+  markObservedGenerationReady,
+  waitForGeneratedValue,
+} from "@/lib/generation/coordinator";
+
+async function loadLessonContent(lessonId: string) {
+  const existing = await prisma.lessonContent.findUnique({
+    where: { lessonId },
+  });
+
+  return existing
+    ? lessonContentSchema.parse(existing.content)
+    : null;
+}
 
 export async function getOrGenerateLesson(
   userId: string,
@@ -20,7 +37,6 @@ export async function getOrGenerateLesson(
     },
     select: {
       module: { select: { courseId: true } },
-      content: true,
     },
   });
 
@@ -28,20 +44,55 @@ export async function getOrGenerateLesson(
     throw new Error("Lesson not found or locked.");
   }
 
-  if (lesson.content) {
-    return lessonContentSchema.parse(lesson.content.content);
+  const existing = await loadLessonContent(lessonId);
+
+  if (existing) {
+    await markObservedGenerationReady(lessonId, "LESSON_CONTENT");
+    return existing;
   }
 
-  const context = await buildLessonContext(lessonId);
-  const generated = await generateLesson(context, lesson.module.courseId, userId);
+  const claimToken = await claimGeneration(lessonId, "LESSON_CONTENT");
 
-  await prisma.lessonContent.create({
-    data: {
+  if (!claimToken) {
+    return waitForGeneratedValue({
       lessonId,
-      content: generated as Prisma.InputJsonValue,
-      generationVersion: 1,
-    },
-  });
+      kind: "LESSON_CONTENT",
+      load: () => loadLessonContent(lessonId),
+    });
+  }
 
-  return generated;
+  try {
+    const context = await buildLessonContext(lessonId);
+    const generated = await generateLesson(
+      context,
+      lesson.module.courseId,
+      userId,
+    );
+
+    const persisted = await prisma.lessonContent.upsert({
+      where: { lessonId },
+      create: {
+        lessonId,
+        content: generated as Prisma.InputJsonValue,
+        generationVersion: 1,
+      },
+      update: {},
+    });
+
+    await markGenerationReady(
+      lessonId,
+      "LESSON_CONTENT",
+      claimToken,
+    );
+
+    return lessonContentSchema.parse(persisted.content);
+  } catch (error) {
+    await markGenerationFailed(
+      lessonId,
+      "LESSON_CONTENT",
+      claimToken,
+      error,
+    );
+    throw error;
+  }
 }

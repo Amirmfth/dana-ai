@@ -77,3 +77,8 @@ export type AiRequestWindow = Prisma.AiRequestWindowModel
  * 
  */
 export type UserPrivacySettings = Prisma.UserPrivacySettingsModel
+/**
+ * Model GenerationJob
+ * 
+ */
+export type GenerationJob = Prisma.GenerationJobModel

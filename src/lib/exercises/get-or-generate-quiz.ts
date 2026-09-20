@@ -3,6 +3,32 @@ import { Prisma } from "@/generated/prisma/client";
 import { type GeneratedQuizExercise } from "@/lib/ai/schemas/quiz";
 import { generateLessonQuiz } from "@/lib/ai/quiz-generator";
 import { prisma } from "@/lib/db/prisma";
+import {
+  claimGeneration,
+  markGenerationFailed,
+  markGenerationReady,
+  markObservedGenerationReady,
+  waitForGeneratedValue,
+} from "@/lib/generation/coordinator";
+
+const quizInclude = {
+  attempts: {
+    orderBy: {
+      createdAt: "desc" as const,
+    },
+    take: 1,
+  },
+};
+
+async function loadQuiz(lessonId: string) {
+  const exercises = await prisma.exercise.findMany({
+    where: { lessonId },
+    orderBy: { order: "asc" },
+    include: quizInclude,
+  });
+
+  return exercises.length > 0 ? exercises : null;
+}
 
 export async function getOrGenerateQuiz(userId: string, lessonId: string) {
   const lesson = await prisma.lesson.findFirst({
@@ -14,49 +40,70 @@ export async function getOrGenerateQuiz(userId: string, lessonId: string) {
     select: { id: true },
   });
 
-  if (!lesson) throw new Error("Lesson not found or locked.");
+  if (!lesson) {
+    throw new Error("Lesson not found or locked.");
+  }
 
-  const existing = await prisma.exercise.findMany({
-    where: { lessonId },
-    orderBy: { order: "asc" },
-    include: {
-      attempts: {
-        orderBy: { createdAt: "desc" },
-        take: 1,
-      },
-    },
-  });
+  const existing = await loadQuiz(lessonId);
 
-  if (existing.length > 0) return existing;
+  if (existing) {
+    await markObservedGenerationReady(lessonId, "LESSON_QUIZ");
+    return existing;
+  }
 
-  const quiz = await generateLessonQuiz(userId, lessonId);
+  const claimToken = await claimGeneration(lessonId, "LESSON_QUIZ");
 
-  await prisma.exercise.createMany({
-    data: quiz.exercises.map((exercise, index) => {
-      const storage = prepareExercise(exercise);
-      return {
-        lessonId,
-        type: exercise.type,
-        order: index + 1,
-        question: exercise.question,
-        data: storage.data as Prisma.InputJsonValue,
-        answerKey: storage.answerKey as Prisma.InputJsonValue,
-        explanation: exercise.explanation,
-        concepts: exercise.concepts,
-      };
-    }),
-  });
+  if (!claimToken) {
+    return waitForGeneratedValue({
+      lessonId,
+      kind: "LESSON_QUIZ",
+      load: () => loadQuiz(lessonId),
+    });
+  }
 
-  return prisma.exercise.findMany({
-    where: { lessonId },
-    orderBy: { order: "asc" },
-    include: {
-      attempts: {
-        orderBy: { createdAt: "desc" },
-        take: 1,
-      },
-    },
-  });
+  try {
+    const quiz = await generateLessonQuiz(userId, lessonId);
+
+    await prisma.exercise.createMany({
+      data: quiz.exercises.map((exercise, index) => {
+        const storage = prepareExercise(exercise);
+
+        return {
+          lessonId,
+          type: exercise.type,
+          order: index + 1,
+          question: exercise.question,
+          data: storage.data as Prisma.InputJsonValue,
+          answerKey: storage.answerKey as Prisma.InputJsonValue,
+          explanation: exercise.explanation,
+          concepts: exercise.concepts,
+        };
+      }),
+      skipDuplicates: true,
+    });
+
+    const persisted = await loadQuiz(lessonId);
+
+    if (!persisted) {
+      throw new Error("Quiz generation completed without persisted exercises.");
+    }
+
+    await markGenerationReady(
+      lessonId,
+      "LESSON_QUIZ",
+      claimToken,
+    );
+
+    return persisted;
+  } catch (error) {
+    await markGenerationFailed(
+      lessonId,
+      "LESSON_QUIZ",
+      claimToken,
+      error,
+    );
+    throw error;
+  }
 }
 
 function prepareExercise(exercise: GeneratedQuizExercise) {

@@ -213,16 +213,16 @@ function Matching({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="w-full min-w-0 space-y-3">
       {parsed.leftItems.map((left) => {
         const current = selectedPairs.find((pair) => pair.leftId === left.id);
 
         return (
           <div
             key={left.id}
-            className="grid gap-2 sm:grid-cols-2 sm:items-center"
+            className="grid w-full min-w-0 gap-2 sm:grid-cols-2 sm:items-center"
           >
-            <div className="rounded-xl bg-neutral-100 px-4 py-3 text-sm font-medium dark:bg-neutral-900">
+            <div className="min-w-0 break-words rounded-xl bg-neutral-100 px-4 py-3 text-sm font-medium dark:bg-neutral-900">
               {left.label}
             </div>
 
@@ -230,7 +230,7 @@ function Matching({
               disabled={disabled}
               value={current?.rightId ?? ""}
               onChange={(event) => changeMatch(left.id, event.target.value)}
-              className="min-h-11 rounded-xl border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-neutral-700 dark:bg-neutral-950 dark:focus:border-white"
+              className="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-neutral-700 dark:bg-neutral-950 dark:focus:border-white"
             >
               <option value="">Choose match…</option>
 

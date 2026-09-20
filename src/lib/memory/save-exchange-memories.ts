@@ -1,6 +1,13 @@
 import { extractMemories } from "@/lib/ai/memory-extractor";
 import { prisma } from "@/lib/db/prisma";
-import { embedMemory } from "./vector-memory";
+import {
+  createMemoryEmbedding,
+  findNearestMemory,
+  isSemanticDuplicate,
+  setMemoryEmbedding,
+} from "./vector-memory";
+
+const MEMORY_DUPLICATE_THRESHOLD = 0.9;
 
 export async function saveExchangeMemories({
   lessonId,
@@ -12,15 +19,10 @@ export async function saveExchangeMemories({
   assistantMessage: string;
 }) {
   const lesson = await prisma.lesson.findUnique({
-    where: {
-      id: lessonId,
-    },
-
+    where: { id: lessonId },
     select: {
       module: {
-        select: {
-          courseId: true,
-        },
+        select: { courseId: true },
       },
     },
   });
@@ -30,49 +32,65 @@ export async function saveExchangeMemories({
   }
 
   const courseId = lesson.module.courseId;
-
   const extracted = await extractMemories({
     lessonId,
     courseId,
-
     exchange: {
       user: userMessage,
       assistant: assistantMessage,
     },
   });
 
-  if (extracted.length === 0) {
-    return;
-  }
+  if (extracted.length === 0) return;
 
-  /*
-   * Very basic V1 duplicate protection.
-   *
-   * Semantic duplicate detection comes with pgvector next.
-   */
   const existing = await prisma.courseMemory.findMany({
-    where: {
-      courseId,
-    },
-
-    select: {
-      content: true,
-    },
+    where: { courseId },
+    select: { content: true },
   });
 
   const existingNormalized = new Set(
     existing.map((memory) => normalizeMemory(memory.content)),
   );
 
-  const newMemories = extracted.filter(
-    (memory) => !existingNormalized.has(normalizeMemory(memory.content)),
-  );
+  for (const memory of extracted) {
+    const normalized = normalizeMemory(memory.content);
 
-  if (newMemories.length === 0) {
-    return;
-  }
+    if (existingNormalized.has(normalized)) {
+      continue;
+    }
 
-  for (const memory of newMemories) {
+    let embedding: number[] | null = null;
+
+    try {
+      embedding = await createMemoryEmbedding({
+        content: memory.content,
+        courseId,
+        lessonId,
+      });
+
+      const nearest = await findNearestMemory({
+        courseId,
+        type: memory.type,
+        embedding,
+      });
+
+      if (
+        nearest &&
+        isSemanticDuplicate(
+          nearest.similarity,
+          MEMORY_DUPLICATE_THRESHOLD,
+        )
+      ) {
+        existingNormalized.add(normalized);
+        continue;
+      }
+    } catch (error) {
+      console.error(
+        "Semantic memory duplicate check failed:",
+        error,
+      );
+    }
+
     const created = await prisma.courseMemory.create({
       data: {
         courseId,
@@ -83,19 +101,20 @@ export async function saveExchangeMemories({
       },
     });
 
+    existingNormalized.add(normalized);
+
+    if (!embedding) continue;
+
     try {
-      await embedMemory({
+      await setMemoryEmbedding({
         memoryId: created.id,
-        content: memory.content,
-        courseId,
-        lessonId,
+        embedding,
       });
     } catch (error) {
-      /*
-       * Memory persistence should still succeed if embedding fails.
-       * We can backfill missing embeddings later.
-       */
-      console.error(`Failed to embed memory ${created.id}:`, error);
+      console.error(
+        "Failed to persist memory embedding:",
+        error,
+      );
     }
   }
 }

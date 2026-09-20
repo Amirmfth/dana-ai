@@ -430,17 +430,25 @@ export async function ensureModuleAssessment(
       title: courseModule.title,
       objective: courseModule.objective,
     },
-    courseModule.lessons.map(lessonTarget),
+    courseModule.lessons
+      .filter((lesson) => !lesson.isOptional)
+      .map(lessonTarget),
   );
 
-  if (generated.questions.length < 8) {
-    throw new Error("Module assessment must contain at least eight questions.");
+  const requiredLessons = courseModule.lessons.filter(
+    (lesson) => !lesson.isOptional,
+  );
+  const assessmentLessons =
+    requiredLessons.length > 0 ? requiredLessons : courseModule.lessons;
+
+  if (generated.questions.length < 5) {
+    throw new Error("Module assessment must contain at least five questions.");
   }
 
   return persistVersion(
     assessment.id,
     generated,
-    new Set(courseModule.lessons.map((lesson) => lesson.id)),
+    new Set(assessmentLessons.map((lesson) => lesson.id)),
   );
 }
 
@@ -569,12 +577,14 @@ export async function ensureCourseFinalAssessment(
       id: courseModule.id,
       title: courseModule.title,
       objective: courseModule.objective,
-      lessons: courseModule.lessons.map(lessonTarget),
+      lessons: courseModule.lessons
+        .filter((lesson) => !lesson.isOptional)
+        .map(lessonTarget),
     })),
   );
 
-  if (generated.questions.length < 12) {
-    throw new Error("Course-final assessment must contain at least twelve questions.");
+  if (generated.questions.length < 8) {
+    throw new Error("Course-final assessment must contain at least eight questions.");
   }
 
   return persistVersion(

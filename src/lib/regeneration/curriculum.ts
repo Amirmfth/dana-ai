@@ -27,6 +27,8 @@ function courseSnapshot(course: NonNullable<Awaited<ReturnType<typeof getOwnedCo
         description: lesson.description,
         objectives: lesson.objectives,
         concepts: lesson.concepts,
+      difficulty: lesson.difficulty,
+      isOptional: lesson.isOptional,
       })),
     })),
   };
@@ -89,6 +91,8 @@ export async function createModuleRevision(
           description: lesson.description,
           objectives: lesson.objectives,
           concepts: lesson.concepts,
+      difficulty: lesson.difficulty,
+      isOptional: lesson.isOptional,
         })),
       },
       {
@@ -134,6 +138,8 @@ async function applyModuleStructure(
       description: string;
       objectives: string[];
       concepts: string[];
+      difficulty?: "INTRODUCTORY" | "EASY" | "MEDIUM" | "HARD" | "ADVANCED";
+      isOptional?: boolean;
     }>;
   },
 ) {
@@ -163,10 +169,12 @@ async function applyModuleStructure(
           description: proposed.description,
           objectives: proposed.objectives,
           concepts: proposed.concepts,
+          difficulty: proposed.difficulty ?? current.difficulty,
+          isOptional: proposed.isOptional ?? current.isOptional,
         },
       });
     } else {
-      await tx.lesson.create({
+      const created = await tx.lesson.create({
         data: {
           moduleId,
           order: existing.length + (index - existing.length) + 1,
@@ -174,9 +182,28 @@ async function applyModuleStructure(
           description: proposed.description,
           objectives: proposed.objectives,
           concepts: proposed.concepts,
+          difficulty: proposed.difficulty ?? "MEDIUM",
+          isOptional: proposed.isOptional ?? false,
           status: "LOCKED",
         },
       });
+
+      const previous =
+        index > 0
+          ? await tx.lesson.findFirst({
+              where: { moduleId, order: index },
+              select: { id: true },
+            })
+          : null;
+
+      if (previous && previous.id !== created.id) {
+        await tx.lessonPrerequisite.create({
+          data: {
+            lessonId: created.id,
+            prerequisiteLessonId: previous.id,
+          },
+        });
+      }
     }
   }
 }

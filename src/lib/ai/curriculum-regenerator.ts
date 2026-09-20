@@ -20,7 +20,7 @@ export async function regenerateCoursePlan(
       {
         role: "system",
         content:
-          "You are revising an existing course curriculum. Preserve the learner's overall goal and improve structure, sequencing, lesson coverage, objectives, and concepts. Return a complete replacement proposal. Do not generate lesson prose or quizzes.",
+          "You are revising an existing course curriculum. Preserve the learner's overall goal and improve structure, sequencing, lesson coverage, objectives, concepts, difficulty, optionality, and prerequisite relationships. Each lesson should use a stable key and prerequisiteKeys that reference earlier lesson keys only. Return a complete replacement proposal. Do not generate lesson prose or quizzes.",
       },
       {
         role: "user",
@@ -51,7 +51,7 @@ export async function regenerateModulePlan(
       {
         role: "system",
         content:
-          "You are revising one module inside an existing course. Improve the module objective, lesson sequence, lesson descriptions, objectives, and concepts while keeping it aligned with the course. Return only the revised module.",
+          "You are revising one module inside an existing course. Improve the module objective, lesson sequence, lesson descriptions, objectives, concepts, difficulty, optionality, and prerequisite relationships while keeping it aligned with the course. Each lesson should use a stable key and prerequisiteKeys that reference earlier lesson keys only. Return only the revised module.",
       },
       {
         role: "user",

@@ -758,11 +758,12 @@ model LessonCitation {
   sourceChunkId String
   sourceChunk   SourceChunk @relation(fields: [sourceChunkId], references: [id], onDelete: Cascade)
 
+  marker   String
   location String
 
   createdAt DateTime @default(now())
 
-  @@unique([lessonContentVersionId, sourceChunkId, location])
+  @@unique([lessonContentVersionId, sourceChunkId, marker])
   @@index([lessonContentVersionId])
   @@index([sourceChunkId])
 }

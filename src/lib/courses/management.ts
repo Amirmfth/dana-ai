@@ -182,7 +182,6 @@ export async function normalizeCourseProgress(courseId: string) {
                 include: {
                   runs: {
                     where: {
-                      userId: course.ownerId,
                       passed: true,
                       completedAt: { not: null },
                     },
@@ -227,7 +226,8 @@ export async function normalizeCourseProgress(courseId: string) {
   const modulePassed = course.modules.map((courseModule) =>
     Boolean(
       courseModule.assessments[0]?.versions.some(
-        (version) => Boolean(version.runs[0]),
+        (version) =>
+          version.runs.some((run) => run.userId === course.ownerId),
       ),
     ),
   );
@@ -273,7 +273,8 @@ export async function normalizeCourseProgress(courseId: string) {
     course.modules.length > 0 && modulePassed.every(Boolean);
   const finalPassed = Boolean(
     course.assessments[0]?.versions.some(
-      (version) => Boolean(version.runs[0]),
+      (version) =>
+        version.runs.some((run) => run.userId === course.ownerId),
     ),
   );
 

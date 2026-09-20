@@ -179,8 +179,6 @@ export async function normalizeCourseProgress(courseId: string) {
             where: { type: "MODULE" },
             include: {
               versions: {
-                orderBy: { version: "desc" },
-                take: 1,
                 include: {
                   runs: {
                     where: {
@@ -227,7 +225,11 @@ export async function normalizeCourseProgress(courseId: string) {
   );
 
   const modulePassed = course.modules.map((courseModule) =>
-    Boolean(courseModule.assessments[0]?.versions[0]?.runs[0]),
+    Boolean(
+      courseModule.assessments[0]?.versions.some(
+        (version) => Boolean(version.runs[0]),
+      ),
+    ),
   );
 
   const statusUpdates: Array<{
@@ -270,7 +272,9 @@ export async function normalizeCourseProgress(courseId: string) {
   const allModuleAssessmentsPassed =
     course.modules.length > 0 && modulePassed.every(Boolean);
   const finalPassed = Boolean(
-    course.assessments[0]?.versions[0]?.runs[0],
+    course.assessments[0]?.versions.some(
+      (version) => Boolean(version.runs[0]),
+    ),
   );
 
   await prisma.$transaction([

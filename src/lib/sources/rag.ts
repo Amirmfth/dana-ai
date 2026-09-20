@@ -68,6 +68,24 @@ export async function findRelevantSourceChunks({
   sourceIds?: string[];
   limit?: number;
 }) {
+  if (sourceIds?.length) {
+    const readyCount = await prisma.courseSource.count({
+      where: {
+        id: { in: [...new Set(sourceIds)] },
+        ownerId,
+        status: "READY",
+      },
+    });
+    if (readyCount === 0) return [];
+  } else if (courseId) {
+    const readyCount = await prisma.courseSource.count({
+      where: { courseId, ownerId, status: "READY" },
+    });
+    if (readyCount === 0) return [];
+  } else {
+    return [];
+  }
+
   const embedding = await createEmbedding({
     text: query,
     userId: ownerId,

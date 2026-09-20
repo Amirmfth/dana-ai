@@ -227,6 +227,7 @@ export type CourseWhereInput = {
   templates?: Prisma.CourseTemplateListRelationFilter
   learningEvents?: Prisma.LearningEventListRelationFilter
   studyTime?: Prisma.StudyTimeListRelationFilter
+  curriculumRevisions?: Prisma.CurriculumRevisionListRelationFilter
 }
 
 export type CourseOrderByWithRelationInput = {
@@ -245,6 +246,7 @@ export type CourseOrderByWithRelationInput = {
   templates?: Prisma.CourseTemplateOrderByRelationAggregateInput
   learningEvents?: Prisma.LearningEventOrderByRelationAggregateInput
   studyTime?: Prisma.StudyTimeOrderByRelationAggregateInput
+  curriculumRevisions?: Prisma.CurriculumRevisionOrderByRelationAggregateInput
 }
 
 export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -266,6 +268,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   templates?: Prisma.CourseTemplateListRelationFilter
   learningEvents?: Prisma.LearningEventListRelationFilter
   studyTime?: Prisma.StudyTimeListRelationFilter
+  curriculumRevisions?: Prisma.CurriculumRevisionListRelationFilter
 }, "id">
 
 export type CourseOrderByWithAggregationInput = {
@@ -316,6 +319,7 @@ export type CourseCreateInput = {
   templates?: Prisma.CourseTemplateCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateInput = {
@@ -334,6 +338,7 @@ export type CourseUncheckedCreateInput = {
   templates?: Prisma.CourseTemplateUncheckedCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUpdateInput = {
@@ -352,6 +357,7 @@ export type CourseUpdateInput = {
   templates?: Prisma.CourseTemplateUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateInput = {
@@ -370,6 +376,7 @@ export type CourseUncheckedUpdateInput = {
   templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyInput = {
@@ -548,6 +555,20 @@ export type CourseUpdateOneWithoutTemplatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutTemplatesInput, Prisma.CourseUpdateWithoutTemplatesInput>, Prisma.CourseUncheckedUpdateWithoutTemplatesInput>
 }
 
+export type CourseCreateNestedOneWithoutCurriculumRevisionsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutCurriculumRevisionsInput, Prisma.CourseUncheckedCreateWithoutCurriculumRevisionsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutCurriculumRevisionsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutCurriculumRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutCurriculumRevisionsInput, Prisma.CourseUncheckedCreateWithoutCurriculumRevisionsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutCurriculumRevisionsInput
+  upsert?: Prisma.CourseUpsertWithoutCurriculumRevisionsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutCurriculumRevisionsInput, Prisma.CourseUpdateWithoutCurriculumRevisionsInput>, Prisma.CourseUncheckedUpdateWithoutCurriculumRevisionsInput>
+}
+
 export type CourseCreateWithoutModulesInput = {
   id?: string
   ownerId: string
@@ -563,6 +584,7 @@ export type CourseCreateWithoutModulesInput = {
   templates?: Prisma.CourseTemplateCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutModulesInput = {
@@ -580,6 +602,7 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   templates?: Prisma.CourseTemplateUncheckedCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutModulesInput = {
@@ -613,6 +636,7 @@ export type CourseUpdateWithoutModulesInput = {
   templates?: Prisma.CourseTemplateUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutModulesInput = {
@@ -630,6 +654,7 @@ export type CourseUncheckedUpdateWithoutModulesInput = {
   templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutCourseMemoriesInput = {
@@ -647,6 +672,7 @@ export type CourseCreateWithoutCourseMemoriesInput = {
   templates?: Prisma.CourseTemplateCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutCourseMemoriesInput = {
@@ -664,6 +690,7 @@ export type CourseUncheckedCreateWithoutCourseMemoriesInput = {
   templates?: Prisma.CourseTemplateUncheckedCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutCourseMemoriesInput = {
@@ -697,6 +724,7 @@ export type CourseUpdateWithoutCourseMemoriesInput = {
   templates?: Prisma.CourseTemplateUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutCourseMemoriesInput = {
@@ -714,6 +742,7 @@ export type CourseUncheckedUpdateWithoutCourseMemoriesInput = {
   templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutLearningEventsInput = {
@@ -731,6 +760,7 @@ export type CourseCreateWithoutLearningEventsInput = {
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutCourseInput
   templates?: Prisma.CourseTemplateCreateNestedManyWithoutSourceCourseInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutLearningEventsInput = {
@@ -748,6 +778,7 @@ export type CourseUncheckedCreateWithoutLearningEventsInput = {
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutCourseInput
   templates?: Prisma.CourseTemplateUncheckedCreateNestedManyWithoutSourceCourseInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutLearningEventsInput = {
@@ -781,6 +812,7 @@ export type CourseUpdateWithoutLearningEventsInput = {
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutCourseNestedInput
   templates?: Prisma.CourseTemplateUpdateManyWithoutSourceCourseNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutLearningEventsInput = {
@@ -798,6 +830,7 @@ export type CourseUncheckedUpdateWithoutLearningEventsInput = {
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutCourseNestedInput
   templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutStudyTimeInput = {
@@ -815,6 +848,7 @@ export type CourseCreateWithoutStudyTimeInput = {
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutCourseInput
   templates?: Prisma.CourseTemplateCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutStudyTimeInput = {
@@ -832,6 +866,7 @@ export type CourseUncheckedCreateWithoutStudyTimeInput = {
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutCourseInput
   templates?: Prisma.CourseTemplateUncheckedCreateNestedManyWithoutSourceCourseInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutStudyTimeInput = {
@@ -865,6 +900,7 @@ export type CourseUpdateWithoutStudyTimeInput = {
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutCourseNestedInput
   templates?: Prisma.CourseTemplateUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutStudyTimeInput = {
@@ -882,6 +918,7 @@ export type CourseUncheckedUpdateWithoutStudyTimeInput = {
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutCourseNestedInput
   templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutTemplatesInput = {
@@ -899,6 +936,7 @@ export type CourseCreateWithoutTemplatesInput = {
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutCourseInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutTemplatesInput = {
@@ -916,6 +954,7 @@ export type CourseUncheckedCreateWithoutTemplatesInput = {
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutCourseInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutCourseInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutTemplatesInput = {
@@ -949,6 +988,7 @@ export type CourseUpdateWithoutTemplatesInput = {
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutCourseNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutTemplatesInput = {
@@ -966,6 +1006,95 @@ export type CourseUncheckedUpdateWithoutTemplatesInput = {
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutCourseNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutCurriculumRevisionsInput = {
+  id?: string
+  ownerId: string
+  title: string
+  description?: string | null
+  goal: string
+  status?: $Enums.CourseStatus
+  prompt: string
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutCourseInput
+  templates?: Prisma.CourseTemplateCreateNestedManyWithoutSourceCourseInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutCourseInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutCurriculumRevisionsInput = {
+  id?: string
+  ownerId: string
+  title: string
+  description?: string | null
+  goal: string
+  status?: $Enums.CourseStatus
+  prompt: string
+  instructions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutCourseInput
+  templates?: Prisma.CourseTemplateUncheckedCreateNestedManyWithoutSourceCourseInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutCourseInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutCurriculumRevisionsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutCurriculumRevisionsInput, Prisma.CourseUncheckedCreateWithoutCurriculumRevisionsInput>
+}
+
+export type CourseUpsertWithoutCurriculumRevisionsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutCurriculumRevisionsInput, Prisma.CourseUncheckedUpdateWithoutCurriculumRevisionsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutCurriculumRevisionsInput, Prisma.CourseUncheckedCreateWithoutCurriculumRevisionsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutCurriculumRevisionsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutCurriculumRevisionsInput, Prisma.CourseUncheckedUpdateWithoutCurriculumRevisionsInput>
+}
+
+export type CourseUpdateWithoutCurriculumRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  goal?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutCourseNestedInput
+  templates?: Prisma.CourseTemplateUpdateManyWithoutSourceCourseNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutCourseNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutCurriculumRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  goal?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutCourseNestedInput
+  templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 
@@ -979,6 +1108,7 @@ export type CourseCountOutputType = {
   templates: number
   learningEvents: number
   studyTime: number
+  curriculumRevisions: number
 }
 
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -987,6 +1117,7 @@ export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   templates?: boolean | CourseCountOutputTypeCountTemplatesArgs
   learningEvents?: boolean | CourseCountOutputTypeCountLearningEventsArgs
   studyTime?: boolean | CourseCountOutputTypeCountStudyTimeArgs
+  curriculumRevisions?: boolean | CourseCountOutputTypeCountCurriculumRevisionsArgs
 }
 
 /**
@@ -1034,6 +1165,13 @@ export type CourseCountOutputTypeCountStudyTimeArgs<ExtArgs extends runtime.Type
   where?: Prisma.StudyTimeWhereInput
 }
 
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountCurriculumRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CurriculumRevisionWhereInput
+}
+
 
 export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1051,6 +1189,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   templates?: boolean | Prisma.Course$templatesArgs<ExtArgs>
   learningEvents?: boolean | Prisma.Course$learningEventsArgs<ExtArgs>
   studyTime?: boolean | Prisma.Course$studyTimeArgs<ExtArgs>
+  curriculumRevisions?: boolean | Prisma.Course$curriculumRevisionsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
@@ -1100,6 +1239,7 @@ export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   templates?: boolean | Prisma.Course$templatesArgs<ExtArgs>
   learningEvents?: boolean | Prisma.Course$learningEventsArgs<ExtArgs>
   studyTime?: boolean | Prisma.Course$studyTimeArgs<ExtArgs>
+  curriculumRevisions?: boolean | Prisma.Course$curriculumRevisionsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1113,6 +1253,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     templates: Prisma.$CourseTemplatePayload<ExtArgs>[]
     learningEvents: Prisma.$LearningEventPayload<ExtArgs>[]
     studyTime: Prisma.$StudyTimePayload<ExtArgs>[]
+    curriculumRevisions: Prisma.$CurriculumRevisionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1524,6 +1665,7 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
   templates<T extends Prisma.Course$templatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   learningEvents<T extends Prisma.Course$learningEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$learningEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studyTime<T extends Prisma.Course$studyTimeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$studyTimeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudyTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  curriculumRevisions<T extends Prisma.Course$curriculumRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$curriculumRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CurriculumRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2073,6 +2215,30 @@ export type Course$studyTimeArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.StudyTimeScalarFieldEnum | Prisma.StudyTimeScalarFieldEnum[]
+}
+
+/**
+ * Course.curriculumRevisions
+ */
+export type Course$curriculumRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CurriculumRevision
+   */
+  select?: Prisma.CurriculumRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CurriculumRevision
+   */
+  omit?: Prisma.CurriculumRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CurriculumRevisionInclude<ExtArgs> | null
+  where?: Prisma.CurriculumRevisionWhereInput
+  orderBy?: Prisma.CurriculumRevisionOrderByWithRelationInput | Prisma.CurriculumRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.CurriculumRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CurriculumRevisionScalarFieldEnum | Prisma.CurriculumRevisionScalarFieldEnum[]
 }
 
 /**

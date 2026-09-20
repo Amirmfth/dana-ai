@@ -16,7 +16,7 @@ export async function getCourseAnalytics(userId: string, courseId: string) {
             orderBy: { order: "asc" },
             include: {
               content: { select: { content: true } },
-              exercises: { select: { id: true } },
+              exercises: { select: { id: true, quizVersionId: true } },
             },
           },
         },
@@ -43,7 +43,9 @@ export async function getCourseAnalytics(userId: string, courseId: string) {
       content: lesson.content?.content ?? null,
       objectivesCount: lesson.objectives.length,
       conceptsCount: lesson.concepts.length,
-      exerciseCount: lesson.exercises.length,
+      exerciseCount: lesson.exercises.filter(
+        (exercise) => exercise.quizVersionId === lesson.activeQuizVersionId,
+      ).length,
     }),
   }));
 
@@ -154,7 +156,9 @@ export async function getCourseAnalytics(userId: string, courseId: string) {
       content: lesson.content?.content ?? null,
       objectivesCount: lesson.objectives.length,
       conceptsCount: lesson.concepts.length,
-      exerciseCount: lesson.exercises.length,
+      exerciseCount: lesson.exercises.filter(
+        (exercise) => exercise.quizVersionId === lesson.activeQuizVersionId,
+      ).length,
       completed: lesson.status === "COMPLETED",
     })),
   );
@@ -214,7 +218,7 @@ export async function getUserDashboard(userId: string) {
             orderBy: { order: "asc" },
             include: {
               content: { select: { content: true } },
-              exercises: { select: { id: true } },
+              exercises: { select: { id: true, quizVersionId: true } },
             },
           },
         },
@@ -264,7 +268,9 @@ export async function getUserDashboard(userId: string) {
         content: lesson.content?.content ?? null,
         objectivesCount: lesson.objectives.length,
         conceptsCount: lesson.concepts.length,
-        exerciseCount: lesson.exercises.length,
+        exerciseCount: lesson.exercises.filter(
+        (exercise) => exercise.quizVersionId === lesson.activeQuizVersionId,
+      ).length,
         completed: lesson.status === "COMPLETED",
       })),
     );

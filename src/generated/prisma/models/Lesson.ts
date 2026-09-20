@@ -41,6 +41,8 @@ export type LessonMinAggregateOutputType = {
   order: number | null
   status: $Enums.LessonStatus | null
   moduleId: string | null
+  activeContentVersionId: string | null
+  activeQuizVersionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   startedAt: Date | null
@@ -54,6 +56,8 @@ export type LessonMaxAggregateOutputType = {
   order: number | null
   status: $Enums.LessonStatus | null
   moduleId: string | null
+  activeContentVersionId: string | null
+  activeQuizVersionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   startedAt: Date | null
@@ -69,6 +73,8 @@ export type LessonCountAggregateOutputType = {
   order: number
   status: number
   moduleId: number
+  activeContentVersionId: number
+  activeQuizVersionId: number
   createdAt: number
   updatedAt: number
   startedAt: number
@@ -92,6 +98,8 @@ export type LessonMinAggregateInputType = {
   order?: true
   status?: true
   moduleId?: true
+  activeContentVersionId?: true
+  activeQuizVersionId?: true
   createdAt?: true
   updatedAt?: true
   startedAt?: true
@@ -105,6 +113,8 @@ export type LessonMaxAggregateInputType = {
   order?: true
   status?: true
   moduleId?: true
+  activeContentVersionId?: true
+  activeQuizVersionId?: true
   createdAt?: true
   updatedAt?: true
   startedAt?: true
@@ -120,6 +130,8 @@ export type LessonCountAggregateInputType = {
   order?: true
   status?: true
   moduleId?: true
+  activeContentVersionId?: true
+  activeQuizVersionId?: true
   createdAt?: true
   updatedAt?: true
   startedAt?: true
@@ -222,6 +234,8 @@ export type LessonGroupByOutputType = {
   order: number
   status: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId: string | null
+  activeQuizVersionId: string | null
   createdAt: Date
   updatedAt: Date
   startedAt: Date | null
@@ -260,6 +274,8 @@ export type LessonWhereInput = {
   order?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
   moduleId?: Prisma.StringFilter<"Lesson"> | string
+  activeContentVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
+  activeQuizVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   startedAt?: Prisma.DateTimeNullableFilter<"Lesson"> | Date | string | null
@@ -273,6 +289,10 @@ export type LessonWhereInput = {
   quizRuns?: Prisma.QuizRunListRelationFilter
   learningEvents?: Prisma.LearningEventListRelationFilter
   studyTime?: Prisma.StudyTimeListRelationFilter
+  activeContentVersion?: Prisma.XOR<Prisma.LessonContentVersionNullableScalarRelationFilter, Prisma.LessonContentVersionWhereInput> | null
+  contentVersions?: Prisma.LessonContentVersionListRelationFilter
+  activeQuizVersion?: Prisma.XOR<Prisma.QuizVersionNullableScalarRelationFilter, Prisma.QuizVersionWhereInput> | null
+  quizVersions?: Prisma.QuizVersionListRelationFilter
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -284,6 +304,8 @@ export type LessonOrderByWithRelationInput = {
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
+  activeContentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  activeQuizVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -297,10 +319,16 @@ export type LessonOrderByWithRelationInput = {
   quizRuns?: Prisma.QuizRunOrderByRelationAggregateInput
   learningEvents?: Prisma.LearningEventOrderByRelationAggregateInput
   studyTime?: Prisma.StudyTimeOrderByRelationAggregateInput
+  activeContentVersion?: Prisma.LessonContentVersionOrderByWithRelationInput
+  contentVersions?: Prisma.LessonContentVersionOrderByRelationAggregateInput
+  activeQuizVersion?: Prisma.QuizVersionOrderByWithRelationInput
+  quizVersions?: Prisma.QuizVersionOrderByRelationAggregateInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  activeContentVersionId?: string
+  activeQuizVersionId?: string
   moduleId_order?: Prisma.LessonModuleIdOrderCompoundUniqueInput
   AND?: Prisma.LessonWhereInput | Prisma.LessonWhereInput[]
   OR?: Prisma.LessonWhereInput[]
@@ -325,7 +353,11 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   quizRuns?: Prisma.QuizRunListRelationFilter
   learningEvents?: Prisma.LearningEventListRelationFilter
   studyTime?: Prisma.StudyTimeListRelationFilter
-}, "id" | "moduleId_order">
+  activeContentVersion?: Prisma.XOR<Prisma.LessonContentVersionNullableScalarRelationFilter, Prisma.LessonContentVersionWhereInput> | null
+  contentVersions?: Prisma.LessonContentVersionListRelationFilter
+  activeQuizVersion?: Prisma.XOR<Prisma.QuizVersionNullableScalarRelationFilter, Prisma.QuizVersionWhereInput> | null
+  quizVersions?: Prisma.QuizVersionListRelationFilter
+}, "id" | "activeContentVersionId" | "activeQuizVersionId" | "moduleId_order">
 
 export type LessonOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -336,6 +368,8 @@ export type LessonOrderByWithAggregationInput = {
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
+  activeContentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  activeQuizVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -359,6 +393,8 @@ export type LessonScalarWhereWithAggregatesInput = {
   order?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusWithAggregatesFilter<"Lesson"> | $Enums.LessonStatus
   moduleId?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
+  activeContentVersionId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
+  activeQuizVersionId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Lesson"> | Date | string | null
@@ -386,6 +422,10 @@ export type LessonCreateInput = {
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -397,6 +437,8 @@ export type LessonUncheckedCreateInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -409,6 +451,8 @@ export type LessonUncheckedCreateInput = {
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -432,6 +476,10 @@ export type LessonUpdateInput = {
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -443,6 +491,8 @@ export type LessonUncheckedUpdateInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -455,6 +505,8 @@ export type LessonUncheckedUpdateInput = {
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -466,6 +518,8 @@ export type LessonCreateManyInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -495,6 +549,8 @@ export type LessonUncheckedUpdateManyInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -533,6 +589,8 @@ export type LessonCountOrderByAggregateInput = {
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
+  activeContentVersionId?: Prisma.SortOrder
+  activeQuizVersionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -550,6 +608,8 @@ export type LessonMaxOrderByAggregateInput = {
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
+  activeContentVersionId?: Prisma.SortOrder
+  activeQuizVersionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -563,6 +623,8 @@ export type LessonMinOrderByAggregateInput = {
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
+  activeContentVersionId?: Prisma.SortOrder
+  activeQuizVersionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -665,6 +727,52 @@ export type LessonUpdateOneRequiredWithoutContentNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutContentInput, Prisma.LessonUpdateWithoutContentInput>, Prisma.LessonUncheckedUpdateWithoutContentInput>
 }
 
+export type LessonCreateNestedOneWithoutContentVersionsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutContentVersionsInput, Prisma.LessonUncheckedCreateWithoutContentVersionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutContentVersionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonCreateNestedOneWithoutActiveContentVersionInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveContentVersionInput, Prisma.LessonUncheckedCreateWithoutActiveContentVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveContentVersionInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUncheckedCreateNestedOneWithoutActiveContentVersionInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveContentVersionInput, Prisma.LessonUncheckedCreateWithoutActiveContentVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveContentVersionInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutContentVersionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutContentVersionsInput, Prisma.LessonUncheckedCreateWithoutContentVersionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutContentVersionsInput
+  upsert?: Prisma.LessonUpsertWithoutContentVersionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutContentVersionsInput, Prisma.LessonUpdateWithoutContentVersionsInput>, Prisma.LessonUncheckedUpdateWithoutContentVersionsInput>
+}
+
+export type LessonUpdateOneWithoutActiveContentVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveContentVersionInput, Prisma.LessonUncheckedCreateWithoutActiveContentVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveContentVersionInput
+  upsert?: Prisma.LessonUpsertWithoutActiveContentVersionInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutActiveContentVersionInput, Prisma.LessonUpdateWithoutActiveContentVersionInput>, Prisma.LessonUncheckedUpdateWithoutActiveContentVersionInput>
+}
+
+export type LessonUncheckedUpdateOneWithoutActiveContentVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveContentVersionInput, Prisma.LessonUncheckedCreateWithoutActiveContentVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveContentVersionInput
+  upsert?: Prisma.LessonUpsertWithoutActiveContentVersionInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutActiveContentVersionInput, Prisma.LessonUpdateWithoutActiveContentVersionInput>, Prisma.LessonUncheckedUpdateWithoutActiveContentVersionInput>
+}
+
 export type LessonCreateNestedOneWithoutConversationsInput = {
   create?: Prisma.XOR<Prisma.LessonCreateWithoutConversationsInput, Prisma.LessonUncheckedCreateWithoutConversationsInput>
   connectOrCreate?: Prisma.LessonCreateOrConnectWithoutConversationsInput
@@ -721,6 +829,52 @@ export type LessonUpdateOneRequiredWithoutQuizRunsNestedInput = {
   upsert?: Prisma.LessonUpsertWithoutQuizRunsInput
   connect?: Prisma.LessonWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutQuizRunsInput, Prisma.LessonUpdateWithoutQuizRunsInput>, Prisma.LessonUncheckedUpdateWithoutQuizRunsInput>
+}
+
+export type LessonCreateNestedOneWithoutQuizVersionsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutQuizVersionsInput, Prisma.LessonUncheckedCreateWithoutQuizVersionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutQuizVersionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonCreateNestedOneWithoutActiveQuizVersionInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedCreateWithoutActiveQuizVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveQuizVersionInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUncheckedCreateNestedOneWithoutActiveQuizVersionInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedCreateWithoutActiveQuizVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveQuizVersionInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutQuizVersionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutQuizVersionsInput, Prisma.LessonUncheckedCreateWithoutQuizVersionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutQuizVersionsInput
+  upsert?: Prisma.LessonUpsertWithoutQuizVersionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutQuizVersionsInput, Prisma.LessonUpdateWithoutQuizVersionsInput>, Prisma.LessonUncheckedUpdateWithoutQuizVersionsInput>
+}
+
+export type LessonUpdateOneWithoutActiveQuizVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedCreateWithoutActiveQuizVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveQuizVersionInput
+  upsert?: Prisma.LessonUpsertWithoutActiveQuizVersionInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutActiveQuizVersionInput, Prisma.LessonUpdateWithoutActiveQuizVersionInput>, Prisma.LessonUncheckedUpdateWithoutActiveQuizVersionInput>
+}
+
+export type LessonUncheckedUpdateOneWithoutActiveQuizVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedCreateWithoutActiveQuizVersionInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutActiveQuizVersionInput
+  upsert?: Prisma.LessonUpsertWithoutActiveQuizVersionInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutActiveQuizVersionInput, Prisma.LessonUpdateWithoutActiveQuizVersionInput>, Prisma.LessonUncheckedUpdateWithoutActiveQuizVersionInput>
 }
 
 export type LessonCreateNestedOneWithoutLearningEventsInput = {
@@ -787,6 +941,10 @@ export type LessonCreateWithoutModuleInput = {
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutModuleInput = {
@@ -797,6 +955,8 @@ export type LessonUncheckedCreateWithoutModuleInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -809,6 +969,8 @@ export type LessonUncheckedCreateWithoutModuleInput = {
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutModuleInput = {
@@ -849,6 +1011,8 @@ export type LessonScalarWhereInput = {
   order?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
   moduleId?: Prisma.StringFilter<"Lesson"> | string
+  activeContentVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
+  activeQuizVersionId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   startedAt?: Prisma.DateTimeNullableFilter<"Lesson"> | Date | string | null
@@ -875,6 +1039,10 @@ export type LessonCreateWithoutContentInput = {
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutContentInput = {
@@ -886,6 +1054,8 @@ export type LessonUncheckedCreateWithoutContentInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -897,6 +1067,8 @@ export type LessonUncheckedCreateWithoutContentInput = {
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutContentInput = {
@@ -935,6 +1107,10 @@ export type LessonUpdateWithoutContentInput = {
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutContentInput = {
@@ -946,6 +1122,8 @@ export type LessonUncheckedUpdateWithoutContentInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -957,6 +1135,248 @@ export type LessonUncheckedUpdateWithoutContentInput = {
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutContentVersionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutContentVersionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutContentVersionsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutContentVersionsInput, Prisma.LessonUncheckedCreateWithoutContentVersionsInput>
+}
+
+export type LessonCreateWithoutActiveContentVersionInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutActiveContentVersionInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  moduleId: string
+  activeQuizVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutActiveContentVersionInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutActiveContentVersionInput, Prisma.LessonUncheckedCreateWithoutActiveContentVersionInput>
+}
+
+export type LessonUpsertWithoutContentVersionsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutContentVersionsInput, Prisma.LessonUncheckedUpdateWithoutContentVersionsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutContentVersionsInput, Prisma.LessonUncheckedCreateWithoutContentVersionsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutContentVersionsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutContentVersionsInput, Prisma.LessonUncheckedUpdateWithoutContentVersionsInput>
+}
+
+export type LessonUpdateWithoutContentVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutContentVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUpsertWithoutActiveContentVersionInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutActiveContentVersionInput, Prisma.LessonUncheckedUpdateWithoutActiveContentVersionInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutActiveContentVersionInput, Prisma.LessonUncheckedCreateWithoutActiveContentVersionInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutActiveContentVersionInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutActiveContentVersionInput, Prisma.LessonUncheckedUpdateWithoutActiveContentVersionInput>
+}
+
+export type LessonUpdateWithoutActiveContentVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutActiveContentVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutConversationsInput = {
@@ -979,6 +1399,10 @@ export type LessonCreateWithoutConversationsInput = {
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutConversationsInput = {
@@ -990,6 +1414,8 @@ export type LessonUncheckedCreateWithoutConversationsInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1001,6 +1427,8 @@ export type LessonUncheckedCreateWithoutConversationsInput = {
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutConversationsInput = {
@@ -1039,6 +1467,10 @@ export type LessonUpdateWithoutConversationsInput = {
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutConversationsInput = {
@@ -1050,6 +1482,8 @@ export type LessonUncheckedUpdateWithoutConversationsInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1061,6 +1495,8 @@ export type LessonUncheckedUpdateWithoutConversationsInput = {
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutCourseMemoriesInput = {
@@ -1083,6 +1519,10 @@ export type LessonCreateWithoutCourseMemoriesInput = {
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
@@ -1094,6 +1534,8 @@ export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1105,6 +1547,8 @@ export type LessonUncheckedCreateWithoutCourseMemoriesInput = {
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutCourseMemoriesInput = {
@@ -1143,6 +1587,10 @@ export type LessonUpdateWithoutCourseMemoriesInput = {
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
@@ -1154,6 +1602,8 @@ export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1165,6 +1615,8 @@ export type LessonUncheckedUpdateWithoutCourseMemoriesInput = {
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutExercisesInput = {
@@ -1187,6 +1639,10 @@ export type LessonCreateWithoutExercisesInput = {
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutExercisesInput = {
@@ -1198,6 +1654,8 @@ export type LessonUncheckedCreateWithoutExercisesInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1209,6 +1667,8 @@ export type LessonUncheckedCreateWithoutExercisesInput = {
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutExercisesInput = {
@@ -1247,6 +1707,10 @@ export type LessonUpdateWithoutExercisesInput = {
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutExercisesInput = {
@@ -1258,6 +1722,8 @@ export type LessonUncheckedUpdateWithoutExercisesInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1269,6 +1735,8 @@ export type LessonUncheckedUpdateWithoutExercisesInput = {
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutQuizRunsInput = {
@@ -1291,6 +1759,10 @@ export type LessonCreateWithoutQuizRunsInput = {
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutQuizRunsInput = {
@@ -1302,6 +1774,8 @@ export type LessonUncheckedCreateWithoutQuizRunsInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1313,6 +1787,8 @@ export type LessonUncheckedCreateWithoutQuizRunsInput = {
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutQuizRunsInput = {
@@ -1351,6 +1827,10 @@ export type LessonUpdateWithoutQuizRunsInput = {
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutQuizRunsInput = {
@@ -1362,6 +1842,8 @@ export type LessonUncheckedUpdateWithoutQuizRunsInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1373,6 +1855,248 @@ export type LessonUncheckedUpdateWithoutQuizRunsInput = {
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutQuizVersionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+}
+
+export type LessonUncheckedCreateWithoutQuizVersionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutQuizVersionsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutQuizVersionsInput, Prisma.LessonUncheckedCreateWithoutQuizVersionsInput>
+}
+
+export type LessonCreateWithoutActiveQuizVersionInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  content?: Prisma.LessonContentCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutActiveQuizVersionInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objectives?: Prisma.LessonCreateobjectivesInput | string[]
+  concepts?: Prisma.LessonCreateconceptsInput | string[]
+  order: number
+  status?: $Enums.LessonStatus
+  moduleId: string
+  activeContentVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  content?: Prisma.LessonContentUncheckedCreateNestedOneWithoutLessonInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutLessonInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutLessonInput
+  exercises?: Prisma.ExerciseUncheckedCreateNestedManyWithoutLessonInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
+  quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutActiveQuizVersionInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedCreateWithoutActiveQuizVersionInput>
+}
+
+export type LessonUpsertWithoutQuizVersionsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutQuizVersionsInput, Prisma.LessonUncheckedUpdateWithoutQuizVersionsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutQuizVersionsInput, Prisma.LessonUncheckedCreateWithoutQuizVersionsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutQuizVersionsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutQuizVersionsInput, Prisma.LessonUncheckedUpdateWithoutQuizVersionsInput>
+}
+
+export type LessonUpdateWithoutQuizVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutQuizVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUpsertWithoutActiveQuizVersionInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedUpdateWithoutActiveQuizVersionInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedCreateWithoutActiveQuizVersionInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutActiveQuizVersionInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutActiveQuizVersionInput, Prisma.LessonUncheckedUpdateWithoutActiveQuizVersionInput>
+}
+
+export type LessonUpdateWithoutActiveQuizVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  content?: Prisma.LessonContentUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutActiveQuizVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objectives?: Prisma.LessonUpdateobjectivesInput | string[]
+  concepts?: Prisma.LessonUpdateconceptsInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  content?: Prisma.LessonContentUncheckedUpdateOneWithoutLessonNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutLessonNestedInput
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutLessonNestedInput
+  exercises?: Prisma.ExerciseUncheckedUpdateManyWithoutLessonNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
+  quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutLearningEventsInput = {
@@ -1395,6 +2119,10 @@ export type LessonCreateWithoutLearningEventsInput = {
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutLearningEventsInput = {
@@ -1406,6 +2134,8 @@ export type LessonUncheckedCreateWithoutLearningEventsInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1417,6 +2147,8 @@ export type LessonUncheckedCreateWithoutLearningEventsInput = {
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutLearningEventsInput = {
@@ -1455,6 +2187,10 @@ export type LessonUpdateWithoutLearningEventsInput = {
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutLearningEventsInput = {
@@ -1466,6 +2202,8 @@ export type LessonUncheckedUpdateWithoutLearningEventsInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1477,6 +2215,8 @@ export type LessonUncheckedUpdateWithoutLearningEventsInput = {
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutStudyTimeInput = {
@@ -1499,6 +2239,10 @@ export type LessonCreateWithoutStudyTimeInput = {
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutLessonInput
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutStudyTimeInput = {
@@ -1510,6 +2254,8 @@ export type LessonUncheckedCreateWithoutStudyTimeInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1521,6 +2267,8 @@ export type LessonUncheckedCreateWithoutStudyTimeInput = {
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutLessonInput
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutStudyTimeInput = {
@@ -1559,6 +2307,10 @@ export type LessonUpdateWithoutStudyTimeInput = {
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutLessonNestedInput
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutStudyTimeInput = {
@@ -1570,6 +2322,8 @@ export type LessonUncheckedUpdateWithoutStudyTimeInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1581,6 +2335,8 @@ export type LessonUncheckedUpdateWithoutStudyTimeInput = {
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutLessonNestedInput
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutGenerationJobsInput = {
@@ -1603,6 +2359,10 @@ export type LessonCreateWithoutGenerationJobsInput = {
   quizRuns?: Prisma.QuizRunCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutLessonInput
+  activeContentVersion?: Prisma.LessonContentVersionCreateNestedOneWithoutActiveForInput
+  contentVersions?: Prisma.LessonContentVersionCreateNestedManyWithoutLessonInput
+  activeQuizVersion?: Prisma.QuizVersionCreateNestedOneWithoutActiveForInput
+  quizVersions?: Prisma.QuizVersionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutGenerationJobsInput = {
@@ -1614,6 +2374,8 @@ export type LessonUncheckedCreateWithoutGenerationJobsInput = {
   order: number
   status?: $Enums.LessonStatus
   moduleId: string
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1625,6 +2387,8 @@ export type LessonUncheckedCreateWithoutGenerationJobsInput = {
   quizRuns?: Prisma.QuizRunUncheckedCreateNestedManyWithoutLessonInput
   learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutLessonInput
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutLessonInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedCreateNestedManyWithoutLessonInput
+  quizVersions?: Prisma.QuizVersionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutGenerationJobsInput = {
@@ -1663,6 +2427,10 @@ export type LessonUpdateWithoutGenerationJobsInput = {
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutGenerationJobsInput = {
@@ -1674,6 +2442,8 @@ export type LessonUncheckedUpdateWithoutGenerationJobsInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1685,6 +2455,8 @@ export type LessonUncheckedUpdateWithoutGenerationJobsInput = {
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyModuleInput = {
@@ -1695,6 +2467,8 @@ export type LessonCreateManyModuleInput = {
   concepts?: Prisma.LessonCreateconceptsInput | string[]
   order: number
   status?: $Enums.LessonStatus
+  activeContentVersionId?: string | null
+  activeQuizVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   startedAt?: Date | string | null
@@ -1721,6 +2495,10 @@ export type LessonUpdateWithoutModuleInput = {
   quizRuns?: Prisma.QuizRunUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUpdateManyWithoutLessonNestedInput
+  activeContentVersion?: Prisma.LessonContentVersionUpdateOneWithoutActiveForNestedInput
+  contentVersions?: Prisma.LessonContentVersionUpdateManyWithoutLessonNestedInput
+  activeQuizVersion?: Prisma.QuizVersionUpdateOneWithoutActiveForNestedInput
+  quizVersions?: Prisma.QuizVersionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutModuleInput = {
@@ -1731,6 +2509,8 @@ export type LessonUncheckedUpdateWithoutModuleInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1743,6 +2523,8 @@ export type LessonUncheckedUpdateWithoutModuleInput = {
   quizRuns?: Prisma.QuizRunUncheckedUpdateManyWithoutLessonNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutLessonNestedInput
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutLessonNestedInput
+  contentVersions?: Prisma.LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput
+  quizVersions?: Prisma.QuizVersionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutModuleInput = {
@@ -1753,6 +2535,8 @@ export type LessonUncheckedUpdateManyWithoutModuleInput = {
   concepts?: Prisma.LessonUpdateconceptsInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  activeContentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeQuizVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1772,6 +2556,8 @@ export type LessonCountOutputType = {
   quizRuns: number
   learningEvents: number
   studyTime: number
+  contentVersions: number
+  quizVersions: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1782,6 +2568,8 @@ export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   quizRuns?: boolean | LessonCountOutputTypeCountQuizRunsArgs
   learningEvents?: boolean | LessonCountOutputTypeCountLearningEventsArgs
   studyTime?: boolean | LessonCountOutputTypeCountStudyTimeArgs
+  contentVersions?: boolean | LessonCountOutputTypeCountContentVersionsArgs
+  quizVersions?: boolean | LessonCountOutputTypeCountQuizVersionsArgs
 }
 
 /**
@@ -1843,6 +2631,20 @@ export type LessonCountOutputTypeCountStudyTimeArgs<ExtArgs extends runtime.Type
   where?: Prisma.StudyTimeWhereInput
 }
 
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountContentVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonContentVersionWhereInput
+}
+
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountQuizVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QuizVersionWhereInput
+}
+
 
 export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1853,6 +2655,8 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   order?: boolean
   status?: boolean
   moduleId?: boolean
+  activeContentVersionId?: boolean
+  activeQuizVersionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   startedAt?: boolean
@@ -1866,6 +2670,10 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   quizRuns?: boolean | Prisma.Lesson$quizRunsArgs<ExtArgs>
   learningEvents?: boolean | Prisma.Lesson$learningEventsArgs<ExtArgs>
   studyTime?: boolean | Prisma.Lesson$studyTimeArgs<ExtArgs>
+  activeContentVersion?: boolean | Prisma.Lesson$activeContentVersionArgs<ExtArgs>
+  contentVersions?: boolean | Prisma.Lesson$contentVersionsArgs<ExtArgs>
+  activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
+  quizVersions?: boolean | Prisma.Lesson$quizVersionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -1878,11 +2686,15 @@ export type LessonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   order?: boolean
   status?: boolean
   moduleId?: boolean
+  activeContentVersionId?: boolean
+  activeQuizVersionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   startedAt?: boolean
   completedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
+  activeContentVersion?: boolean | Prisma.Lesson$activeContentVersionArgs<ExtArgs>
+  activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
 export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1894,11 +2706,15 @@ export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   order?: boolean
   status?: boolean
   moduleId?: boolean
+  activeContentVersionId?: boolean
+  activeQuizVersionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   startedAt?: boolean
   completedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
+  activeContentVersion?: boolean | Prisma.Lesson$activeContentVersionArgs<ExtArgs>
+  activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
 export type LessonSelectScalar = {
@@ -1910,13 +2726,15 @@ export type LessonSelectScalar = {
   order?: boolean
   status?: boolean
   moduleId?: boolean
+  activeContentVersionId?: boolean
+  activeQuizVersionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   startedAt?: boolean
   completedAt?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "objectives" | "concepts" | "order" | "status" | "moduleId" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "objectives" | "concepts" | "order" | "status" | "moduleId" | "activeContentVersionId" | "activeQuizVersionId" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
   content?: boolean | Prisma.Lesson$contentArgs<ExtArgs>
@@ -1927,13 +2745,21 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   quizRuns?: boolean | Prisma.Lesson$quizRunsArgs<ExtArgs>
   learningEvents?: boolean | Prisma.Lesson$learningEventsArgs<ExtArgs>
   studyTime?: boolean | Prisma.Lesson$studyTimeArgs<ExtArgs>
+  activeContentVersion?: boolean | Prisma.Lesson$activeContentVersionArgs<ExtArgs>
+  contentVersions?: boolean | Prisma.Lesson$contentVersionsArgs<ExtArgs>
+  activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
+  quizVersions?: boolean | Prisma.Lesson$quizVersionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
+  activeContentVersion?: boolean | Prisma.Lesson$activeContentVersionArgs<ExtArgs>
+  activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
 }
 export type LessonIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
+  activeContentVersion?: boolean | Prisma.Lesson$activeContentVersionArgs<ExtArgs>
+  activeQuizVersion?: boolean | Prisma.Lesson$activeQuizVersionArgs<ExtArgs>
 }
 
 export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1948,6 +2774,10 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     quizRuns: Prisma.$QuizRunPayload<ExtArgs>[]
     learningEvents: Prisma.$LearningEventPayload<ExtArgs>[]
     studyTime: Prisma.$StudyTimePayload<ExtArgs>[]
+    activeContentVersion: Prisma.$LessonContentVersionPayload<ExtArgs> | null
+    contentVersions: Prisma.$LessonContentVersionPayload<ExtArgs>[]
+    activeQuizVersion: Prisma.$QuizVersionPayload<ExtArgs> | null
+    quizVersions: Prisma.$QuizVersionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1958,6 +2788,8 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     order: number
     status: $Enums.LessonStatus
     moduleId: string
+    activeContentVersionId: string | null
+    activeQuizVersionId: string | null
     createdAt: Date
     updatedAt: Date
     startedAt: Date | null
@@ -2365,6 +3197,10 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   quizRuns<T extends Prisma.Lesson$quizRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$quizRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   learningEvents<T extends Prisma.Lesson$learningEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$learningEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studyTime<T extends Prisma.Lesson$studyTimeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$studyTimeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudyTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  activeContentVersion<T extends Prisma.Lesson$activeContentVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$activeContentVersionArgs<ExtArgs>>): Prisma.Prisma__LessonContentVersionClient<runtime.Types.Result.GetResult<Prisma.$LessonContentVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  contentVersions<T extends Prisma.Lesson$contentVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$contentVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonContentVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  activeQuizVersion<T extends Prisma.Lesson$activeQuizVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$activeQuizVersionArgs<ExtArgs>>): Prisma.Prisma__QuizVersionClient<runtime.Types.Result.GetResult<Prisma.$QuizVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  quizVersions<T extends Prisma.Lesson$quizVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$quizVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2402,6 +3238,8 @@ export interface LessonFieldRefs {
   readonly order: Prisma.FieldRef<"Lesson", 'Int'>
   readonly status: Prisma.FieldRef<"Lesson", 'LessonStatus'>
   readonly moduleId: Prisma.FieldRef<"Lesson", 'String'>
+  readonly activeContentVersionId: Prisma.FieldRef<"Lesson", 'String'>
+  readonly activeQuizVersionId: Prisma.FieldRef<"Lesson", 'String'>
   readonly createdAt: Prisma.FieldRef<"Lesson", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Lesson", 'DateTime'>
   readonly startedAt: Prisma.FieldRef<"Lesson", 'DateTime'>
@@ -2991,6 +3829,92 @@ export type Lesson$studyTimeArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.StudyTimeScalarFieldEnum | Prisma.StudyTimeScalarFieldEnum[]
+}
+
+/**
+ * Lesson.activeContentVersion
+ */
+export type Lesson$activeContentVersionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonContentVersion
+   */
+  select?: Prisma.LessonContentVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonContentVersion
+   */
+  omit?: Prisma.LessonContentVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonContentVersionInclude<ExtArgs> | null
+  where?: Prisma.LessonContentVersionWhereInput
+}
+
+/**
+ * Lesson.contentVersions
+ */
+export type Lesson$contentVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonContentVersion
+   */
+  select?: Prisma.LessonContentVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonContentVersion
+   */
+  omit?: Prisma.LessonContentVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonContentVersionInclude<ExtArgs> | null
+  where?: Prisma.LessonContentVersionWhereInput
+  orderBy?: Prisma.LessonContentVersionOrderByWithRelationInput | Prisma.LessonContentVersionOrderByWithRelationInput[]
+  cursor?: Prisma.LessonContentVersionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonContentVersionScalarFieldEnum | Prisma.LessonContentVersionScalarFieldEnum[]
+}
+
+/**
+ * Lesson.activeQuizVersion
+ */
+export type Lesson$activeQuizVersionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the QuizVersion
+   */
+  select?: Prisma.QuizVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the QuizVersion
+   */
+  omit?: Prisma.QuizVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuizVersionInclude<ExtArgs> | null
+  where?: Prisma.QuizVersionWhereInput
+}
+
+/**
+ * Lesson.quizVersions
+ */
+export type Lesson$quizVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the QuizVersion
+   */
+  select?: Prisma.QuizVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the QuizVersion
+   */
+  omit?: Prisma.QuizVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuizVersionInclude<ExtArgs> | null
+  where?: Prisma.QuizVersionWhereInput
+  orderBy?: Prisma.QuizVersionOrderByWithRelationInput | Prisma.QuizVersionOrderByWithRelationInput[]
+  cursor?: Prisma.QuizVersionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuizVersionScalarFieldEnum | Prisma.QuizVersionScalarFieldEnum[]
 }
 
 /**

@@ -518,6 +518,57 @@ export type EnumGenerationStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumGenerationStatusFilter<$PrismaModel>
 }
 
+export type EnumRegenerationTargetFilter<$PrismaModel = never> = {
+  equals?: $Enums.RegenerationTarget | Prisma.EnumRegenerationTargetFieldRefInput<$PrismaModel>
+  in?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRegenerationTargetFilter<$PrismaModel> | $Enums.RegenerationTarget
+}
+
+export type EnumRegenerationTargetWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RegenerationTarget | Prisma.EnumRegenerationTargetFieldRefInput<$PrismaModel>
+  in?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRegenerationTargetWithAggregatesFilter<$PrismaModel> | $Enums.RegenerationTarget
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRegenerationTargetFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRegenerationTargetFilter<$PrismaModel>
+}
+
+export type EnumCurriculumRevisionScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionScope | Prisma.EnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionScopeFilter<$PrismaModel> | $Enums.CurriculumRevisionScope
+}
+
+export type EnumCurriculumRevisionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionStatus | Prisma.EnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionStatusFilter<$PrismaModel> | $Enums.CurriculumRevisionStatus
+}
+
+export type EnumCurriculumRevisionScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionScope | Prisma.EnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionScopeWithAggregatesFilter<$PrismaModel> | $Enums.CurriculumRevisionScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCurriculumRevisionScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCurriculumRevisionScopeFilter<$PrismaModel>
+}
+
+export type EnumCurriculumRevisionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionStatus | Prisma.EnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionStatusWithAggregatesFilter<$PrismaModel> | $Enums.CurriculumRevisionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCurriculumRevisionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCurriculumRevisionStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -977,6 +1028,57 @@ export type NestedEnumGenerationStatusWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumGenerationStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumGenerationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumRegenerationTargetFilter<$PrismaModel = never> = {
+  equals?: $Enums.RegenerationTarget | Prisma.EnumRegenerationTargetFieldRefInput<$PrismaModel>
+  in?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRegenerationTargetFilter<$PrismaModel> | $Enums.RegenerationTarget
+}
+
+export type NestedEnumRegenerationTargetWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RegenerationTarget | Prisma.EnumRegenerationTargetFieldRefInput<$PrismaModel>
+  in?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RegenerationTarget[] | Prisma.ListEnumRegenerationTargetFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRegenerationTargetWithAggregatesFilter<$PrismaModel> | $Enums.RegenerationTarget
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRegenerationTargetFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRegenerationTargetFilter<$PrismaModel>
+}
+
+export type NestedEnumCurriculumRevisionScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionScope | Prisma.EnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionScopeFilter<$PrismaModel> | $Enums.CurriculumRevisionScope
+}
+
+export type NestedEnumCurriculumRevisionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionStatus | Prisma.EnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionStatusFilter<$PrismaModel> | $Enums.CurriculumRevisionStatus
+}
+
+export type NestedEnumCurriculumRevisionScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionScope | Prisma.EnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionScope[] | Prisma.ListEnumCurriculumRevisionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionScopeWithAggregatesFilter<$PrismaModel> | $Enums.CurriculumRevisionScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCurriculumRevisionScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCurriculumRevisionScopeFilter<$PrismaModel>
+}
+
+export type NestedEnumCurriculumRevisionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CurriculumRevisionStatus | Prisma.EnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CurriculumRevisionStatus[] | Prisma.ListEnumCurriculumRevisionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCurriculumRevisionStatusWithAggregatesFilter<$PrismaModel> | $Enums.CurriculumRevisionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCurriculumRevisionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCurriculumRevisionStatusFilter<$PrismaModel>
 }
 
 

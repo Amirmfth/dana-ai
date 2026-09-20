@@ -38,6 +38,11 @@ export type Lesson = Prisma.LessonModel
  */
 export type LessonContent = Prisma.LessonContentModel
 /**
+ * Model LessonContentVersion
+ * 
+ */
+export type LessonContentVersion = Prisma.LessonContentVersionModel
+/**
  * Model Conversation
  * 
  */
@@ -73,6 +78,11 @@ export type ExerciseAttempt = Prisma.ExerciseAttemptModel
  */
 export type QuizRun = Prisma.QuizRunModel
 /**
+ * Model QuizVersion
+ * 
+ */
+export type QuizVersion = Prisma.QuizVersionModel
+/**
  * Model LearningEvent
  * 
  */
@@ -102,3 +112,13 @@ export type GenerationJob = Prisma.GenerationJobModel
  * 
  */
 export type CourseTemplate = Prisma.CourseTemplateModel
+/**
+ * Model RegenerationLock
+ * 
+ */
+export type RegenerationLock = Prisma.RegenerationLockModel
+/**
+ * Model CurriculumRevision
+ * 
+ */
+export type CurriculumRevision = Prisma.CurriculumRevisionModel

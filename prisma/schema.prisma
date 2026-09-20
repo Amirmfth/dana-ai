@@ -79,6 +79,23 @@ enum LearningEventType {
   QUIZ_COMPLETED
 }
 
+enum RegenerationTarget {
+  LESSON_CONTENT
+  LESSON_QUIZ
+  CURRICULUM
+  MODULE
+}
+
+enum CurriculumRevisionScope {
+  COURSE
+  MODULE
+}
+
+enum CurriculumRevisionStatus {
+  DRAFT
+  APPLIED
+}
+
 model Course {
   id           String       @id @default(cuid())
   ownerId      String       @db.Uuid
@@ -92,8 +109,9 @@ model Course {
   modules         Module[]
   courseMemories  CourseMemory[]
   templates       CourseTemplate[]
-  learningEvents  LearningEvent[]
-  studyTime       StudyTime[]
+  learningEvents       LearningEvent[]
+  studyTime            StudyTime[]
+  curriculumRevisions  CurriculumRevision[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -111,7 +129,8 @@ model Module {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  lessons Lesson[]
+  lessons              Lesson[]
+  curriculumRevisions  CurriculumRevision[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -141,6 +160,14 @@ model Lesson {
   learningEvents   LearningEvent[]
   studyTime        StudyTime[]
 
+  activeContentVersionId String? @unique
+  activeContentVersion   LessonContentVersion? @relation("ActiveLessonContentVersion", fields: [activeContentVersionId], references: [id], onDelete: SetNull)
+  contentVersions        LessonContentVersion[] @relation("LessonContentVersions")
+
+  activeQuizVersionId String? @unique
+  activeQuizVersion   QuizVersion? @relation("ActiveLessonQuizVersion", fields: [activeQuizVersionId], references: [id], onDelete: SetNull)
+  quizVersions        QuizVersion[] @relation("LessonQuizVersions")
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   startedAt   DateTime?
@@ -160,6 +187,22 @@ model LessonContent {
   generationVersion Int      @default(1)
   generatedAt       DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model LessonContentVersion {
+  id String @id @default(cuid())
+
+  lessonId String
+  lesson   Lesson @relation("LessonContentVersions", fields: [lessonId], references: [id], onDelete: Cascade)
+  activeFor Lesson? @relation("ActiveLessonContentVersion")
+
+  version      Int
+  content      Json
+  instructions String?
+  createdAt    DateTime @default(now())
+
+  @@unique([lessonId, version])
+  @@index([lessonId, createdAt])
 }
 
 model Conversation {
@@ -249,6 +292,10 @@ model Exercise {
   id          String       @id @default(cuid())
   lessonId    String
   lesson      Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  quizVersionId String
+  quizVersion   QuizVersion @relation(fields: [quizVersionId], references: [id], onDelete: Cascade)
+
   type        ExerciseType
   order       Int
   question    String
@@ -261,8 +308,9 @@ model Exercise {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([lessonId, order])
+  @@unique([quizVersionId, order])
   @@index([lessonId])
+  @@index([quizVersionId])
 }
 
 model ExerciseAttempt {
@@ -290,6 +338,9 @@ model QuizRun {
   lessonId String
   lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
+  quizVersionId String
+  quizVersion   QuizVersion @relation(fields: [quizVersionId], references: [id], onDelete: Restrict)
+
   attempts ExerciseAttempt[]
 
   score Int?
@@ -300,6 +351,24 @@ model QuizRun {
 
   @@index([userId, startedAt])
   @@index([lessonId, startedAt])
+  @@index([quizVersionId, startedAt])
+}
+
+model QuizVersion {
+  id String @id @default(cuid())
+
+  lessonId String
+  lesson   Lesson @relation("LessonQuizVersions", fields: [lessonId], references: [id], onDelete: Cascade)
+  activeFor Lesson? @relation("ActiveLessonQuizVersion")
+
+  version      Int
+  instructions String?
+  exercises    Exercise[]
+  quizRuns     QuizRun[]
+  createdAt    DateTime @default(now())
+
+  @@unique([lessonId, version])
+  @@index([lessonId, createdAt])
 }
 
 model LearningEvent {
@@ -400,4 +469,48 @@ model CourseTemplate {
 
   @@index([ownerId, updatedAt])
   @@index([sourceCourseId])
+}
+
+
+model RegenerationLock {
+  id String @id @default(cuid())
+  ownerId String @db.Uuid
+
+  target   RegenerationTarget
+  targetId String
+  status   GenerationStatus @default(NOT_STARTED)
+
+  claimToken   String?
+  errorMessage String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([target, targetId])
+  @@index([ownerId, updatedAt])
+}
+
+model CurriculumRevision {
+  id String @id @default(cuid())
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  moduleId String?
+  module   Module? @relation(fields: [moduleId], references: [id], onDelete: SetNull)
+
+  scope        CurriculumRevisionScope
+  version      Int
+  status       CurriculumRevisionStatus @default(DRAFT)
+  instructions String?
+  structure    Json
+
+  createdAt DateTime @default(now())
+  appliedAt DateTime?
+
+  @@index([courseId, createdAt])
+  @@index([moduleId, createdAt])
+  @@index([courseId, scope, version])
 }

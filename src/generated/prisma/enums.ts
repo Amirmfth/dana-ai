@@ -112,3 +112,29 @@ export const LearningEventType = {
 } as const
 
 export type LearningEventType = (typeof LearningEventType)[keyof typeof LearningEventType]
+
+
+export const RegenerationTarget = {
+  LESSON_CONTENT: 'LESSON_CONTENT',
+  LESSON_QUIZ: 'LESSON_QUIZ',
+  CURRICULUM: 'CURRICULUM',
+  MODULE: 'MODULE'
+} as const
+
+export type RegenerationTarget = (typeof RegenerationTarget)[keyof typeof RegenerationTarget]
+
+
+export const CurriculumRevisionScope = {
+  COURSE: 'COURSE',
+  MODULE: 'MODULE'
+} as const
+
+export type CurriculumRevisionScope = (typeof CurriculumRevisionScope)[keyof typeof CurriculumRevisionScope]
+
+
+export const CurriculumRevisionStatus = {
+  DRAFT: 'DRAFT',
+  APPLIED: 'APPLIED'
+} as const
+
+export type CurriculumRevisionStatus = (typeof CurriculumRevisionStatus)[keyof typeof CurriculumRevisionStatus]

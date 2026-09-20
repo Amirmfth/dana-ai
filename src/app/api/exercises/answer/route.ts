@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
         id: quizRunId,
         userId: user.id,
         lessonId: exercise.lessonId,
+        quizVersionId: exercise.quizVersionId,
         completedAt: null,
       },
     });
@@ -96,7 +97,7 @@ export async function POST(request: NextRequest) {
 
     const [exerciseCount, attempts] = await Promise.all([
       prisma.exercise.count({
-        where: { lessonId: exercise.lessonId },
+        where: { quizVersionId: exercise.quizVersionId },
       }),
       prisma.exerciseAttempt.findMany({
         where: { quizRunId },

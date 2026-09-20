@@ -55,6 +55,7 @@ export const ModelName = {
   Module: 'Module',
   Lesson: 'Lesson',
   LessonContent: 'LessonContent',
+  LessonContentVersion: 'LessonContentVersion',
   Conversation: 'Conversation',
   Message: 'Message',
   CourseMemory: 'CourseMemory',
@@ -62,12 +63,15 @@ export const ModelName = {
   Exercise: 'Exercise',
   ExerciseAttempt: 'ExerciseAttempt',
   QuizRun: 'QuizRun',
+  QuizVersion: 'QuizVersion',
   LearningEvent: 'LearningEvent',
   StudyTime: 'StudyTime',
   AiRequestWindow: 'AiRequestWindow',
   UserPrivacySettings: 'UserPrivacySettings',
   GenerationJob: 'GenerationJob',
-  CourseTemplate: 'CourseTemplate'
+  CourseTemplate: 'CourseTemplate',
+  RegenerationLock: 'RegenerationLock',
+  CurriculumRevision: 'CurriculumRevision'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -125,6 +129,8 @@ export const LessonScalarFieldEnum = {
   order: 'order',
   status: 'status',
   moduleId: 'moduleId',
+  activeContentVersionId: 'activeContentVersionId',
+  activeQuizVersionId: 'activeQuizVersionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   startedAt: 'startedAt',
@@ -144,6 +150,18 @@ export const LessonContentScalarFieldEnum = {
 } as const
 
 export type LessonContentScalarFieldEnum = (typeof LessonContentScalarFieldEnum)[keyof typeof LessonContentScalarFieldEnum]
+
+
+export const LessonContentVersionScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  version: 'version',
+  content: 'content',
+  instructions: 'instructions',
+  createdAt: 'createdAt'
+} as const
+
+export type LessonContentVersionScalarFieldEnum = (typeof LessonContentVersionScalarFieldEnum)[keyof typeof LessonContentVersionScalarFieldEnum]
 
 
 export const ConversationScalarFieldEnum = {
@@ -209,6 +227,7 @@ export type AiUsageScalarFieldEnum = (typeof AiUsageScalarFieldEnum)[keyof typeo
 export const ExerciseScalarFieldEnum = {
   id: 'id',
   lessonId: 'lessonId',
+  quizVersionId: 'quizVersionId',
   type: 'type',
   order: 'order',
   question: 'question',
@@ -239,6 +258,7 @@ export const QuizRunScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   lessonId: 'lessonId',
+  quizVersionId: 'quizVersionId',
   score: 'score',
   total: 'total',
   startedAt: 'startedAt',
@@ -246,6 +266,17 @@ export const QuizRunScalarFieldEnum = {
 } as const
 
 export type QuizRunScalarFieldEnum = (typeof QuizRunScalarFieldEnum)[keyof typeof QuizRunScalarFieldEnum]
+
+
+export const QuizVersionScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  version: 'version',
+  instructions: 'instructions',
+  createdAt: 'createdAt'
+} as const
+
+export type QuizVersionScalarFieldEnum = (typeof QuizVersionScalarFieldEnum)[keyof typeof QuizVersionScalarFieldEnum]
 
 
 export const LearningEventScalarFieldEnum = {
@@ -326,6 +357,39 @@ export const CourseTemplateScalarFieldEnum = {
 } as const
 
 export type CourseTemplateScalarFieldEnum = (typeof CourseTemplateScalarFieldEnum)[keyof typeof CourseTemplateScalarFieldEnum]
+
+
+export const RegenerationLockScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  target: 'target',
+  targetId: 'targetId',
+  status: 'status',
+  claimToken: 'claimToken',
+  errorMessage: 'errorMessage',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RegenerationLockScalarFieldEnum = (typeof RegenerationLockScalarFieldEnum)[keyof typeof RegenerationLockScalarFieldEnum]
+
+
+export const CurriculumRevisionScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  moduleId: 'moduleId',
+  scope: 'scope',
+  version: 'version',
+  status: 'status',
+  instructions: 'instructions',
+  structure: 'structure',
+  createdAt: 'createdAt',
+  appliedAt: 'appliedAt'
+} as const
+
+export type CurriculumRevisionScalarFieldEnum = (typeof CurriculumRevisionScalarFieldEnum)[keyof typeof CurriculumRevisionScalarFieldEnum]
 
 
 export const SortOrder = {

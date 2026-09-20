@@ -44,9 +44,11 @@ export async function createMemoryEmbedding({
 
 export async function findNearestMemory({
   courseId,
+  type,
   embedding,
 }: {
   courseId: string;
+  type: string;
   embedding: number[];
 }): Promise<SemanticMemoryMatch | null> {
   const vector = vectorToSql(embedding);
@@ -59,6 +61,7 @@ export async function findNearestMemory({
     FROM "CourseMemory"
     WHERE
       "courseId" = ${courseId}
+      AND "type" = ${type}::"MemoryType"
       AND "embedding" IS NOT NULL
     ORDER BY ("embedding" <=> ${vector}::vector) ASC
     LIMIT 1

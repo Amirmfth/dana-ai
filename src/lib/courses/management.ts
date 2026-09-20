@@ -175,6 +175,40 @@ export async function normalizeCourseProgress(courseId: string) {
               },
             },
           },
+          assessments: {
+            where: { type: "MODULE" },
+            include: {
+              versions: {
+                include: {
+                  runs: {
+                    where: {
+                      passed: true,
+                      completedAt: { not: null },
+                    },
+                    take: 1,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      assessments: {
+        where: { type: "COURSE_FINAL" },
+        include: {
+          versions: {
+            orderBy: { version: "desc" },
+            take: 1,
+            include: {
+              runs: {
+                where: {
+                  passed: true,
+                  completedAt: { not: null },
+                },
+                take: 1,
+              },
+            },
+          },
         },
       },
     },
@@ -182,22 +216,70 @@ export async function normalizeCourseProgress(courseId: string) {
 
   if (!course) return;
 
-  const lessons = course.modules.flatMap((module) => module.lessons);
-  const statuses = nextStatusesFromPrerequisites(
-    lessons.map((lesson) => ({
-      id: lesson.id,
-      status: lesson.status,
-      prerequisiteIds: lesson.prerequisites.map(
-        (item) => item.prerequisiteLessonId,
-      ),
-    })),
+  const completed = new Set(
+    course.modules
+      .flatMap((courseModule) => courseModule.lessons)
+      .filter((lesson) => lesson.status === "COMPLETED")
+      .map((lesson) => lesson.id),
   );
-  const incompleteCount = statuses.filter(
-    (lesson) => lesson.status !== "COMPLETED",
-  ).length;
+
+  const modulePassed = course.modules.map((courseModule) =>
+    Boolean(
+      courseModule.assessments[0]?.versions.some(
+        (version) =>
+          version.runs.some((run) => run.userId === course.ownerId),
+      ),
+    ),
+  );
+
+  const statusUpdates: Array<{
+    id: string;
+    status: "LOCKED" | "AVAILABLE" | "IN_PROGRESS" | "COMPLETED";
+  }> = [];
+
+  course.modules.forEach((courseModule, moduleIndex) => {
+    const previousModulePassed =
+      moduleIndex === 0 || modulePassed[moduleIndex - 1];
+
+    for (const lesson of courseModule.lessons) {
+      if (lesson.status === "COMPLETED") {
+        statusUpdates.push({ id: lesson.id, status: "COMPLETED" });
+        continue;
+      }
+
+      const prerequisitesSatisfied = lesson.prerequisites.every((edge) =>
+        completed.has(edge.prerequisiteLessonId),
+      );
+
+      statusUpdates.push({
+        id: lesson.id,
+        status:
+          previousModulePassed && prerequisitesSatisfied
+            ? lesson.status === "IN_PROGRESS"
+              ? "IN_PROGRESS"
+              : "AVAILABLE"
+            : "LOCKED",
+      });
+    }
+  });
+
+  const requiredLessons = course.modules.flatMap((courseModule) =>
+    courseModule.lessons.filter((lesson) => !lesson.isOptional),
+  );
+  const requiredLessonsComplete = requiredLessons.every(
+    (lesson) => lesson.status === "COMPLETED",
+  );
+  const allModuleAssessmentsPassed =
+    course.modules.length > 0 && modulePassed.every(Boolean);
+  const finalPassed = Boolean(
+    course.assessments[0]?.versions.some(
+      (version) =>
+        version.runs.some((run) => run.userId === course.ownerId),
+    ),
+  );
 
   await prisma.$transaction([
-    ...statuses.map((lesson) =>
+    ...statusUpdates.map((lesson) =>
       prisma.lesson.update({
         where: { id: lesson.id },
         data: { status: lesson.status },
@@ -209,7 +291,9 @@ export async function normalizeCourseProgress(courseId: string) {
         status:
           course.status === "ARCHIVED"
             ? "ARCHIVED"
-            : lessons.length > 0 && incompleteCount === 0
+            : requiredLessonsComplete &&
+                allModuleAssessmentsPassed &&
+                finalPassed
               ? "COMPLETED"
               : "ACTIVE",
       },

@@ -46,6 +46,7 @@ export const lessonContentSchema = z.object({
   citations: z
     .array(
       z.object({
+        marker: z.string().regex(/^\[S\d+\]$/),
         sourceChunkId: z.string(),
         location: z.string(),
       }),

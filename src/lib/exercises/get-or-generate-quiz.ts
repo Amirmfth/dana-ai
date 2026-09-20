@@ -61,7 +61,7 @@ export async function getOrGenerateQuiz(userId: string, lessonId: string) {
   }
 
   let activeQuizVersionId = lesson.activeQuizVersionId;
-  let existing = activeQuizVersionId
+  const existing = activeQuizVersionId
     ? await loadExercises(activeQuizVersionId)
     : null;
 

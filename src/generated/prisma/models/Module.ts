@@ -242,6 +242,7 @@ export type ModuleWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   lessons?: Prisma.LessonListRelationFilter
+  curriculumRevisions?: Prisma.CurriculumRevisionListRelationFilter
 }
 
 export type ModuleOrderByWithRelationInput = {
@@ -255,6 +256,7 @@ export type ModuleOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
+  curriculumRevisions?: Prisma.CurriculumRevisionOrderByRelationAggregateInput
 }
 
 export type ModuleWhereUniqueInput = Prisma.AtLeast<{
@@ -272,6 +274,7 @@ export type ModuleWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   lessons?: Prisma.LessonListRelationFilter
+  curriculumRevisions?: Prisma.CurriculumRevisionListRelationFilter
 }, "id" | "courseId_order">
 
 export type ModuleOrderByWithAggregationInput = {
@@ -314,6 +317,7 @@ export type ModuleCreateInput = {
   updatedAt?: Date | string
   course: Prisma.CourseCreateNestedOneWithoutModulesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutModuleInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateInput = {
@@ -326,6 +330,7 @@ export type ModuleUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutModuleInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUpdateInput = {
@@ -338,6 +343,7 @@ export type ModuleUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneRequiredWithoutModulesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutModuleNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateInput = {
@@ -350,6 +356,7 @@ export type ModuleUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutModuleNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleCreateManyInput = {
@@ -445,6 +452,11 @@ export type ModuleScalarRelationFilter = {
   isNot?: Prisma.ModuleWhereInput
 }
 
+export type ModuleNullableScalarRelationFilter = {
+  is?: Prisma.ModuleWhereInput | null
+  isNot?: Prisma.ModuleWhereInput | null
+}
+
 export type ModuleCreateNestedManyWithoutCourseInput = {
   create?: Prisma.XOR<Prisma.ModuleCreateWithoutCourseInput, Prisma.ModuleUncheckedCreateWithoutCourseInput> | Prisma.ModuleCreateWithoutCourseInput[] | Prisma.ModuleUncheckedCreateWithoutCourseInput[]
   connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutCourseInput | Prisma.ModuleCreateOrConnectWithoutCourseInput[]
@@ -509,6 +521,22 @@ export type ModuleUpdateOneRequiredWithoutLessonsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutLessonsInput, Prisma.ModuleUpdateWithoutLessonsInput>, Prisma.ModuleUncheckedUpdateWithoutLessonsInput>
 }
 
+export type ModuleCreateNestedOneWithoutCurriculumRevisionsInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutCurriculumRevisionsInput, Prisma.ModuleUncheckedCreateWithoutCurriculumRevisionsInput>
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutCurriculumRevisionsInput
+  connect?: Prisma.ModuleWhereUniqueInput
+}
+
+export type ModuleUpdateOneWithoutCurriculumRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutCurriculumRevisionsInput, Prisma.ModuleUncheckedCreateWithoutCurriculumRevisionsInput>
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutCurriculumRevisionsInput
+  upsert?: Prisma.ModuleUpsertWithoutCurriculumRevisionsInput
+  disconnect?: Prisma.ModuleWhereInput | boolean
+  delete?: Prisma.ModuleWhereInput | boolean
+  connect?: Prisma.ModuleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutCurriculumRevisionsInput, Prisma.ModuleUpdateWithoutCurriculumRevisionsInput>, Prisma.ModuleUncheckedUpdateWithoutCurriculumRevisionsInput>
+}
+
 export type ModuleCreateWithoutCourseInput = {
   id?: string
   title: string
@@ -518,6 +546,7 @@ export type ModuleCreateWithoutCourseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lessons?: Prisma.LessonCreateNestedManyWithoutModuleInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateWithoutCourseInput = {
@@ -529,6 +558,7 @@ export type ModuleUncheckedCreateWithoutCourseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutModuleInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleCreateOrConnectWithoutCourseInput = {
@@ -580,6 +610,7 @@ export type ModuleCreateWithoutLessonsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   course: Prisma.CourseCreateNestedOneWithoutModulesInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateWithoutLessonsInput = {
@@ -591,6 +622,7 @@ export type ModuleUncheckedCreateWithoutLessonsInput = {
   courseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleCreateOrConnectWithoutLessonsInput = {
@@ -618,6 +650,7 @@ export type ModuleUpdateWithoutLessonsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneRequiredWithoutModulesNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutLessonsInput = {
@@ -629,6 +662,71 @@ export type ModuleUncheckedUpdateWithoutLessonsInput = {
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutModuleNestedInput
+}
+
+export type ModuleCreateWithoutCurriculumRevisionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objective?: string | null
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  course: Prisma.CourseCreateNestedOneWithoutModulesInput
+  lessons?: Prisma.LessonCreateNestedManyWithoutModuleInput
+}
+
+export type ModuleUncheckedCreateWithoutCurriculumRevisionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  objective?: string | null
+  order: number
+  courseId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutModuleInput
+}
+
+export type ModuleCreateOrConnectWithoutCurriculumRevisionsInput = {
+  where: Prisma.ModuleWhereUniqueInput
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutCurriculumRevisionsInput, Prisma.ModuleUncheckedCreateWithoutCurriculumRevisionsInput>
+}
+
+export type ModuleUpsertWithoutCurriculumRevisionsInput = {
+  update: Prisma.XOR<Prisma.ModuleUpdateWithoutCurriculumRevisionsInput, Prisma.ModuleUncheckedUpdateWithoutCurriculumRevisionsInput>
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutCurriculumRevisionsInput, Prisma.ModuleUncheckedCreateWithoutCurriculumRevisionsInput>
+  where?: Prisma.ModuleWhereInput
+}
+
+export type ModuleUpdateToOneWithWhereWithoutCurriculumRevisionsInput = {
+  where?: Prisma.ModuleWhereInput
+  data: Prisma.XOR<Prisma.ModuleUpdateWithoutCurriculumRevisionsInput, Prisma.ModuleUncheckedUpdateWithoutCurriculumRevisionsInput>
+}
+
+export type ModuleUpdateWithoutCurriculumRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  course?: Prisma.CourseUpdateOneRequiredWithoutModulesNestedInput
+  lessons?: Prisma.LessonUpdateManyWithoutModuleNestedInput
+}
+
+export type ModuleUncheckedUpdateWithoutCurriculumRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  objective?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessons?: Prisma.LessonUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleCreateManyCourseInput = {
@@ -650,6 +748,7 @@ export type ModuleUpdateWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUpdateManyWithoutModuleNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutCourseInput = {
@@ -661,6 +760,7 @@ export type ModuleUncheckedUpdateWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutModuleNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateManyWithoutCourseInput = {
@@ -680,10 +780,12 @@ export type ModuleUncheckedUpdateManyWithoutCourseInput = {
 
 export type ModuleCountOutputType = {
   lessons: number
+  curriculumRevisions: number
 }
 
 export type ModuleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lessons?: boolean | ModuleCountOutputTypeCountLessonsArgs
+  curriculumRevisions?: boolean | ModuleCountOutputTypeCountCurriculumRevisionsArgs
 }
 
 /**
@@ -703,6 +805,13 @@ export type ModuleCountOutputTypeCountLessonsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.LessonWhereInput
 }
 
+/**
+ * ModuleCountOutputType without action
+ */
+export type ModuleCountOutputTypeCountCurriculumRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CurriculumRevisionWhereInput
+}
+
 
 export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -715,6 +824,7 @@ export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   lessons?: boolean | Prisma.Module$lessonsArgs<ExtArgs>
+  curriculumRevisions?: boolean | Prisma.Module$curriculumRevisionsArgs<ExtArgs>
   _count?: boolean | Prisma.ModuleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["module"]>
 
@@ -757,6 +867,7 @@ export type ModuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type ModuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   lessons?: boolean | Prisma.Module$lessonsArgs<ExtArgs>
+  curriculumRevisions?: boolean | Prisma.Module$curriculumRevisionsArgs<ExtArgs>
   _count?: boolean | Prisma.ModuleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ModuleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -771,6 +882,7 @@ export type $ModulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     course: Prisma.$CoursePayload<ExtArgs>
     lessons: Prisma.$LessonPayload<ExtArgs>[]
+    curriculumRevisions: Prisma.$CurriculumRevisionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1177,6 +1289,7 @@ export interface Prisma__ModuleClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   lessons<T extends Prisma.Module$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  curriculumRevisions<T extends Prisma.Module$curriculumRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$curriculumRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CurriculumRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1636,6 +1749,30 @@ export type Module$lessonsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.LessonScalarFieldEnum | Prisma.LessonScalarFieldEnum[]
+}
+
+/**
+ * Module.curriculumRevisions
+ */
+export type Module$curriculumRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CurriculumRevision
+   */
+  select?: Prisma.CurriculumRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CurriculumRevision
+   */
+  omit?: Prisma.CurriculumRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CurriculumRevisionInclude<ExtArgs> | null
+  where?: Prisma.CurriculumRevisionWhereInput
+  orderBy?: Prisma.CurriculumRevisionOrderByWithRelationInput | Prisma.CurriculumRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.CurriculumRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CurriculumRevisionScalarFieldEnum | Prisma.CurriculumRevisionScalarFieldEnum[]
 }
 
 /**

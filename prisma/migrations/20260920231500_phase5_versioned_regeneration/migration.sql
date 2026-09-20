@@ -188,13 +188,3 @@ CREATE INDEX "CurriculumRevision_moduleId_createdAt_idx"
   ON "CurriculumRevision"("moduleId", "createdAt");
 CREATE INDEX "CurriculumRevision_courseId_scope_version_idx"
   ON "CurriculumRevision"("courseId", "scope", "version");
-
-ALTER TABLE "LessonContentVersion" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "QuizVersion" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "RegenerationLock" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "CurriculumRevision" ENABLE ROW LEVEL SECURITY;
-
-REVOKE ALL ON TABLE "LessonContentVersion" FROM anon, authenticated;
-REVOKE ALL ON TABLE "QuizVersion" FROM anon, authenticated;
-REVOKE ALL ON TABLE "RegenerationLock" FROM anon, authenticated;
-REVOKE ALL ON TABLE "CurriculumRevision" FROM anon, authenticated;

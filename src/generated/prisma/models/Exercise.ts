@@ -37,6 +37,7 @@ export type ExerciseSumAggregateOutputType = {
 export type ExerciseMinAggregateOutputType = {
   id: string | null
   lessonId: string | null
+  quizVersionId: string | null
   type: $Enums.ExerciseType | null
   order: number | null
   question: string | null
@@ -48,6 +49,7 @@ export type ExerciseMinAggregateOutputType = {
 export type ExerciseMaxAggregateOutputType = {
   id: string | null
   lessonId: string | null
+  quizVersionId: string | null
   type: $Enums.ExerciseType | null
   order: number | null
   question: string | null
@@ -59,6 +61,7 @@ export type ExerciseMaxAggregateOutputType = {
 export type ExerciseCountAggregateOutputType = {
   id: number
   lessonId: number
+  quizVersionId: number
   type: number
   order: number
   question: number
@@ -83,6 +86,7 @@ export type ExerciseSumAggregateInputType = {
 export type ExerciseMinAggregateInputType = {
   id?: true
   lessonId?: true
+  quizVersionId?: true
   type?: true
   order?: true
   question?: true
@@ -94,6 +98,7 @@ export type ExerciseMinAggregateInputType = {
 export type ExerciseMaxAggregateInputType = {
   id?: true
   lessonId?: true
+  quizVersionId?: true
   type?: true
   order?: true
   question?: true
@@ -105,6 +110,7 @@ export type ExerciseMaxAggregateInputType = {
 export type ExerciseCountAggregateInputType = {
   id?: true
   lessonId?: true
+  quizVersionId?: true
   type?: true
   order?: true
   question?: true
@@ -206,6 +212,7 @@ export type ExerciseGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type ExerciseGroupByOutputType = {
   id: string
   lessonId: string
+  quizVersionId: string
   type: $Enums.ExerciseType
   order: number
   question: string
@@ -243,6 +250,7 @@ export type ExerciseWhereInput = {
   NOT?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
   id?: Prisma.StringFilter<"Exercise"> | string
   lessonId?: Prisma.StringFilter<"Exercise"> | string
+  quizVersionId?: Prisma.StringFilter<"Exercise"> | string
   type?: Prisma.EnumExerciseTypeFilter<"Exercise"> | $Enums.ExerciseType
   order?: Prisma.IntFilter<"Exercise"> | number
   question?: Prisma.StringFilter<"Exercise"> | string
@@ -253,12 +261,14 @@ export type ExerciseWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Exercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exercise"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
+  quizVersion?: Prisma.XOR<Prisma.QuizVersionScalarRelationFilter, Prisma.QuizVersionWhereInput>
   attempts?: Prisma.ExerciseAttemptListRelationFilter
 }
 
 export type ExerciseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
+  quizVersionId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   order?: Prisma.SortOrder
   question?: Prisma.SortOrder
@@ -269,16 +279,18 @@ export type ExerciseOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lesson?: Prisma.LessonOrderByWithRelationInput
+  quizVersion?: Prisma.QuizVersionOrderByWithRelationInput
   attempts?: Prisma.ExerciseAttemptOrderByRelationAggregateInput
 }
 
 export type ExerciseWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  lessonId_order?: Prisma.ExerciseLessonIdOrderCompoundUniqueInput
+  quizVersionId_order?: Prisma.ExerciseQuizVersionIdOrderCompoundUniqueInput
   AND?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
   OR?: Prisma.ExerciseWhereInput[]
   NOT?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
   lessonId?: Prisma.StringFilter<"Exercise"> | string
+  quizVersionId?: Prisma.StringFilter<"Exercise"> | string
   type?: Prisma.EnumExerciseTypeFilter<"Exercise"> | $Enums.ExerciseType
   order?: Prisma.IntFilter<"Exercise"> | number
   question?: Prisma.StringFilter<"Exercise"> | string
@@ -289,12 +301,14 @@ export type ExerciseWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Exercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exercise"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
+  quizVersion?: Prisma.XOR<Prisma.QuizVersionScalarRelationFilter, Prisma.QuizVersionWhereInput>
   attempts?: Prisma.ExerciseAttemptListRelationFilter
-}, "id" | "lessonId_order">
+}, "id" | "quizVersionId_order">
 
 export type ExerciseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
+  quizVersionId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   order?: Prisma.SortOrder
   question?: Prisma.SortOrder
@@ -317,6 +331,7 @@ export type ExerciseScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ExerciseScalarWhereWithAggregatesInput | Prisma.ExerciseScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Exercise"> | string
   lessonId?: Prisma.StringWithAggregatesFilter<"Exercise"> | string
+  quizVersionId?: Prisma.StringWithAggregatesFilter<"Exercise"> | string
   type?: Prisma.EnumExerciseTypeWithAggregatesFilter<"Exercise"> | $Enums.ExerciseType
   order?: Prisma.IntWithAggregatesFilter<"Exercise"> | number
   question?: Prisma.StringWithAggregatesFilter<"Exercise"> | string
@@ -340,12 +355,14 @@ export type ExerciseCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lesson: Prisma.LessonCreateNestedOneWithoutExercisesInput
+  quizVersion: Prisma.QuizVersionCreateNestedOneWithoutExercisesInput
   attempts?: Prisma.ExerciseAttemptCreateNestedManyWithoutExerciseInput
 }
 
 export type ExerciseUncheckedCreateInput = {
   id?: string
   lessonId: string
+  quizVersionId: string
   type: $Enums.ExerciseType
   order: number
   question: string
@@ -370,12 +387,14 @@ export type ExerciseUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneRequiredWithoutExercisesNestedInput
+  quizVersion?: Prisma.QuizVersionUpdateOneRequiredWithoutExercisesNestedInput
   attempts?: Prisma.ExerciseAttemptUpdateManyWithoutExerciseNestedInput
 }
 
 export type ExerciseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  quizVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -391,6 +410,7 @@ export type ExerciseUncheckedUpdateInput = {
 export type ExerciseCreateManyInput = {
   id?: string
   lessonId: string
+  quizVersionId: string
   type: $Enums.ExerciseType
   order: number
   question: string
@@ -418,6 +438,7 @@ export type ExerciseUpdateManyMutationInput = {
 export type ExerciseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  quizVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -439,14 +460,15 @@ export type ExerciseOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ExerciseLessonIdOrderCompoundUniqueInput = {
-  lessonId: string
+export type ExerciseQuizVersionIdOrderCompoundUniqueInput = {
+  quizVersionId: string
   order: number
 }
 
 export type ExerciseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
+  quizVersionId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   order?: Prisma.SortOrder
   question?: Prisma.SortOrder
@@ -465,6 +487,7 @@ export type ExerciseAvgOrderByAggregateInput = {
 export type ExerciseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
+  quizVersionId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   order?: Prisma.SortOrder
   question?: Prisma.SortOrder
@@ -476,6 +499,7 @@ export type ExerciseMaxOrderByAggregateInput = {
 export type ExerciseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
+  quizVersionId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   order?: Prisma.SortOrder
   question?: Prisma.SortOrder
@@ -562,6 +586,48 @@ export type ExerciseUpdateOneRequiredWithoutAttemptsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExerciseUpdateToOneWithWhereWithoutAttemptsInput, Prisma.ExerciseUpdateWithoutAttemptsInput>, Prisma.ExerciseUncheckedUpdateWithoutAttemptsInput>
 }
 
+export type ExerciseCreateNestedManyWithoutQuizVersionInput = {
+  create?: Prisma.XOR<Prisma.ExerciseCreateWithoutQuizVersionInput, Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput> | Prisma.ExerciseCreateWithoutQuizVersionInput[] | Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput[]
+  connectOrCreate?: Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput | Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput[]
+  createMany?: Prisma.ExerciseCreateManyQuizVersionInputEnvelope
+  connect?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+}
+
+export type ExerciseUncheckedCreateNestedManyWithoutQuizVersionInput = {
+  create?: Prisma.XOR<Prisma.ExerciseCreateWithoutQuizVersionInput, Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput> | Prisma.ExerciseCreateWithoutQuizVersionInput[] | Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput[]
+  connectOrCreate?: Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput | Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput[]
+  createMany?: Prisma.ExerciseCreateManyQuizVersionInputEnvelope
+  connect?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+}
+
+export type ExerciseUpdateManyWithoutQuizVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.ExerciseCreateWithoutQuizVersionInput, Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput> | Prisma.ExerciseCreateWithoutQuizVersionInput[] | Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput[]
+  connectOrCreate?: Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput | Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput[]
+  upsert?: Prisma.ExerciseUpsertWithWhereUniqueWithoutQuizVersionInput | Prisma.ExerciseUpsertWithWhereUniqueWithoutQuizVersionInput[]
+  createMany?: Prisma.ExerciseCreateManyQuizVersionInputEnvelope
+  set?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  disconnect?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  delete?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  connect?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  update?: Prisma.ExerciseUpdateWithWhereUniqueWithoutQuizVersionInput | Prisma.ExerciseUpdateWithWhereUniqueWithoutQuizVersionInput[]
+  updateMany?: Prisma.ExerciseUpdateManyWithWhereWithoutQuizVersionInput | Prisma.ExerciseUpdateManyWithWhereWithoutQuizVersionInput[]
+  deleteMany?: Prisma.ExerciseScalarWhereInput | Prisma.ExerciseScalarWhereInput[]
+}
+
+export type ExerciseUncheckedUpdateManyWithoutQuizVersionNestedInput = {
+  create?: Prisma.XOR<Prisma.ExerciseCreateWithoutQuizVersionInput, Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput> | Prisma.ExerciseCreateWithoutQuizVersionInput[] | Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput[]
+  connectOrCreate?: Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput | Prisma.ExerciseCreateOrConnectWithoutQuizVersionInput[]
+  upsert?: Prisma.ExerciseUpsertWithWhereUniqueWithoutQuizVersionInput | Prisma.ExerciseUpsertWithWhereUniqueWithoutQuizVersionInput[]
+  createMany?: Prisma.ExerciseCreateManyQuizVersionInputEnvelope
+  set?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  disconnect?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  delete?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  connect?: Prisma.ExerciseWhereUniqueInput | Prisma.ExerciseWhereUniqueInput[]
+  update?: Prisma.ExerciseUpdateWithWhereUniqueWithoutQuizVersionInput | Prisma.ExerciseUpdateWithWhereUniqueWithoutQuizVersionInput[]
+  updateMany?: Prisma.ExerciseUpdateManyWithWhereWithoutQuizVersionInput | Prisma.ExerciseUpdateManyWithWhereWithoutQuizVersionInput[]
+  deleteMany?: Prisma.ExerciseScalarWhereInput | Prisma.ExerciseScalarWhereInput[]
+}
+
 export type ExerciseCreateWithoutLessonInput = {
   id?: string
   type: $Enums.ExerciseType
@@ -573,11 +639,13 @@ export type ExerciseCreateWithoutLessonInput = {
   concepts?: Prisma.ExerciseCreateconceptsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  quizVersion: Prisma.QuizVersionCreateNestedOneWithoutExercisesInput
   attempts?: Prisma.ExerciseAttemptCreateNestedManyWithoutExerciseInput
 }
 
 export type ExerciseUncheckedCreateWithoutLessonInput = {
   id?: string
+  quizVersionId: string
   type: $Enums.ExerciseType
   order: number
   question: string
@@ -622,6 +690,7 @@ export type ExerciseScalarWhereInput = {
   NOT?: Prisma.ExerciseScalarWhereInput | Prisma.ExerciseScalarWhereInput[]
   id?: Prisma.StringFilter<"Exercise"> | string
   lessonId?: Prisma.StringFilter<"Exercise"> | string
+  quizVersionId?: Prisma.StringFilter<"Exercise"> | string
   type?: Prisma.EnumExerciseTypeFilter<"Exercise"> | $Enums.ExerciseType
   order?: Prisma.IntFilter<"Exercise"> | number
   question?: Prisma.StringFilter<"Exercise"> | string
@@ -645,11 +714,13 @@ export type ExerciseCreateWithoutAttemptsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lesson: Prisma.LessonCreateNestedOneWithoutExercisesInput
+  quizVersion: Prisma.QuizVersionCreateNestedOneWithoutExercisesInput
 }
 
 export type ExerciseUncheckedCreateWithoutAttemptsInput = {
   id?: string
   lessonId: string
+  quizVersionId: string
   type: $Enums.ExerciseType
   order: number
   question: string
@@ -689,11 +760,13 @@ export type ExerciseUpdateWithoutAttemptsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneRequiredWithoutExercisesNestedInput
+  quizVersion?: Prisma.QuizVersionUpdateOneRequiredWithoutExercisesNestedInput
 }
 
 export type ExerciseUncheckedUpdateWithoutAttemptsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  quizVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -705,8 +778,65 @@ export type ExerciseUncheckedUpdateWithoutAttemptsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type ExerciseCreateWithoutQuizVersionInput = {
+  id?: string
+  type: $Enums.ExerciseType
+  order: number
+  question: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  answerKey: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  explanation: string
+  concepts?: Prisma.ExerciseCreateconceptsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lesson: Prisma.LessonCreateNestedOneWithoutExercisesInput
+  attempts?: Prisma.ExerciseAttemptCreateNestedManyWithoutExerciseInput
+}
+
+export type ExerciseUncheckedCreateWithoutQuizVersionInput = {
+  id?: string
+  lessonId: string
+  type: $Enums.ExerciseType
+  order: number
+  question: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  answerKey: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  explanation: string
+  concepts?: Prisma.ExerciseCreateconceptsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  attempts?: Prisma.ExerciseAttemptUncheckedCreateNestedManyWithoutExerciseInput
+}
+
+export type ExerciseCreateOrConnectWithoutQuizVersionInput = {
+  where: Prisma.ExerciseWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExerciseCreateWithoutQuizVersionInput, Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput>
+}
+
+export type ExerciseCreateManyQuizVersionInputEnvelope = {
+  data: Prisma.ExerciseCreateManyQuizVersionInput | Prisma.ExerciseCreateManyQuizVersionInput[]
+  skipDuplicates?: boolean
+}
+
+export type ExerciseUpsertWithWhereUniqueWithoutQuizVersionInput = {
+  where: Prisma.ExerciseWhereUniqueInput
+  update: Prisma.XOR<Prisma.ExerciseUpdateWithoutQuizVersionInput, Prisma.ExerciseUncheckedUpdateWithoutQuizVersionInput>
+  create: Prisma.XOR<Prisma.ExerciseCreateWithoutQuizVersionInput, Prisma.ExerciseUncheckedCreateWithoutQuizVersionInput>
+}
+
+export type ExerciseUpdateWithWhereUniqueWithoutQuizVersionInput = {
+  where: Prisma.ExerciseWhereUniqueInput
+  data: Prisma.XOR<Prisma.ExerciseUpdateWithoutQuizVersionInput, Prisma.ExerciseUncheckedUpdateWithoutQuizVersionInput>
+}
+
+export type ExerciseUpdateManyWithWhereWithoutQuizVersionInput = {
+  where: Prisma.ExerciseScalarWhereInput
+  data: Prisma.XOR<Prisma.ExerciseUpdateManyMutationInput, Prisma.ExerciseUncheckedUpdateManyWithoutQuizVersionInput>
+}
+
 export type ExerciseCreateManyLessonInput = {
   id?: string
+  quizVersionId: string
   type: $Enums.ExerciseType
   order: number
   question: string
@@ -729,11 +859,13 @@ export type ExerciseUpdateWithoutLessonInput = {
   concepts?: Prisma.ExerciseUpdateconceptsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quizVersion?: Prisma.QuizVersionUpdateOneRequiredWithoutExercisesNestedInput
   attempts?: Prisma.ExerciseAttemptUpdateManyWithoutExerciseNestedInput
 }
 
 export type ExerciseUncheckedUpdateWithoutLessonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  quizVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -748,6 +880,65 @@ export type ExerciseUncheckedUpdateWithoutLessonInput = {
 
 export type ExerciseUncheckedUpdateManyWithoutLessonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  quizVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  answerKey?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  explanation?: Prisma.StringFieldUpdateOperationsInput | string
+  concepts?: Prisma.ExerciseUpdateconceptsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ExerciseCreateManyQuizVersionInput = {
+  id?: string
+  lessonId: string
+  type: $Enums.ExerciseType
+  order: number
+  question: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  answerKey: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  explanation: string
+  concepts?: Prisma.ExerciseCreateconceptsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ExerciseUpdateWithoutQuizVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  answerKey?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  explanation?: Prisma.StringFieldUpdateOperationsInput | string
+  concepts?: Prisma.ExerciseUpdateconceptsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneRequiredWithoutExercisesNestedInput
+  attempts?: Prisma.ExerciseAttemptUpdateManyWithoutExerciseNestedInput
+}
+
+export type ExerciseUncheckedUpdateWithoutQuizVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  answerKey?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  explanation?: Prisma.StringFieldUpdateOperationsInput | string
+  concepts?: Prisma.ExerciseUpdateconceptsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attempts?: Prisma.ExerciseAttemptUncheckedUpdateManyWithoutExerciseNestedInput
+}
+
+export type ExerciseUncheckedUpdateManyWithoutQuizVersionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumExerciseTypeFieldUpdateOperationsInput | $Enums.ExerciseType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -793,6 +984,7 @@ export type ExerciseCountOutputTypeCountAttemptsArgs<ExtArgs extends runtime.Typ
 export type ExerciseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   lessonId?: boolean
+  quizVersionId?: boolean
   type?: boolean
   order?: boolean
   question?: boolean
@@ -803,6 +995,7 @@ export type ExerciseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  quizVersion?: boolean | Prisma.QuizVersionDefaultArgs<ExtArgs>
   attempts?: boolean | Prisma.Exercise$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.ExerciseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["exercise"]>
@@ -810,6 +1003,7 @@ export type ExerciseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type ExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   lessonId?: boolean
+  quizVersionId?: boolean
   type?: boolean
   order?: boolean
   question?: boolean
@@ -820,11 +1014,13 @@ export type ExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  quizVersion?: boolean | Prisma.QuizVersionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["exercise"]>
 
 export type ExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   lessonId?: boolean
+  quizVersionId?: boolean
   type?: boolean
   order?: boolean
   question?: boolean
@@ -835,11 +1031,13 @@ export type ExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  quizVersion?: boolean | Prisma.QuizVersionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["exercise"]>
 
 export type ExerciseSelectScalar = {
   id?: boolean
   lessonId?: boolean
+  quizVersionId?: boolean
   type?: boolean
   order?: boolean
   question?: boolean
@@ -851,28 +1049,33 @@ export type ExerciseSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "type" | "order" | "question" | "data" | "answerKey" | "explanation" | "concepts" | "createdAt" | "updatedAt", ExtArgs["result"]["exercise"]>
+export type ExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "quizVersionId" | "type" | "order" | "question" | "data" | "answerKey" | "explanation" | "concepts" | "createdAt" | "updatedAt", ExtArgs["result"]["exercise"]>
 export type ExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  quizVersion?: boolean | Prisma.QuizVersionDefaultArgs<ExtArgs>
   attempts?: boolean | Prisma.Exercise$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.ExerciseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExerciseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  quizVersion?: boolean | Prisma.QuizVersionDefaultArgs<ExtArgs>
 }
 export type ExerciseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  quizVersion?: boolean | Prisma.QuizVersionDefaultArgs<ExtArgs>
 }
 
 export type $ExercisePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Exercise"
   objects: {
     lesson: Prisma.$LessonPayload<ExtArgs>
+    quizVersion: Prisma.$QuizVersionPayload<ExtArgs>
     attempts: Prisma.$ExerciseAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     lessonId: string
+    quizVersionId: string
     type: $Enums.ExerciseType
     order: number
     question: string
@@ -1277,6 +1480,7 @@ readonly fields: ExerciseFieldRefs;
 export interface Prisma__ExerciseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lesson<T extends Prisma.LessonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LessonDefaultArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  quizVersion<T extends Prisma.QuizVersionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.QuizVersionDefaultArgs<ExtArgs>>): Prisma.Prisma__QuizVersionClient<runtime.Types.Result.GetResult<Prisma.$QuizVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   attempts<T extends Prisma.Exercise$attemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exercise$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExerciseAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1309,6 +1513,7 @@ export interface Prisma__ExerciseClient<T, Null = never, ExtArgs extends runtime
 export interface ExerciseFieldRefs {
   readonly id: Prisma.FieldRef<"Exercise", 'String'>
   readonly lessonId: Prisma.FieldRef<"Exercise", 'String'>
+  readonly quizVersionId: Prisma.FieldRef<"Exercise", 'String'>
   readonly type: Prisma.FieldRef<"Exercise", 'ExerciseType'>
   readonly order: Prisma.FieldRef<"Exercise", 'Int'>
   readonly question: Prisma.FieldRef<"Exercise", 'String'>

@@ -1,7 +1,11 @@
 import { lessonContentSchema } from "@/lib/ai/schemas/lesson";
 import { prisma } from "@/lib/db/prisma";
+import { findRelevantSourceChunks, sourceLocation } from "@/lib/sources/rag";
 
-export async function buildTutorContext(lessonId: string) {
+export async function buildTutorContext(
+  lessonId: string,
+  query?: string,
+) {
   const lesson = await prisma.lesson.findUnique({
     where: {
       id: lessonId,
@@ -21,6 +25,7 @@ export async function buildTutorContext(lessonId: string) {
           course: {
             select: {
               id: true,
+              ownerId: true,
               title: true,
               goal: true,
               instructions: true,
@@ -55,7 +60,18 @@ export async function buildTutorContext(lessonId: string) {
 
   const generatedContent = parsed.success ? parsed.data : null;
 
-  const memories = await prisma.courseMemory.findMany({
+  const sourceQuery = [
+    query,
+    lesson.title,
+    lesson.description,
+    ...lesson.objectives,
+    ...lesson.concepts,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const [memories, relevantSources] = await Promise.all([
+    prisma.courseMemory.findMany({
     where: {
       courseId: lesson.module.course.id,
     },
@@ -71,12 +87,19 @@ export async function buildTutorContext(lessonId: string) {
 
     take: 10,
 
-    select: {
-      type: true,
-      content: true,
-      importance: true,
-    },
-  });
+      select: {
+        type: true,
+        content: true,
+        importance: true,
+      },
+    }),
+    findRelevantSourceChunks({
+      ownerId: lesson.module.course.ownerId,
+      courseId: lesson.module.course.id,
+      query: sourceQuery,
+      limit: 8,
+    }),
+  ]);
 
   return {
     course: {
@@ -109,6 +132,13 @@ export async function buildTutorContext(lessonId: string) {
       assumedKnowledge: [],
     },
     learnerMemory: memories,
+    sourceContext: relevantSources.map((source, index) => ({
+      marker: "[S" + (index + 1) + "]",
+      sourceChunkId: source.id,
+      sourceTitle: source.sourceTitle,
+      location: sourceLocation(source),
+      content: source.content,
+    })),
   };
 }
 

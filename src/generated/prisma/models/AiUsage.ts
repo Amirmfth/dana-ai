@@ -46,6 +46,7 @@ export type AiUsageSumAggregateOutputType = {
 
 export type AiUsageMinAggregateOutputType = {
   id: string | null
+  userId: string | null
   operation: $Enums.AiOperation | null
   status: $Enums.AiRequestStatus | null
   model: string | null
@@ -66,6 +67,7 @@ export type AiUsageMinAggregateOutputType = {
 
 export type AiUsageMaxAggregateOutputType = {
   id: string | null
+  userId: string | null
   operation: $Enums.AiOperation | null
   status: $Enums.AiRequestStatus | null
   model: string | null
@@ -86,6 +88,7 @@ export type AiUsageMaxAggregateOutputType = {
 
 export type AiUsageCountAggregateOutputType = {
   id: number
+  userId: number
   operation: number
   status: number
   model: number
@@ -127,6 +130,7 @@ export type AiUsageSumAggregateInputType = {
 
 export type AiUsageMinAggregateInputType = {
   id?: true
+  userId?: true
   operation?: true
   status?: true
   model?: true
@@ -147,6 +151,7 @@ export type AiUsageMinAggregateInputType = {
 
 export type AiUsageMaxAggregateInputType = {
   id?: true
+  userId?: true
   operation?: true
   status?: true
   model?: true
@@ -167,6 +172,7 @@ export type AiUsageMaxAggregateInputType = {
 
 export type AiUsageCountAggregateInputType = {
   id?: true
+  userId?: true
   operation?: true
   status?: true
   model?: true
@@ -275,6 +281,7 @@ export type AiUsageGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type AiUsageGroupByOutputType = {
   id: string
+  userId: string
   operation: $Enums.AiOperation
   status: $Enums.AiRequestStatus
   model: string
@@ -319,6 +326,7 @@ export type AiUsageWhereInput = {
   OR?: Prisma.AiUsageWhereInput[]
   NOT?: Prisma.AiUsageWhereInput | Prisma.AiUsageWhereInput[]
   id?: Prisma.StringFilter<"AiUsage"> | string
+  userId?: Prisma.UuidFilter<"AiUsage"> | string
   operation?: Prisma.EnumAiOperationFilter<"AiUsage"> | $Enums.AiOperation
   status?: Prisma.EnumAiRequestStatusFilter<"AiUsage"> | $Enums.AiRequestStatus
   model?: Prisma.StringFilter<"AiUsage"> | string
@@ -340,6 +348,7 @@ export type AiUsageWhereInput = {
 
 export type AiUsageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   operation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
@@ -364,6 +373,7 @@ export type AiUsageWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.AiUsageWhereInput | Prisma.AiUsageWhereInput[]
   OR?: Prisma.AiUsageWhereInput[]
   NOT?: Prisma.AiUsageWhereInput | Prisma.AiUsageWhereInput[]
+  userId?: Prisma.UuidFilter<"AiUsage"> | string
   operation?: Prisma.EnumAiOperationFilter<"AiUsage"> | $Enums.AiOperation
   status?: Prisma.EnumAiRequestStatusFilter<"AiUsage"> | $Enums.AiRequestStatus
   model?: Prisma.StringFilter<"AiUsage"> | string
@@ -385,6 +395,7 @@ export type AiUsageWhereUniqueInput = Prisma.AtLeast<{
 
 export type AiUsageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   operation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
@@ -414,6 +425,7 @@ export type AiUsageScalarWhereWithAggregatesInput = {
   OR?: Prisma.AiUsageScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AiUsageScalarWhereWithAggregatesInput | Prisma.AiUsageScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"AiUsage"> | string
+  userId?: Prisma.UuidWithAggregatesFilter<"AiUsage"> | string
   operation?: Prisma.EnumAiOperationWithAggregatesFilter<"AiUsage"> | $Enums.AiOperation
   status?: Prisma.EnumAiRequestStatusWithAggregatesFilter<"AiUsage"> | $Enums.AiRequestStatus
   model?: Prisma.StringWithAggregatesFilter<"AiUsage"> | string
@@ -435,6 +447,7 @@ export type AiUsageScalarWhereWithAggregatesInput = {
 
 export type AiUsageCreateInput = {
   id?: string
+  userId: string
   operation: $Enums.AiOperation
   status: $Enums.AiRequestStatus
   model: string
@@ -456,6 +469,7 @@ export type AiUsageCreateInput = {
 
 export type AiUsageUncheckedCreateInput = {
   id?: string
+  userId: string
   operation: $Enums.AiOperation
   status: $Enums.AiRequestStatus
   model: string
@@ -477,6 +491,7 @@ export type AiUsageUncheckedCreateInput = {
 
 export type AiUsageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   operation?: Prisma.EnumAiOperationFieldUpdateOperationsInput | $Enums.AiOperation
   status?: Prisma.EnumAiRequestStatusFieldUpdateOperationsInput | $Enums.AiRequestStatus
   model?: Prisma.StringFieldUpdateOperationsInput | string
@@ -498,6 +513,7 @@ export type AiUsageUpdateInput = {
 
 export type AiUsageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   operation?: Prisma.EnumAiOperationFieldUpdateOperationsInput | $Enums.AiOperation
   status?: Prisma.EnumAiRequestStatusFieldUpdateOperationsInput | $Enums.AiRequestStatus
   model?: Prisma.StringFieldUpdateOperationsInput | string
@@ -519,6 +535,7 @@ export type AiUsageUncheckedUpdateInput = {
 
 export type AiUsageCreateManyInput = {
   id?: string
+  userId: string
   operation: $Enums.AiOperation
   status: $Enums.AiRequestStatus
   model: string
@@ -540,6 +557,7 @@ export type AiUsageCreateManyInput = {
 
 export type AiUsageUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   operation?: Prisma.EnumAiOperationFieldUpdateOperationsInput | $Enums.AiOperation
   status?: Prisma.EnumAiRequestStatusFieldUpdateOperationsInput | $Enums.AiRequestStatus
   model?: Prisma.StringFieldUpdateOperationsInput | string
@@ -561,6 +579,7 @@ export type AiUsageUpdateManyMutationInput = {
 
 export type AiUsageUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   operation?: Prisma.EnumAiOperationFieldUpdateOperationsInput | $Enums.AiOperation
   status?: Prisma.EnumAiRequestStatusFieldUpdateOperationsInput | $Enums.AiRequestStatus
   model?: Prisma.StringFieldUpdateOperationsInput | string
@@ -582,6 +601,7 @@ export type AiUsageUncheckedUpdateManyInput = {
 
 export type AiUsageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   operation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
@@ -612,6 +632,7 @@ export type AiUsageAvgOrderByAggregateInput = {
 
 export type AiUsageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   operation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
@@ -632,6 +653,7 @@ export type AiUsageMaxOrderByAggregateInput = {
 
 export type AiUsageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   operation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
@@ -679,6 +701,7 @@ export type NullableIntFieldUpdateOperationsInput = {
 
 export type AiUsageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   operation?: boolean
   status?: boolean
   model?: boolean
@@ -700,6 +723,7 @@ export type AiUsageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type AiUsageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   operation?: boolean
   status?: boolean
   model?: boolean
@@ -721,6 +745,7 @@ export type AiUsageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type AiUsageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   operation?: boolean
   status?: boolean
   model?: boolean
@@ -742,6 +767,7 @@ export type AiUsageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type AiUsageSelectScalar = {
   id?: boolean
+  userId?: boolean
   operation?: boolean
   status?: boolean
   model?: boolean
@@ -761,13 +787,14 @@ export type AiUsageSelectScalar = {
   createdAt?: boolean
 }
 
-export type AiUsageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "operation" | "status" | "model" | "providerResponseId" | "input" | "output" | "inputTokens" | "outputTokens" | "totalTokens" | "cachedInputTokens" | "reasoningTokens" | "durationMs" | "errorMessage" | "courseId" | "lessonId" | "conversationId" | "createdAt", ExtArgs["result"]["aiUsage"]>
+export type AiUsageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "operation" | "status" | "model" | "providerResponseId" | "input" | "output" | "inputTokens" | "outputTokens" | "totalTokens" | "cachedInputTokens" | "reasoningTokens" | "durationMs" | "errorMessage" | "courseId" | "lessonId" | "conversationId" | "createdAt", ExtArgs["result"]["aiUsage"]>
 
 export type $AiUsagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AiUsage"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    userId: string
     operation: $Enums.AiOperation
     status: $Enums.AiRequestStatus
     model: string
@@ -1209,6 +1236,7 @@ export interface Prisma__AiUsageClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface AiUsageFieldRefs {
   readonly id: Prisma.FieldRef<"AiUsage", 'String'>
+  readonly userId: Prisma.FieldRef<"AiUsage", 'String'>
   readonly operation: Prisma.FieldRef<"AiUsage", 'AiOperation'>
   readonly status: Prisma.FieldRef<"AiUsage", 'AiRequestStatus'>
   readonly model: Prisma.FieldRef<"AiUsage", 'String'>

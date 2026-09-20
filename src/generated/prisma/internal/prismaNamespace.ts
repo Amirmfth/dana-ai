@@ -406,7 +406,9 @@ export const ModelName = {
   CourseMemory: 'CourseMemory',
   AiUsage: 'AiUsage',
   Exercise: 'Exercise',
-  ExerciseAttempt: 'ExerciseAttempt'
+  ExerciseAttempt: 'ExerciseAttempt',
+  AiRequestWindow: 'AiRequestWindow',
+  UserPrivacySettings: 'UserPrivacySettings'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "course" | "module" | "lesson" | "lessonContent" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt"
+    modelProps: "course" | "module" | "lesson" | "lessonContent" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt" | "aiRequestWindow" | "userPrivacySettings"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1166,6 +1168,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AiRequestWindow: {
+      payload: Prisma.$AiRequestWindowPayload<ExtArgs>
+      fields: Prisma.AiRequestWindowFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiRequestWindowFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiRequestWindowFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>
+        }
+        findFirst: {
+          args: Prisma.AiRequestWindowFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiRequestWindowFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>
+        }
+        findMany: {
+          args: Prisma.AiRequestWindowFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>[]
+        }
+        create: {
+          args: Prisma.AiRequestWindowCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>
+        }
+        createMany: {
+          args: Prisma.AiRequestWindowCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiRequestWindowCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>[]
+        }
+        delete: {
+          args: Prisma.AiRequestWindowDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>
+        }
+        update: {
+          args: Prisma.AiRequestWindowUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiRequestWindowDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiRequestWindowUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiRequestWindowUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiRequestWindowUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiRequestWindowPayload>
+        }
+        aggregate: {
+          args: Prisma.AiRequestWindowAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiRequestWindow>
+        }
+        groupBy: {
+          args: Prisma.AiRequestWindowGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiRequestWindowGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiRequestWindowCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiRequestWindowCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserPrivacySettings: {
+      payload: Prisma.$UserPrivacySettingsPayload<ExtArgs>
+      fields: Prisma.UserPrivacySettingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserPrivacySettingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserPrivacySettingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>
+        }
+        findFirst: {
+          args: Prisma.UserPrivacySettingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserPrivacySettingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>
+        }
+        findMany: {
+          args: Prisma.UserPrivacySettingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>[]
+        }
+        create: {
+          args: Prisma.UserPrivacySettingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>
+        }
+        createMany: {
+          args: Prisma.UserPrivacySettingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserPrivacySettingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>[]
+        }
+        delete: {
+          args: Prisma.UserPrivacySettingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>
+        }
+        update: {
+          args: Prisma.UserPrivacySettingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserPrivacySettingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserPrivacySettingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserPrivacySettingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserPrivacySettingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPrivacySettingsPayload>
+        }
+        aggregate: {
+          args: Prisma.UserPrivacySettingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserPrivacySettings>
+        }
+        groupBy: {
+          args: Prisma.UserPrivacySettingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserPrivacySettingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserPrivacySettingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserPrivacySettingsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1207,6 +1357,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const CourseScalarFieldEnum = {
   id: 'id',
+  ownerId: 'ownerId',
   title: 'title',
   description: 'description',
   goal: 'goal',
@@ -1301,6 +1452,7 @@ export type CourseMemoryScalarFieldEnum = (typeof CourseMemoryScalarFieldEnum)[k
 
 export const AiUsageScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   operation: 'operation',
   status: 'status',
   model: 'model',
@@ -1349,6 +1501,28 @@ export const ExerciseAttemptScalarFieldEnum = {
 } as const
 
 export type ExerciseAttemptScalarFieldEnum = (typeof ExerciseAttemptScalarFieldEnum)[keyof typeof ExerciseAttemptScalarFieldEnum]
+
+
+export const AiRequestWindowScalarFieldEnum = {
+  id: 'id',
+  scopeKey: 'scopeKey',
+  operation: 'operation',
+  windowStart: 'windowStart',
+  count: 'count'
+} as const
+
+export type AiRequestWindowScalarFieldEnum = (typeof AiRequestWindowScalarFieldEnum)[keyof typeof AiRequestWindowScalarFieldEnum]
+
+
+export const UserPrivacySettingsScalarFieldEnum = {
+  userId: 'userId',
+  storeAiPayloads: 'storeAiPayloads',
+  retentionDays: 'retentionDays',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserPrivacySettingsScalarFieldEnum = (typeof UserPrivacySettingsScalarFieldEnum)[keyof typeof UserPrivacySettingsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1574,6 +1748,13 @@ export type ListEnumAttemptResultFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1747,6 +1928,8 @@ export type GlobalOmitConfig = {
   aiUsage?: Prisma.AiUsageOmit
   exercise?: Prisma.ExerciseOmit
   exerciseAttempt?: Prisma.ExerciseAttemptOmit
+  aiRequestWindow?: Prisma.AiRequestWindowOmit
+  userPrivacySettings?: Prisma.UserPrivacySettingsOmit
 }
 
 /* Types for Logging */

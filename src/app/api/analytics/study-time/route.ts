@@ -51,10 +51,11 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: "Lesson not found." }, { status: 404 });
     }
 
-    const seconds = Math.min(60, Math.max(1, Math.round(requestedSeconds)));
+    const requested = Math.min(60, Math.max(1, Math.round(requestedSeconds)));
     const day = utcDay();
+    const now = new Date();
 
-    await prisma.studyTime.upsert({
+    const existing = await prisma.studyTime.findUnique({
       where: {
         userId_lessonId_day: {
           userId: user.id,
@@ -62,17 +63,42 @@ export async function POST(request: NextRequest) {
           day,
         },
       },
-      create: {
-        userId: user.id,
-        courseId: lesson.module.courseId,
-        lessonId,
-        day,
-        seconds,
-      },
-      update: {
-        seconds: { increment: seconds },
+      select: {
+        updatedAt: true,
       },
     });
+
+    const allowedSeconds = existing
+      ? Math.max(
+          0,
+          Math.min(
+            requested,
+            Math.ceil((now.getTime() - existing.updatedAt.getTime()) / 1000) + 5,
+          ),
+        )
+      : requested;
+
+    if (allowedSeconds > 0) {
+      await prisma.studyTime.upsert({
+        where: {
+          userId_lessonId_day: {
+            userId: user.id,
+            lessonId,
+            day,
+          },
+        },
+        create: {
+          userId: user.id,
+          courseId: lesson.module.courseId,
+          lessonId,
+          day,
+          seconds: allowedSeconds,
+        },
+        update: {
+          seconds: { increment: allowedSeconds },
+        },
+      });
+    }
 
     return Response.json({ success: true });
   } catch (error) {

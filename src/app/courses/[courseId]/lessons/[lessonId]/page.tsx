@@ -73,6 +73,45 @@ export default async function LessonPage({ params }: LessonPageProps) {
     : undefined;
 
   const lesson = await getOrGenerateLesson(user.id, lessonId);
+  const citationState = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    select: {
+      activeContentVersion: {
+        select: {
+          citations: {
+            orderBy: { createdAt: "asc" },
+            include: {
+              sourceChunk: {
+                include: {
+                  source: {
+                    select: {
+                      title: true,
+                      type: true,
+                      originalUrl: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const citations =
+    citationState?.activeContentVersion?.citations.map((citation) => ({
+      id: citation.id,
+      marker: citation.marker,
+      location: citation.location,
+      sourceTitle: citation.sourceChunk.source.title,
+      sourceType: citation.sourceChunk.source.type,
+      originalUrl: citation.sourceChunk.source.originalUrl,
+      pageStart: citation.sourceChunk.pageStart,
+      pageEnd: citation.sourceChunk.pageEnd,
+      heading: citation.sourceChunk.heading,
+    })) ?? [];
+
   const quiz = await getOrGenerateQuiz(user.id, lessonId);
   const quizExercises = quiz.exercises.map((exercise) => {
     const latestAttempt = exercise.attempts[0];
@@ -194,7 +233,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                   </form>
                 )}
               </div>
-              <LessonContent lesson={lesson} />
+              <LessonContent lesson={lesson} citations={citations} />
               <LessonQuiz
                 exercises={quizExercises}
                 lessonId={lessonId}

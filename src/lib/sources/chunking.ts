@@ -14,6 +14,7 @@ export function normalizeSourceText(value: string) {
   return value
     .replace(/\r\n?/g, "\n")
     .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim()
     .slice(0, SOURCE_MAX_TEXT_CHARS);

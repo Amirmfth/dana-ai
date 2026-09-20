@@ -103,3 +103,12 @@ export const GenerationStatus = {
 } as const
 
 export type GenerationStatus = (typeof GenerationStatus)[keyof typeof GenerationStatus]
+
+
+export const LearningEventType = {
+  LESSON_STARTED: 'LESSON_STARTED',
+  LESSON_COMPLETED: 'LESSON_COMPLETED',
+  QUIZ_COMPLETED: 'QUIZ_COMPLETED'
+} as const
+
+export type LearningEventType = (typeof LearningEventType)[keyof typeof LearningEventType]

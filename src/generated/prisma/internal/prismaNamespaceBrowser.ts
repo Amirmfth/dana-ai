@@ -61,6 +61,9 @@ export const ModelName = {
   AiUsage: 'AiUsage',
   Exercise: 'Exercise',
   ExerciseAttempt: 'ExerciseAttempt',
+  QuizRun: 'QuizRun',
+  LearningEvent: 'LearningEvent',
+  StudyTime: 'StudyTime',
   AiRequestWindow: 'AiRequestWindow',
   UserPrivacySettings: 'UserPrivacySettings',
   GenerationJob: 'GenerationJob',
@@ -223,12 +226,53 @@ export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typ
 export const ExerciseAttemptScalarFieldEnum = {
   id: 'id',
   exerciseId: 'exerciseId',
+  quizRunId: 'quizRunId',
   answer: 'answer',
   result: 'result',
   createdAt: 'createdAt'
 } as const
 
 export type ExerciseAttemptScalarFieldEnum = (typeof ExerciseAttemptScalarFieldEnum)[keyof typeof ExerciseAttemptScalarFieldEnum]
+
+
+export const QuizRunScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lessonId: 'lessonId',
+  score: 'score',
+  total: 'total',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type QuizRunScalarFieldEnum = (typeof QuizRunScalarFieldEnum)[keyof typeof QuizRunScalarFieldEnum]
+
+
+export const LearningEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  lessonId: 'lessonId',
+  type: 'type',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type LearningEventScalarFieldEnum = (typeof LearningEventScalarFieldEnum)[keyof typeof LearningEventScalarFieldEnum]
+
+
+export const StudyTimeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  lessonId: 'lessonId',
+  day: 'day',
+  seconds: 'seconds',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudyTimeScalarFieldEnum = (typeof StudyTimeScalarFieldEnum)[keyof typeof StudyTimeScalarFieldEnum]
 
 
 export const AiRequestWindowScalarFieldEnum = {

@@ -37,10 +37,15 @@ type QuestionState = {
 
 type LessonQuizProps = {
   lessonId: string;
+  quizRunId: string;
   exercises: Exercise[];
 };
 
-export function LessonQuiz({ exercises, lessonId }: LessonQuizProps) {
+export function LessonQuiz({
+  exercises,
+  lessonId,
+  quizRunId,
+}: LessonQuizProps) {
   const [state, setState] = useState<Record<string, QuestionState>>(() => {
     const initial: Record<string, QuestionState> = {};
 
@@ -63,6 +68,7 @@ export function LessonQuiz({ exercises, lessonId }: LessonQuizProps) {
     return initial;
   });
 
+  const [currentQuizRunId, setCurrentQuizRunId] = useState(quizRunId);
   const [submitting, setSubmitting] = useState<string | null>(null);
 
   const [isResetting, setIsResetting] = useState(false);
@@ -86,6 +92,7 @@ export function LessonQuiz({ exercises, lessonId }: LessonQuizProps) {
 
         body: JSON.stringify({
           exerciseId: exercise.id,
+          quizRunId: currentQuizRunId,
           answer: current.answer,
         }),
       });
@@ -142,6 +149,8 @@ export function LessonQuiz({ exercises, lessonId }: LessonQuizProps) {
         throw new Error("Failed to reset quiz.");
       }
 
+      const result = (await response.json()) as { quizRunId: string };
+      setCurrentQuizRunId(result.quizRunId);
       setState({});
     } catch (error) {
       console.error(error);

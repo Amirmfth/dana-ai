@@ -454,6 +454,23 @@ export type EnumAttemptResultWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAttemptResultFilter<$PrismaModel>
 }
 
+export type EnumLearningEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LearningEventType | Prisma.EnumLearningEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel> | $Enums.LearningEventType
+}
+
+export type EnumLearningEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LearningEventType | Prisma.EnumLearningEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLearningEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.LearningEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
+}
+
 export type BoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
@@ -896,6 +913,23 @@ export type NestedEnumAttemptResultWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAttemptResultFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAttemptResultFilter<$PrismaModel>
+}
+
+export type NestedEnumLearningEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LearningEventType | Prisma.EnumLearningEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel> | $Enums.LearningEventType
+}
+
+export type NestedEnumLearningEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LearningEventType | Prisma.EnumLearningEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LearningEventType[] | Prisma.ListEnumLearningEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLearningEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.LearningEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
 }
 
 export type NestedBoolFilter<$PrismaModel = never> = {

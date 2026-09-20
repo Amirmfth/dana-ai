@@ -47,7 +47,7 @@ export async function courseToStructure(
         title: module.title,
         description: module.description,
         objective: module.objective,
-        lessons: module.lessons.map((lesson) => ({
+        lessons: courseModule.lessons.map((lesson) => ({
           title: lesson.title,
           description: lesson.description,
           objectives: lesson.objectives,
@@ -87,7 +87,7 @@ export async function createCourseFromStructure(
           objective: module.objective,
           order: moduleIndex + 1,
           lessons: {
-            create: module.lessons.map((lesson, lessonIndex) => ({
+            create: courseModule.lessons.map((lesson, lessonIndex) => ({
               title: lesson.title,
               description: lesson.description,
               objectives: lesson.objectives,
@@ -123,7 +123,7 @@ export async function normalizeCourseProgress(courseId: string) {
 
   if (!course) return;
 
-  const lessons = course.modules.flatMap((module) => module.lessons);
+  const lessons = course.modules.flatMap((module) => courseModule.lessons);
   const statuses = nextStatusesAfterStructureChange(lessons);
   const incompleteCount = statuses.filter(
     (lesson) => lesson.status !== "COMPLETED",
@@ -191,7 +191,7 @@ export async function reorderLessons(
   moduleId: string,
   orderedIds: string[],
 ) {
-  const module = await prisma.module.findFirst({
+  const courseModule = await prisma.module.findFirst({
     where: {
       id: moduleId,
       course: { ownerId: userId },
@@ -203,11 +203,11 @@ export async function reorderLessons(
     },
   });
 
-  if (!module) throw new Error("Module not found.");
+  if (!courseModule) throw new Error("Module not found.");
 
   if (
     !validateExactOrder(
-      module.lessons.map((lesson) => lesson.id),
+      courseModule.lessons.map((lesson) => lesson.id),
       orderedIds,
     )
   ) {
@@ -230,7 +230,7 @@ export async function reorderLessons(
     }
   });
 
-  await normalizeCourseProgress(module.courseId);
+  await normalizeCourseProgress(courseModule.courseId);
 }
 
 export async function storeTemplateFromCourse(

@@ -42,9 +42,8 @@ export async function refreshAuthSession(request: NextRequest) {
     },
   );
 
-  const response = NextResponse.next({ request });
-
   if (!refreshResponse.ok) {
+    const response = NextResponse.next({ request });
     response.cookies.delete(AUTH_ACCESS_COOKIE);
     response.cookies.delete(AUTH_REFRESH_COOKIE);
     return response;
@@ -55,6 +54,11 @@ export async function refreshAuthSession(request: NextRequest) {
     refresh_token: string;
     expires_in?: number;
   };
+
+  request.cookies.set(AUTH_ACCESS_COOKIE, session.access_token);
+  request.cookies.set(AUTH_REFRESH_COOKIE, session.refresh_token);
+
+  const response = NextResponse.next({ request });
 
   response.cookies.set(AUTH_ACCESS_COOKIE, session.access_token, {
     ...authCookieOptions,

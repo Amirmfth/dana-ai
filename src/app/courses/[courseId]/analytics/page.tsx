@@ -76,6 +76,29 @@ export default async function CourseAnalyticsPage({ params }: PageProps<"/course
         </section>
 
         <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">
+          <h2 className="text-xl font-semibold">Module & final assessments</h2>
+          {analytics.advancedAssessmentRuns.length === 0 ? (
+            <p className="mt-3 text-sm text-neutral-500">No completed module or final assessments yet.</p>
+          ) : (
+            <div className="mt-4 space-y-3">
+              {analytics.advancedAssessmentRuns.map((run) => (
+                <article key={run.id} className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+                  <div>
+                    <p className="font-medium">{run.title}</p>
+                    <p className="text-xs text-neutral-500">
+                      {run.type === "COURSE_FINAL" ? "Course final" : run.moduleTitle ?? "Module assessment"} · version {run.version} · {run.completedAt.toLocaleString()}
+                    </p>
+                  </div>
+                  <p className="text-lg font-semibold">
+                    {run.score}% · {run.passed ? "passed" : "failed"}
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">
           <h2 className="text-xl font-semibold">Learning history</h2>
           <div className="mt-4 space-y-3">{analytics.events.length === 0 ? <p className="text-sm text-neutral-500">No learning events yet.</p> : analytics.events.map((event) => (
             <article key={event.id} className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">

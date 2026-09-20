@@ -5,15 +5,30 @@ import {
 } from "@/lib/ai/schemas/course";
 import { prisma } from "@/lib/db/prisma";
 import { normalizeCourseProgress } from "@/lib/courses/management";
+import { attachSourcesToCourse } from "@/lib/sources/ingestion";
+import { findRelevantSourceChunks } from "@/lib/sources/rag";
 
 export async function createCourse(
   userId: string,
   input: CourseOnboarding,
+  options: { sourceIds?: string[] } = {},
 ) {
   const onboarding = courseOnboardingSchema.parse(input);
+  const sourceIds = [...new Set(options.sourceIds ?? [])];
+  const sourceContext =
+    sourceIds.length > 0
+      ? await findRelevantSourceChunks({
+          ownerId: userId,
+          sourceIds,
+          query: onboarding.prompt,
+          limit: 20,
+        })
+      : [];
+
   const { plan, providerResponseId } = await generateCoursePlan(
     userId,
     onboarding,
+    sourceContext,
   );
 
   const course = await prisma.course.create({
@@ -100,6 +115,14 @@ export async function createCourse(
     await prisma.lessonPrerequisite.createMany({
       data: prerequisiteRows,
       skipDuplicates: true,
+    });
+  }
+
+  if (sourceIds.length > 0) {
+    await attachSourcesToCourse({
+      ownerId: userId,
+      courseId: course.id,
+      sourceIds,
     });
   }
 

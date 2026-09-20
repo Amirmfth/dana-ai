@@ -167,6 +167,8 @@ export async function POST(request: NextRequest) {
               userMessage: message,
               assistantMessage: answer,
             });
+          } else {
+            finishMemoryTask(null);
           }
 
           controller.close();

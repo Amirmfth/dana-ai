@@ -1,6 +1,7 @@
 import { lessonContentSchema } from "@/lib/ai/schemas/lesson";
 import { prisma } from "@/lib/db/prisma";
 import { findRelevantMemories } from "../memory/vector-memory";
+import { findRelevantSourceChunks, sourceLocation } from "@/lib/sources/rag";
 
 export async function buildLessonContext(lessonId: string) {
   const lesson = await prisma.lesson.findUnique({
@@ -63,11 +64,19 @@ export async function buildLessonContext(lessonId: string) {
     .filter(Boolean)
     .join("\n");
 
-  const relevantMemories = await findRelevantMemories({
-    courseId: course.id,
-    query: memoryQuery,
-    limit: 8,
-  });
+  const [relevantMemories, relevantSources] = await Promise.all([
+    findRelevantMemories({
+      courseId: course.id,
+      query: memoryQuery,
+      limit: 8,
+    }),
+    findRelevantSourceChunks({
+      ownerId: course.ownerId,
+      courseId: course.id,
+      query: memoryQuery,
+      limit: 12,
+    }),
+  ]);
 
   /*
    * Keep the roadmap, because it tells the generator where the
@@ -170,6 +179,17 @@ export async function buildLessonContext(lessonId: string) {
       content: memory.content,
       importance: memory.importance,
       relevance: memory.similarity,
+    })),
+
+    sourceContext: relevantSources.map((source, index) => ({
+      marker: "[S" + (index + 1) + "]",
+      sourceChunkId: source.id,
+      sourceTitle: source.sourceTitle,
+      sourceType: source.sourceType,
+      originalUrl: source.originalUrl,
+      location: sourceLocation(source),
+      content: source.content,
+      relevance: Number(source.similarity),
     })),
   };
 }

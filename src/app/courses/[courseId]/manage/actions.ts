@@ -120,12 +120,13 @@ export async function saveCourseAsTemplateAction(
   formData: FormData,
 ) {
   const user = await requireUser();
+  const rawName = formData.get("name");
   const name =
-    typeof formData.get("name") === "string"
-      ? String(formData.get("name")).trim()
-      : "";
+    typeof rawName === "string" && rawName.trim()
+      ? requiredText(rawName, "Template name", 200)
+      : undefined;
 
-  await storeTemplateFromCourse(user.id, courseId, name || undefined);
+  await storeTemplateFromCourse(user.id, courseId, name);
   revalidatePath("/templates");
   revalidateCourse(courseId);
 }

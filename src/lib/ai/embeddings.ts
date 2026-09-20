@@ -1,4 +1,7 @@
-import { createTrackedEmbedding } from "@/lib/ai/tracked-embedding";
+import {
+  createTrackedEmbedding,
+  createTrackedEmbeddings,
+} from "@/lib/ai/tracked-embedding";
 
 export async function createEmbedding({
   text,
@@ -24,6 +27,26 @@ export async function createEmbedding({
     courseId,
     lessonId,
     conversationId,
+    userId,
+  });
+}
+
+
+export async function createEmbeddings({
+  texts,
+  courseId,
+  userId,
+}: {
+  texts: string[];
+  courseId?: string;
+  userId?: string;
+}) {
+  const values = texts.map((text) => text.trim()).filter(Boolean);
+  if (values.length === 0) return [];
+
+  return createTrackedEmbeddings({
+    inputs: values,
+    courseId,
     userId,
   });
 }

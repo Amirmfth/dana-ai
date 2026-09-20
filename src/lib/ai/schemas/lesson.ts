@@ -43,6 +43,15 @@ export const lessonContentSchema = z.object({
 
   summary: z.string(),
 
+  citations: z
+    .array(
+      z.object({
+        sourceChunkId: z.string(),
+        location: z.string(),
+      }),
+    )
+    .default([]),
+
   /*
    * Compact AI-facing representation of the lesson.
    *

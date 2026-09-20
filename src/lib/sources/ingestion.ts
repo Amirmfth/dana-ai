@@ -1,6 +1,7 @@
 import { Prisma } from "@/generated/prisma/client";
 
 import { createEmbeddings } from "@/lib/ai/embeddings";
+import { assertAiRequestAllowed } from "@/lib/ai/guard";
 import { prisma } from "@/lib/db/prisma";
 import { chunkSourceText, type TextChunk } from "@/lib/sources/chunking";
 import { extractPdfSource } from "@/lib/sources/pdf";
@@ -117,13 +118,20 @@ export async function ingestTextSource({
       data: { status: "READY", metadata: { chunkCount: chunks.length } },
     });
   } catch (error) {
-    await prisma.courseSource.update({
-      where: { id: source.id },
-      data: {
-        status: "FAILED",
-        errorMessage: error instanceof Error ? error.message.slice(0, 2000) : "Source ingestion failed.",
-      },
-    });
+    if (courseId) {
+      await prisma.courseSource.update({
+        where: { id: source.id },
+        data: {
+          status: "FAILED",
+          errorMessage:
+            error instanceof Error
+              ? error.message.slice(0, 2000)
+              : "Source ingestion failed.",
+        },
+      });
+    } else {
+      await prisma.courseSource.delete({ where: { id: source.id } }).catch(() => null);
+    }
     throw error;
   }
 }
@@ -131,6 +139,8 @@ export async function ingestTextSource({
 export async function ingestUrlSource({
   ownerId, courseId, url,
 }: { ownerId: string; courseId?: string; url: string }) {
+  await assertAiRequestAllowed(ownerId, "SOURCE_INGESTION");
+
   const fetched = await fetchPublicSourceUrl(url);
   const source = await createSourceRecord({
     ownerId, courseId, type: "URL", title: fetched.title,
@@ -146,13 +156,20 @@ export async function ingestUrlSource({
       data: { status: "READY", metadata: { chunkCount: chunks.length } },
     });
   } catch (error) {
-    await prisma.courseSource.update({
-      where: { id: source.id },
-      data: {
-        status: "FAILED",
-        errorMessage: error instanceof Error ? error.message.slice(0, 2000) : "Source ingestion failed.",
-      },
-    });
+    if (courseId) {
+      await prisma.courseSource.update({
+        where: { id: source.id },
+        data: {
+          status: "FAILED",
+          errorMessage:
+            error instanceof Error
+              ? error.message.slice(0, 2000)
+              : "Source ingestion failed.",
+        },
+      });
+    } else {
+      await prisma.courseSource.delete({ where: { id: source.id } }).catch(() => null);
+    }
     throw error;
   }
 }
@@ -160,6 +177,8 @@ export async function ingestUrlSource({
 export async function ingestFileSource({
   ownerId, courseId, file,
 }: { ownerId: string; courseId?: string; file: File }) {
+  await assertAiRequestAllowed(ownerId, "SOURCE_INGESTION");
+
   const type = file.type === "application/pdf" ? "PDF" : "TEXT";
   const source = await createSourceRecord({
     ownerId, courseId, type, title: file.name || "Uploaded source",
@@ -189,13 +208,20 @@ export async function ingestFileSource({
     });
   } catch (error) {
     if (storagePath) await deleteSourceFile(storagePath).catch(() => null);
-    await prisma.courseSource.update({
-      where: { id: source.id },
-      data: {
-        status: "FAILED",
-        errorMessage: error instanceof Error ? error.message.slice(0, 2000) : "Source ingestion failed.",
-      },
-    });
+    if (courseId) {
+      await prisma.courseSource.update({
+        where: { id: source.id },
+        data: {
+          status: "FAILED",
+          errorMessage:
+            error instanceof Error
+              ? error.message.slice(0, 2000)
+              : "Source ingestion failed.",
+        },
+      });
+    } else {
+      await prisma.courseSource.delete({ where: { id: source.id } }).catch(() => null);
+    }
     throw error;
   }
 }

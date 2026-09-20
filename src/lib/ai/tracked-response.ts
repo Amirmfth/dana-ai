@@ -34,6 +34,7 @@ const guardedOperations = new Set<AiOperation>([
   "LESSON_GENERATION",
   "TUTOR",
   "QUIZ_GENERATION",
+  "SOURCE_INGESTION",
 ]);
 
 async function contextFor(options: TrackedResponseOptions) {
@@ -47,6 +48,7 @@ async function contextFor(options: TrackedResponseOptions) {
         | "COURSE_GENERATION"
         | "LESSON_GENERATION"
         | "QUIZ_GENERATION"
+        | "SOURCE_INGESTION"
         | "TUTOR",
     );
   }

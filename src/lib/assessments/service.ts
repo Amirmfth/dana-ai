@@ -6,6 +6,7 @@ import {
 } from "@/lib/ai/assessment-generator";
 import { prisma } from "@/lib/db/prisma";
 import { normalizeCourseProgress } from "@/lib/courses/management";
+import { passesEvidenceThreshold } from "@/lib/assessments/scoring";
 
 function questionData(options: string[]) {
   return { options } as Prisma.InputJsonValue;
@@ -191,6 +192,10 @@ export async function ensureTestOutAssessment(
     },
   );
 
+  if (generated.questions.length < 5) {
+    throw new Error("Test-out assessment must contain at least five questions.");
+  }
+
   return persistVersion(
     assessment.id,
     generated,
@@ -293,8 +298,7 @@ export async function applyAssessmentOutcome(
 
       const passedLessonIds = [...lessonEvidence.entries()]
         .filter(([, evidence]) =>
-          evidence.total > 0 &&
-          evidence.correct / evidence.total >= 0.8
+          passesEvidenceThreshold(evidence.correct, evidence.total)
         )
         .map(([lessonId]) => lessonId);
 

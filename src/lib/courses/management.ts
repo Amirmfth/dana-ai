@@ -184,6 +184,7 @@ export async function normalizeCourseProgress(courseId: string) {
                 include: {
                   runs: {
                     where: {
+                      userId: course.ownerId,
                       passed: true,
                       completedAt: { not: null },
                     },

@@ -1,12 +1,18 @@
 import { Prisma } from "@/generated/prisma/client";
 
 import {
+  generateCourseFinalAssessment,
+  generateModuleAssessment,
   generatePlacementAssessment,
   generateTestOutAssessment,
 } from "@/lib/ai/assessment-generator";
 import { prisma } from "@/lib/db/prisma";
 import { normalizeCourseProgress } from "@/lib/courses/management";
 import { passesEvidenceThreshold } from "@/lib/assessments/scoring";
+import {
+  courseFinalEligible,
+  moduleAssessmentEligible,
+} from "@/lib/assessments/eligibility";
 
 function questionData(options: string[]) {
   return { options } as Prisma.InputJsonValue;
@@ -322,5 +328,292 @@ export async function applyAssessmentOutcome(
 
   return prisma.assessmentRun.findUnique({
     where: { id: run.id },
+  });
+}
+
+
+function lessonTarget(lesson: {
+  id: string;
+  title: string;
+  description: string | null;
+  objectives: string[];
+  concepts: string[];
+  difficulty: string;
+}) {
+  return {
+    id: lesson.id,
+    title: lesson.title,
+    description: lesson.description,
+    objectives: lesson.objectives,
+    concepts: lesson.concepts,
+    difficulty: lesson.difficulty,
+  };
+}
+
+export async function getModuleAssessmentEligibility(
+  userId: string,
+  courseId: string,
+  moduleId: string,
+) {
+  const courseModule = await prisma.module.findFirst({
+    where: {
+      id: moduleId,
+      courseId,
+      course: { ownerId: userId },
+    },
+    include: {
+      lessons: { orderBy: { order: "asc" } },
+    },
+  });
+
+  if (!courseModule) throw new Error("Module not found.");
+
+  return moduleAssessmentEligible(courseModule.lessons);
+}
+
+export async function ensureModuleAssessment(
+  userId: string,
+  courseId: string,
+  moduleId: string,
+  forceNewVersion = false,
+) {
+  const courseModule = await prisma.module.findFirst({
+    where: {
+      id: moduleId,
+      courseId,
+      course: { ownerId: userId },
+    },
+    include: {
+      course: true,
+      lessons: { orderBy: { order: "asc" } },
+    },
+  });
+
+  if (!courseModule) throw new Error("Module not found.");
+
+  if (!moduleAssessmentEligible(courseModule.lessons)) {
+    throw new Error("Complete all required lessons in this module first.");
+  }
+
+  let assessment = await prisma.assessment.findFirst({
+    where: { courseId, moduleId, type: "MODULE" },
+    include: {
+      versions: {
+        orderBy: { version: "desc" },
+        take: 1,
+      },
+    },
+  });
+
+  if (!assessment) {
+    assessment = await prisma.assessment.create({
+      data: {
+        courseId,
+        moduleId,
+        type: "MODULE",
+        title: courseModule.title + " module assessment",
+        passingScore: 80,
+      },
+      include: { versions: true },
+    });
+  }
+
+  if (assessment.versions[0] && !forceNewVersion) {
+    return assessment.versions[0];
+  }
+
+  const generated = await generateModuleAssessment(
+    userId,
+    courseId,
+    {
+      id: courseModule.id,
+      title: courseModule.title,
+      objective: courseModule.objective,
+    },
+    courseModule.lessons.map(lessonTarget),
+  );
+
+  if (generated.questions.length < 8) {
+    throw new Error("Module assessment must contain at least eight questions.");
+  }
+
+  return persistVersion(
+    assessment.id,
+    generated,
+    new Set(courseModule.lessons.map((lesson) => lesson.id)),
+  );
+}
+
+async function latestModuleAssessmentPassed(
+  userId: string,
+  courseId: string,
+  moduleId: string,
+) {
+  const assessment = await prisma.assessment.findFirst({
+    where: { courseId, moduleId, type: "MODULE" },
+    include: {
+      versions: {
+        orderBy: { version: "desc" },
+        take: 1,
+        include: {
+          runs: {
+            where: {
+              userId,
+              completedAt: { not: null },
+              passed: true,
+            },
+            take: 1,
+          },
+        },
+      },
+    },
+  });
+
+  return Boolean(assessment?.versions[0]?.runs[0]);
+}
+
+export async function getCourseFinalEligibility(
+  userId: string,
+  courseId: string,
+) {
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, ownerId: userId },
+    include: {
+      modules: {
+        orderBy: { order: "asc" },
+        include: {
+          lessons: { orderBy: { order: "asc" } },
+        },
+      },
+    },
+  });
+
+  if (!course) throw new Error("Course not found.");
+
+  const modulePasses = await Promise.all(
+    course.modules.map((courseModule) =>
+      latestModuleAssessmentPassed(userId, courseId, courseModule.id),
+    ),
+  );
+
+  return courseFinalEligible({
+    lessons: course.modules.flatMap((courseModule) => courseModule.lessons),
+    moduleAssessmentPasses: modulePasses,
+  });
+}
+
+export async function ensureCourseFinalAssessment(
+  userId: string,
+  courseId: string,
+  forceNewVersion = false,
+) {
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, ownerId: userId },
+    include: {
+      modules: {
+        orderBy: { order: "asc" },
+        include: {
+          lessons: { orderBy: { order: "asc" } },
+        },
+      },
+    },
+  });
+
+  if (!course) throw new Error("Course not found.");
+
+  if (!(await getCourseFinalEligibility(userId, courseId))) {
+    throw new Error(
+      "Pass every module assessment and complete required lessons first.",
+    );
+  }
+
+  let assessment = await prisma.assessment.findFirst({
+    where: {
+      courseId,
+      type: "COURSE_FINAL",
+      moduleId: null,
+      lessonId: null,
+    },
+    include: {
+      versions: {
+        orderBy: { version: "desc" },
+        take: 1,
+      },
+    },
+  });
+
+  if (!assessment) {
+    assessment = await prisma.assessment.create({
+      data: {
+        courseId,
+        type: "COURSE_FINAL",
+        title: course.title + " final assessment",
+        passingScore: 80,
+      },
+      include: { versions: true },
+    });
+  }
+
+  if (assessment.versions[0] && !forceNewVersion) {
+    return assessment.versions[0];
+  }
+
+  const generated = await generateCourseFinalAssessment(
+    userId,
+    {
+      id: course.id,
+      title: course.title,
+      goal: course.goal,
+    },
+    course.modules.map((courseModule) => ({
+      id: courseModule.id,
+      title: courseModule.title,
+      objective: courseModule.objective,
+      lessons: courseModule.lessons.map(lessonTarget),
+    })),
+  );
+
+  if (generated.questions.length < 12) {
+    throw new Error("Course-final assessment must contain at least twelve questions.");
+  }
+
+  return persistVersion(
+    assessment.id,
+    generated,
+    new Set(
+      course.modules.flatMap((courseModule) =>
+        courseModule.lessons.map((lesson) => lesson.id),
+      ),
+    ),
+  );
+}
+
+export async function getAssessmentHistory(
+  userId: string,
+  courseId: string,
+) {
+  return prisma.assessmentRun.findMany({
+    where: {
+      userId,
+      completedAt: { not: null },
+      assessmentVersion: {
+        assessment: {
+          courseId,
+          type: { in: ["MODULE", "COURSE_FINAL"] },
+        },
+      },
+    },
+    orderBy: { completedAt: "desc" },
+    include: {
+      assessmentVersion: {
+        include: {
+          assessment: {
+            include: {
+              module: { select: { title: true } },
+            },
+          },
+        },
+      },
+    },
   });
 }

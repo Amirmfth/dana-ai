@@ -6,6 +6,7 @@ import {
 } from "@/lib/ai/curriculum-regenerator";
 import { getOwnedCourse, normalizeCourseProgress } from "@/lib/courses/management";
 import { prisma } from "@/lib/db/prisma";
+import { findRelevantSourceChunks } from "@/lib/sources/rag";
 import {
   claimRegeneration,
   failRegeneration,
@@ -42,7 +43,25 @@ export async function createCourseRevision(userId: string, courseId: string) {
   if (!claimToken) throw new Error("Course regeneration is already in progress.");
 
   try {
-    const plan = await regenerateCoursePlan(userId, courseSnapshot(course));
+    const sourceContext = await findRelevantSourceChunks({
+      ownerId: userId,
+      courseId,
+      query: [
+        course.title,
+        course.goal,
+        course.description,
+        ...course.modules.map((item) => item.title),
+      ]
+        .filter(Boolean)
+        .join("\n"),
+      limit: 20,
+    });
+
+    const plan = await regenerateCoursePlan(
+      userId,
+      courseSnapshot(course),
+      sourceContext,
+    );
     const latest = await prisma.curriculumRevision.findFirst({
       where: { courseId, scope: "COURSE" },
       orderBy: { version: "desc" },
@@ -80,6 +99,20 @@ export async function createModuleRevision(
   if (!claimToken) throw new Error("Module regeneration is already in progress.");
 
   try {
+    const sourceContext = await findRelevantSourceChunks({
+      ownerId: userId,
+      courseId,
+      query: [
+        courseModule.title,
+        courseModule.objective,
+        courseModule.description,
+        ...courseModule.lessons.map((lesson) => lesson.title),
+      ]
+        .filter(Boolean)
+        .join("\n"),
+      limit: 14,
+    });
+
     const plan = await regenerateModulePlan(
       userId,
       {
@@ -100,6 +133,7 @@ export async function createModuleRevision(
         goal: course.goal,
         instructions: course.instructions,
       },
+      sourceContext,
     );
 
     const latest = await prisma.curriculumRevision.findFirst({

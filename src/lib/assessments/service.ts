@@ -273,14 +273,30 @@ export async function applyAssessmentOutcome(
         run.answers.map((answer) => [answer.questionId, answer.result]),
       );
 
-      const passedLessonIds = questions
-        .filter(
-          (question) =>
-            question.targetLessonId &&
-            answerByQuestion.get(question.id) === "CORRECT",
+      const lessonEvidence = new Map<
+        string,
+        { correct: number; total: number }
+      >();
+
+      for (const question of questions) {
+        if (!question.targetLessonId) continue;
+        const current = lessonEvidence.get(question.targetLessonId) ?? {
+          correct: 0,
+          total: 0,
+        };
+        current.total += 1;
+        if (answerByQuestion.get(question.id) === "CORRECT") {
+          current.correct += 1;
+        }
+        lessonEvidence.set(question.targetLessonId, current);
+      }
+
+      const passedLessonIds = [...lessonEvidence.entries()]
+        .filter(([, evidence]) =>
+          evidence.total > 0 &&
+          evidence.correct / evidence.total >= 0.8
         )
-        .map((question) => question.targetLessonId!)
-        .filter((id, index, all) => all.indexOf(id) === index);
+        .map(([lessonId]) => lessonId);
 
       if (passedLessonIds.length > 0) {
         await tx.lesson.updateMany({

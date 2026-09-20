@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { after, type NextRequest } from "next/server";
 
 import { getCurrentUser } from "@/lib/auth/server";
 import { askTutor } from "@/lib/ai/tutor";
@@ -40,12 +40,18 @@ export async function POST(request: NextRequest) {
     });
 
     if (!lesson) {
-      return Response.json({ error: "Lesson not found." }, { status: 404 });
+      return Response.json(
+        { error: "Lesson not found." },
+        { status: 404 },
+      );
     }
 
     let conversation = body.conversationId
       ? await prisma.conversation.findFirst({
-          where: { id: body.conversationId, lessonId },
+          where: {
+            id: body.conversationId,
+            lessonId,
+          },
         })
       : null;
 
@@ -72,7 +78,10 @@ export async function POST(request: NextRequest) {
     });
 
     const history = storedMessages.reverse().map((item) => ({
-      role: item.role === "USER" ? ("user" as const) : ("assistant" as const),
+      role:
+        item.role === "USER"
+          ? ("user" as const)
+          : ("assistant" as const),
       content: item.content,
     }));
 
@@ -92,7 +101,9 @@ export async function POST(request: NextRequest) {
           for await (const event of tracked.stream) {
             if (event.type === "response.output_text.delta") {
               answer += event.delta;
-              controller.enqueue(encoder.encode(event.delta));
+              controller.enqueue(
+                encoder.encode(event.delta),
+              );
             }
 
             if (event.type === "response.completed") {
@@ -100,7 +111,9 @@ export async function POST(request: NextRequest) {
             }
 
             if (event.type === "error") {
-              throw new Error(event.message || "OpenAI streaming error");
+              throw new Error(
+                event.message || "OpenAI streaming error",
+              );
             }
           }
 
@@ -113,15 +126,22 @@ export async function POST(request: NextRequest) {
               },
             });
 
-            try {
-              await saveExchangeMemories({
-                lessonId,
-                userMessage: message,
-                assistantMessage: answer,
-              });
-            } catch (error) {
-              console.error("Tutor memory enrichment failed:", error);
-            }
+            const exchange = {
+              lessonId,
+              userMessage: message,
+              assistantMessage: answer,
+            };
+
+            after(async () => {
+              try {
+                await saveExchangeMemories(exchange);
+              } catch (error) {
+                console.error(
+                  "Tutor memory enrichment failed:",
+                  error,
+                );
+              }
+            });
           }
 
           controller.close();
@@ -143,12 +163,21 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Tutor request failed:", error);
 
-    const message = error instanceof Error ? error.message : "";
+    const message =
+      error instanceof Error ? error.message : "";
     const status =
-      message.includes("RATE_LIMIT") || message.includes("BUDGET") ? 429 : 500;
+      message.includes("RATE_LIMIT") ||
+      message.includes("BUDGET")
+        ? 429
+        : 500;
 
     return Response.json(
-      { error: status === 429 ? "AI usage limit reached." : "Failed to get a response from the tutor." },
+      {
+        error:
+          status === 429
+            ? "AI usage limit reached."
+            : "Failed to get a response from the tutor.",
+      },
       { status },
     );
   }

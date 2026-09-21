@@ -31,6 +31,7 @@ export function UserMenu({
           </>
         )}
 
+        <MenuLink href="/analytics">Analytics</MenuLink>
         <MenuLink href="/search">Search</MenuLink>
         <MenuLink href="/settings/memory">Memory</MenuLink>
         <MenuLink href="/settings/experience">Language & reading</MenuLink>

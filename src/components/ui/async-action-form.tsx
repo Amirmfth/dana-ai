@@ -144,7 +144,9 @@ export function AsyncActionForm({
         aria-busy={isPending}
         data-action-status={state.status}
       >
-        {children}
+        <fieldset disabled={isPending} className="contents">
+          {children}
+        </fieldset>
         <AsyncActionFeedback />
       </form>
     </AsyncActionContext.Provider>

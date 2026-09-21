@@ -44,12 +44,9 @@ export async function POST(request: NextRequest) {
     });
 
     if (activeRuns.length > 0) {
-      await prisma.quizRun.updateMany({
+      await prisma.quizRun.deleteMany({
         where: {
           id: { in: activeRuns.map((run) => run.id) },
-        },
-        data: {
-          completedAt: new Date(),
         },
       });
     }

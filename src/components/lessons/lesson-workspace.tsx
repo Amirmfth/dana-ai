@@ -26,6 +26,7 @@ type LessonWorkspaceProps = {
     dyslexiaFriendly: boolean;
     readingTheme: LessonReadingTheme;
   };
+  hasQuiz?: boolean;
   conversation?: {
     id: string;
     messages: Array<{
@@ -42,11 +43,13 @@ export function LessonWorkspace({
   lessonId,
   conversation,
   preferences,
+  hasQuiz = false,
 }: LessonWorkspaceProps) {
   const systemReducedMotion = useReducedMotion();
   const [isTutorOpen, setTutorOpenState] = useState(false);
   const [isTutorMounted, setTutorMounted] = useState(false);
   const [isFocusMode, setFocusMode] = useState(false);
+  const [isQuizOpen, setQuizOpenState] = useState(false);
   const [fontSize, setFontSizeState] = useState<LessonFontSize>(
     preferences?.fontSize ?? "DEFAULT",
   );
@@ -92,9 +95,19 @@ export function LessonWorkspace({
     }[preferences?.readingDensity ?? "COMFORTABLE"],
   } as CSSProperties;
 
+  function setQuizOpen(isOpen: boolean) {
+    if (isFocusMode && isOpen) return;
+    if (isOpen) {
+      setTutorOpenState(false);
+      setTutorMounted(false);
+    }
+    setQuizOpenState(isOpen);
+  }
+
   function setTutorOpen(isOpen: boolean) {
     if (isFocusMode && isOpen) return;
     if (isOpen) {
+      setQuizOpenState(false);
       setTutorMounted(true);
     }
 
@@ -142,6 +155,7 @@ export function LessonWorkspace({
       if (next) {
         setTutorOpenState(false);
         setTutorMounted(false);
+        setQuizOpenState(false);
       }
       return next;
     });
@@ -161,6 +175,9 @@ export function LessonWorkspace({
         dyslexiaFriendly,
         setDyslexiaFriendly,
         isSavingReadingPreferences,
+        hasQuiz,
+        isQuizOpen,
+        setQuizOpen,
       }}
     >
       <motion.div

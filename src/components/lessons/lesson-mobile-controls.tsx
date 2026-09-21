@@ -22,6 +22,9 @@ type LessonMobileControls = {
   dyslexiaFriendly: boolean;
   setDyslexiaFriendly: (enabled: boolean) => void;
   isSavingReadingPreferences: boolean;
+  hasQuiz: boolean;
+  isQuizOpen: boolean;
+  setQuizOpen: (isOpen: boolean) => void;
 };
 
 export const LessonMobileControlsContext =

@@ -9,6 +9,7 @@ import { useLessonMobileControls } from "@/components/lessons/lesson-mobile-cont
 export type LessonTocSection = {
   id: string;
   title: string;
+  type: "text" | "example" | "note" | "list" | "diagram";
 };
 
 type LessonTableOfContentsProps = {
@@ -57,6 +58,9 @@ export function LessonTableOfContents({
     dyslexiaFriendly,
     setDyslexiaFriendly,
     isSavingReadingPreferences,
+    hasQuiz,
+    isQuizOpen,
+    setQuizOpen,
   } = useLessonMobileControls();
 
   useEffect(() => {
@@ -138,11 +142,25 @@ export function LessonTableOfContents({
                 aria-label={`Go to ${section.title}`}
                 aria-current={section.id === activeId ? "location" : undefined}
               >
-                <span
-                  className={`block transition-all duration-200 motion-reduce:transition-none ${lineClass(
-                    Math.abs(index - activeIndex),
-                  )}`}
-                />
+                {section.type === "text" ? (
+                  <span
+                    className={`block transition-all duration-200 motion-reduce:transition-none ${lineClass(
+                      Math.abs(index - activeIndex),
+                    )}`}
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className={
+                      "flex size-6 items-center justify-center rounded-md transition " +
+                      (section.id === activeId
+                        ? "bg-neutral-950 text-white dark:bg-white dark:text-neutral-950"
+                        : "text-neutral-400 dark:text-neutral-500")
+                    }
+                  >
+                    <SectionTypeIcon type={section.type} className="size-3.5" />
+                  </span>
+                )}
               </button>
             </li>
           ))}
@@ -166,13 +184,27 @@ export function LessonTableOfContents({
                     setIsDesktopOpen(false);
                     scrollToSection(section.id);
                   }}
-                  className={`min-h-10 w-full truncate rounded-lg px-2 text-left text-sm transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 ${
+                  className={`flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 ${
                     section.id === activeId
                     ? "bg-neutral-100 font-semibold text-neutral-950 dark:bg-neutral-800 dark:text-white"
                     : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
                   }`}
                 >
-                  {section.title}
+                  {section.type !== "text" && (
+                    <span aria-hidden="true" className="shrink-0 text-neutral-400">
+                      <SectionTypeIcon type={section.type} className="size-4" />
+                    </span>
+                  )}
+                  <span
+                    className={
+                      "truncate " +
+                      (section.type === "text"
+                        ? "text-[0.9375rem] font-semibold"
+                        : "text-sm font-medium")
+                    }
+                  >
+                    {section.title}
+                  </span>
                 </button>
               </li>
             ))}
@@ -201,9 +233,28 @@ export function LessonTableOfContents({
                     <button
                       type="button"
                       onClick={() => selectSection(section.id)}
-                      className="min-h-11 w-full truncate rounded-xl px-3 text-left text-sm font-medium text-neutral-800 transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus-visible:outline-white"
+                      className={
+                        "flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left text-neutral-800 transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus-visible:outline-white " +
+                        (section.id === activeId
+                          ? "bg-neutral-100 dark:bg-neutral-800"
+                          : "")
+                      }
                     >
-                      {section.title}
+                      {section.type !== "text" && (
+                        <span aria-hidden="true" className="shrink-0 text-neutral-400">
+                          <SectionTypeIcon type={section.type} className="size-4" />
+                        </span>
+                      )}
+                      <span
+                        className={
+                          "truncate " +
+                          (section.type === "text"
+                            ? "text-[0.9375rem] font-semibold"
+                            : "text-sm font-medium")
+                        }
+                      >
+                        {section.title}
+                      </span>
                     </button>
                   </li>
                 ))}
@@ -337,6 +388,7 @@ export function LessonTableOfContents({
                 type="button"
                 onClick={() => {
                   setIsAppearanceOpen(false);
+                  setQuizOpen(false);
                   setIsOpen((open) => !open);
                 }}
                 className="flex size-9 items-center justify-center rounded-full text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
@@ -372,6 +424,7 @@ export function LessonTableOfContents({
             type="button"
             onClick={() => {
               setIsOpen(false);
+              setQuizOpen(false);
               setIsAppearanceOpen((open) => !open);
             }}
             className="flex size-9 items-center justify-center rounded-full text-sm font-bold text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
@@ -380,6 +433,26 @@ export function LessonTableOfContents({
           >
             Aa
           </button>
+
+          {!isFocusMode && hasQuiz && (
+            <>
+              <span aria-hidden="true" className="h-5 w-px bg-neutral-200 dark:bg-neutral-700" />
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsAppearanceOpen(false);
+                  setTutorOpen(false);
+                  setQuizOpen(!isQuizOpen);
+                }}
+                className="min-h-9 rounded-full px-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
+                aria-expanded={isQuizOpen}
+                aria-controls="lesson-quiz-sheet"
+              >
+                Quiz
+              </button>
+            </>
+          )}
 
           {!isFocusMode && (
             <>
@@ -390,6 +463,7 @@ export function LessonTableOfContents({
                 onClick={() => {
                   setIsOpen(false);
                   setIsAppearanceOpen(false);
+                  setQuizOpen(false);
                   setTutorOpen(true);
                 }}
                 className="min-h-9 rounded-full px-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
@@ -402,5 +476,47 @@ export function LessonTableOfContents({
         </div>
       </div>
     </>
+  );
+}
+
+
+function SectionTypeIcon({
+  type,
+  className,
+}: {
+  type: Exclude<LessonTocSection["type"], "text">;
+  className?: string;
+}) {
+  if (type === "example") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" className={className}>
+        <path d="M4 5.5h12v9H4zM7 8l2 2-2 2M11 12h2.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (type === "note") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" className={className}>
+        <path d="M5 3.5h8l2 2v11H5zM8 8h4M8 11h4M8 14h2.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (type === "list") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" className={className}>
+        <path d="M7 5h8M7 10h8M7 15h8M4 5h.01M4 10h.01M4 15h.01" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" className={className}>
+      <rect x="2.5" y="7.5" width="5" height="5" rx="1" />
+      <rect x="12.5" y="2.5" width="5" height="5" rx="1" />
+      <rect x="12.5" y="12.5" width="5" height="5" rx="1" />
+      <path d="M7.5 10h2.5c1.5 0 2.5-1 2.5-2.5M10 10c1.5 0 2.5 1 2.5 2.5" strokeLinecap="round" />
+    </svg>
   );
 }

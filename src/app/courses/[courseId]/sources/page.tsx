@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+export const maxDuration = 300;
+
 import {
   addFileSourceAction,
   addTextSourceAction,
   addUrlSourceAction,
   deleteSourceAction,
+  deleteOrphanSourceAction,
 } from "@/app/courses/[courseId]/sources/actions";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
@@ -17,7 +20,8 @@ const buttonClass = "min-h-10 rounded-lg border border-neutral-300 px-3 text-sm 
 export default async function CourseSourcesPage({ params }: PageProps<"/courses/[courseId]/sources">) {
   const user = await requireUser();
   const { courseId } = await params;
-  const course = await prisma.course.findFirst({
+  const [course, unattachedSources] = await Promise.all([
+    prisma.course.findFirst({
     where: { id: courseId, ownerId: user.id },
     include: {
       sources: {
@@ -30,7 +34,25 @@ export default async function CourseSourcesPage({ params }: PageProps<"/courses/
         },
       },
     },
-  });
+    }),
+    prisma.courseSource.findMany({
+      where: {
+        ownerId: user.id,
+        courseId: null,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      select: {
+        id: true,
+        title: true,
+        type: true,
+        status: true,
+        errorMessage: true,
+        storagePath: true,
+        createdAt: true,
+      },
+    }),
+  ]);
   if (!course) notFound();
 
   return (
@@ -66,6 +88,40 @@ export default async function CourseSourcesPage({ params }: PageProps<"/courses/
             <button className={buttonClass + " mt-4"}>Add notes</button>
           </form>
         </section>
+
+        {unattachedSources.length > 0 && (
+          <section className="mt-10 rounded-2xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-900 dark:bg-amber-950/30">
+            <h2 className="text-lg font-semibold">Unattached uploads</h2>
+            <p className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+              These came from interrupted course-creation attempts before a course could be linked. They are not used by Dana. Delete them and re-upload the source to this course.
+            </p>
+            <div className="mt-4 space-y-3">
+              {unattachedSources.map((source) => (
+                <article
+                  key={source.id}
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-white p-4 dark:border-amber-900 dark:bg-neutral-950"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold">{source.title}</p>
+                    <p className="mt-1 text-xs text-neutral-500">
+                      {source.type} · {source.status.toLowerCase()} · {source.createdAt.toLocaleString()}
+                    </p>
+                    {source.errorMessage && (
+                      <p className="mt-2 text-xs text-red-600 dark:text-red-300">
+                        {source.errorMessage}
+                      </p>
+                    )}
+                  </div>
+                  <form action={deleteOrphanSourceAction.bind(null, source.id)}>
+                    <button className="text-sm font-semibold text-red-700 dark:text-red-300">
+                      Delete orphan
+                    </button>
+                  </form>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="mt-10 border-t border-neutral-200 pt-8 dark:border-neutral-800">
           <h2 className="text-xl font-semibold">Attached sources</h2>

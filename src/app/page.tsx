@@ -1,9 +1,10 @@
 import Link from "next/link";
 
+export const maxDuration = 300;
+
 import { createCourseAction } from "@/app/actions/courses";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
-import { signOutAction } from "@/app/auth/actions";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { UserMenu } from "@/components/ui/user-menu";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 import { getUserDashboard } from "@/lib/analytics/course";
@@ -21,7 +22,8 @@ export default async function HomePage() {
     getUserDashboard(user.id),
   ]);
 
-  const activeCourses = courses.filter((course) => course.status !== "ARCHIVED");
+  const activeCourses = courses.filter((course) => course.status === "ACTIVE");
+  const draftCourses = courses.filter((course) => course.status === "DRAFT");
   const archivedCourses = courses.filter((course) => course.status === "ARCHIVED");
 
   const lessonCount = activeCourses.reduce(
@@ -36,26 +38,7 @@ export default async function HomePage() {
           <Link href="/" className="rounded-lg text-sm font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:focus-visible:outline-white">
             Dana AI
           </Link>
-          <div className="flex items-center gap-2">
-            <Link href="/search" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
-              Search
-            </Link>
-            <Link href="/settings/memory" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
-              Memory
-            </Link>
-            <Link href="/templates" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
-              Templates
-            </Link>
-            <Link href="/settings/privacy" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
-              Privacy
-            </Link>
-            <form action={signOutAction}>
-              <button type="submit" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
-                Sign out
-              </button>
-            </form>
-            <ThemeToggle />
-          </div>
+          <UserMenu />
         </header>
 
         <section className="grid gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.78fr)] lg:items-center lg:py-20">
@@ -224,6 +207,42 @@ export default async function HomePage() {
             </div>
           )}
         </section>
+
+        {draftCourses.length > 0 && (
+          <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">
+            <h2 className="text-lg font-semibold">Incomplete course setup</h2>
+            <p className="mt-1 text-sm text-neutral-500">
+              These courses were created but setup did not finish. Open Sources to inspect attached material.
+            </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {draftCourses.map((course) => (
+                <article
+                  key={course.id}
+                  className="rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/30"
+                >
+                  <p className="font-semibold">{course.title}</p>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    Draft · setup incomplete
+                  </p>
+                  <div className="mt-3 flex gap-3">
+                    <Link
+                      href={"/courses/" + course.id + "/sources"}
+                      className="text-sm font-semibold underline underline-offset-4"
+                    >
+                      Open sources
+                    </Link>
+                    <Link
+                      href={"/courses/" + course.id + "/manage"}
+                      className="text-sm font-semibold underline underline-offset-4"
+                    >
+                      Manage
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
         {archivedCourses.length > 0 && (
           <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">

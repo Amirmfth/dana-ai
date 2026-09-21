@@ -69,3 +69,21 @@ export async function deleteSourceAction(courseId: string, sourceId: string) {
   await deleteCourseSource(user.id, sourceId);
   revalidateSources(courseId);
 }
+
+
+export async function deleteOrphanSourceAction(sourceId: string) {
+  const user = await requireUser();
+  const source = await prisma.courseSource.findFirst({
+    where: {
+      id: sourceId,
+      ownerId: user.id,
+      courseId: null,
+    },
+    select: { id: true },
+  });
+
+  if (!source) throw new Error("Unattached source not found.");
+
+  await deleteCourseSource(user.id, source.id);
+  revalidatePath("/");
+}

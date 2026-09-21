@@ -57,7 +57,8 @@ Another durable observation that would genuinely help future lessons or tutoring
 
 RULES
 
-- Most ordinary tutor exchanges should produce zero memories.
+- Ordinary factual questions should produce zero memories.
+- Always capture an explicit durable learner statement about a learning preference, persistent difficulty, misconception, or demonstrated strength when it would improve future teaching.
 - Do not store the learner's question just because they asked it.
 - Do not store temporary conversational details.
 - Do not store information already obvious from the curriculum.

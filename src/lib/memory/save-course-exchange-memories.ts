@@ -1,4 +1,5 @@
 import { getPrivacySettings } from "@/lib/ai/privacy";
+import { inferExplicitLearnerMemories } from "@/lib/memory/explicit-memory";
 import { extractCourseMemories } from "@/lib/ai/course-memory-extractor";
 import { prisma } from "@/lib/db/prisma";
 import {
@@ -47,7 +48,12 @@ export async function saveCourseExchangeMemories({
     },
   });
 
-  if (extracted.length === 0) return;
+  const memories =
+    extracted.length > 0
+      ? extracted
+      : inferExplicitLearnerMemories(userMessage);
+
+  if (memories.length === 0) return;
 
   const existing = await prisma.courseMemory.findMany({
     where: { courseId, isActive: true },
@@ -57,7 +63,7 @@ export async function saveCourseExchangeMemories({
     existing.map((memory) => normalizeMemory(memory.content)),
   );
 
-  for (const memory of extracted) {
+  for (const memory of memories) {
     const normalized = normalizeMemory(memory.content);
     if (normalizedExisting.has(normalized)) continue;
 

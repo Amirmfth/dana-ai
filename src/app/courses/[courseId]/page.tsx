@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { CourseContinueCard } from "@/components/courses/course-continue-card";
 import { CourseCurriculum } from "@/components/courses/course-curriculum";
 import { MobileCourseAction } from "@/components/courses/mobile-course-action";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { UserMenu } from "@/components/ui/user-menu";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 import { CompletionFeedback } from "@/components/ui/completion-feedback";
@@ -22,6 +22,17 @@ export default async function CoursePage({
   const course = await prisma.course.findFirst({
     where: { id: courseId, ownerId: user.id },
     include: {
+      sources: {
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          type: true,
+          status: true,
+          errorMessage: true,
+          _count: { select: { chunks: true } },
+        },
+      },
       modules: {
         orderBy: { order: "asc" },
         include: {
@@ -83,45 +94,7 @@ export default async function CoursePage({
             <span aria-hidden="true" className="text-neutral-300 dark:text-neutral-700">/</span>
             <span aria-current="page" className="truncate font-medium text-neutral-800 dark:text-neutral-200">{course.title}</span>
           </nav>
-          <div className="flex items-center gap-2">
-            <Link
-              href={"/courses/" + course.id + "/tutor"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Ask Dana
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/sources"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Sources
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/assessments"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Assessments
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/placement"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Placement
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/analytics"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Analytics
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/manage"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Manage
-            </Link>
-            <ThemeToggle compact />
-          </div>
+          <UserMenu courseId={course.id} />
         </div>
       </header>
 
@@ -165,6 +138,47 @@ export default async function CoursePage({
           </div>
 
           <CourseContinueCard actionHref={nextLessonHref} completedCount={completedCount} hasProgress={hasProgress} lessonCount={lessonCount} lessonTitle={nextEntry?.lesson.title} moduleOrder={nextEntry?.module.order} moduleTitle={nextEntry?.module.title} />
+        </section>
+
+        <section className="border-b border-neutral-200 py-6 dark:border-neutral-800">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
+                Sources
+              </p>
+              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
+                {course.sources.length === 0
+                  ? "No source material attached."
+                  : course.sources.length +
+                    " attached source" +
+                    (course.sources.length === 1 ? "" : "s") +
+                    " · " +
+                    course.sources.reduce(
+                      (sum, source) => sum + source._count.chunks,
+                      0,
+                    ) +
+                    " chunks"}
+              </p>
+            </div>
+            <Link
+              href={"/courses/" + course.id + "/sources"}
+              className="text-sm font-semibold underline underline-offset-4"
+            >
+              Manage sources
+            </Link>
+          </div>
+          {course.sources.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {course.sources.slice(0, 4).map((source) => (
+                <span
+                  key={source.id}
+                  className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium dark:border-neutral-800 dark:bg-neutral-900"
+                >
+                  {source.title} · {source.status.toLowerCase()}
+                </span>
+              ))}
+            </div>
+          )}
         </section>
 
         <nav aria-label="Course sections" className="sticky top-14 z-30 -mx-5 flex gap-6 overflow-x-auto border-b border-neutral-200 bg-neutral-50/95 px-5 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/95 sm:-mx-8 sm:px-8 lg:top-0 lg:mx-0 lg:px-0">

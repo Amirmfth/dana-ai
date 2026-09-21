@@ -3,12 +3,12 @@
 import { redirect } from "next/navigation";
 
 import { requireUser } from "@/lib/auth/server";
+import { prisma } from "@/lib/db/prisma";
 import {
   courseOnboardingSchema,
 } from "@/lib/ai/schemas/course";
 import { createCourse } from "@/lib/courses/create-course";
 import {
-  deleteCourseSource,
   ingestFileSource,
   ingestTextSource,
   ingestUrlSource,
@@ -25,12 +25,31 @@ export async function createCourseAction(formData: FormData) {
     learningStyle: formData.get("learningStyle"),
   });
 
+  const draftCourse = await prisma.course.create({
+    data: {
+      ownerId: user.id,
+      title: "Creating course…",
+      goal: parsed.prompt,
+      prompt: parsed.prompt,
+      currentLevel: parsed.currentLevel,
+      targetLevel: parsed.targetLevel,
+      weeklyStudyMinutes: parsed.weeklyStudyMinutes,
+      learningStyle: parsed.learningStyle,
+      status: "DRAFT",
+    },
+    select: { id: true },
+  });
+
   const sourceIds: string[] = [];
 
   try {
     const file = formData.get("sourceFile");
     if (file instanceof File && file.size > 0) {
-      const source = await ingestFileSource({ ownerId: user.id, file });
+      const source = await ingestFileSource({
+        ownerId: user.id,
+        courseId: draftCourse.id,
+        file,
+      });
       sourceIds.push(source.id);
     }
 
@@ -38,6 +57,7 @@ export async function createCourseAction(formData: FormData) {
     if (typeof sourceUrl === "string" && sourceUrl.trim()) {
       const source = await ingestUrlSource({
         ownerId: user.id,
+        courseId: draftCourse.id,
         url: sourceUrl.trim(),
       });
       sourceIds.push(source.id);
@@ -48,6 +68,7 @@ export async function createCourseAction(formData: FormData) {
       const sourceTitle = formData.get("sourceTitle");
       const source = await ingestTextSource({
         ownerId: user.id,
+        courseId: draftCourse.id,
         title:
           typeof sourceTitle === "string" && sourceTitle.trim()
             ? sourceTitle.trim()
@@ -57,14 +78,23 @@ export async function createCourseAction(formData: FormData) {
       sourceIds.push(source.id);
     }
 
-    const course = await createCourse(user.id, parsed, { sourceIds });
-    redirect("/courses/" + course.id);
+    const course = await createCourse(user.id, parsed, {
+      sourceIds,
+      draftCourseId: draftCourse.id,
+    });
   } catch (error) {
-    await Promise.all(
-      sourceIds.map((sourceId) =>
-        deleteCourseSource(user.id, sourceId).catch(() => null),
-      ),
-    );
+    await prisma.course
+      .update({
+        where: { id: draftCourse.id },
+        data: {
+          status: "DRAFT",
+          description:
+            "Course setup did not finish. Open Sources to inspect or retry attached material.",
+        },
+      })
+      .catch(() => null);
     throw error;
   }
+
+  redirect("/courses/" + draftCourse.id);
 }

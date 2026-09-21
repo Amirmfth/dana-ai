@@ -185,8 +185,7 @@ export function CourseComposer({
         </div>
       </div>
 
-      {attachmentMode === "file" && (
-        <div className="mt-3 rounded-2xl border border-dashed border-neutral-300 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-900">
+      <div className={(attachmentMode === "file" ? "block" : "hidden") + " mt-3 rounded-2xl border border-dashed border-neutral-300 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-900"}>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold">Upload source</p>
@@ -208,13 +207,12 @@ export function CourseComposer({
             className="mt-4 block w-full text-sm"
           />
         </div>
-      )}
 
-      {!sourceUrl && attachmentMode !== "url" && <input type="hidden" name="sourceUrl" value="" />}
-      {!sourceText && attachmentMode !== "notes" && (
+      {attachmentMode !== "url" && <input type="hidden" name="sourceUrl" value={sourceUrl} />}
+      {attachmentMode !== "notes" && (
         <>
-          <input type="hidden" name="sourceTitle" value="" />
-          <input type="hidden" name="sourceText" value="" />
+          <input type="hidden" name="sourceTitle" value={sourceTitle} />
+          <input type="hidden" name="sourceText" value={sourceText} />
         </>
       )}
 

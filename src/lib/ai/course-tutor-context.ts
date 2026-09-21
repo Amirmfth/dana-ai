@@ -91,10 +91,10 @@ export async function buildCourseTutorContext(
           quizAverage: analytics.quizAverage,
           remainingMinutes: analytics.remainingMinutes,
           weakConcepts: analytics.concepts
-            .filter((concept) => concept.band === "weak")
+            .filter((concept) => concept.band === "WEAKNESS")
             .slice(0, 8),
           developingConcepts: analytics.concepts
-            .filter((concept) => concept.band === "developing")
+            .filter((concept) => concept.band === "DEVELOPING")
             .slice(0, 8),
           recentAssessments: analytics.advancedAssessmentRuns.slice(0, 8),
           recentActivity: analytics.events.slice(0, 10),

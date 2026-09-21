@@ -58,6 +58,7 @@ export async function updateExperienceSettingsAction(formData: FormData) {
 export async function updateLessonReadingPreferencesAction(input: {
   fontSize: (typeof FONT_SIZES)[number];
   readingTheme: (typeof READING_THEMES)[number];
+  dyslexiaFriendly: boolean;
 }) {
   const user = await requireUser();
 
@@ -65,6 +66,7 @@ export async function updateLessonReadingPreferencesAction(input: {
   const readingTheme = READING_THEMES.includes(input.readingTheme)
     ? input.readingTheme
     : "DEFAULT";
+  const dyslexiaFriendly = Boolean(input.dyslexiaFriendly);
 
   await prisma.userExperienceSettings.upsert({
     where: { userId: user.id },
@@ -72,10 +74,12 @@ export async function updateLessonReadingPreferencesAction(input: {
       userId: user.id,
       fontSize,
       readingTheme,
+      dyslexiaFriendly,
     },
     update: {
       fontSize,
       readingTheme,
+      dyslexiaFriendly,
     },
   });
 

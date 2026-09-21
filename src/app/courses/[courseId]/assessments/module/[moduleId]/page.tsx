@@ -44,10 +44,22 @@ export default async function ModuleAssessmentPage({
       id: true,
       title: true,
       order: true,
-      course: { select: { title: true } },
+      course: { select: { title: true, mode: true } },
     },
   });
   if (!courseModule) notFound();
+
+  if (courseModule.course.mode === "FLEXIBLE") {
+    return (
+      <main className="min-h-dvh bg-neutral-50 px-5 py-10 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+        <div className="mx-auto max-w-2xl">
+          <Link href={"/courses/" + courseId} className="text-sm font-medium underline underline-offset-4">Back to course</Link>
+          <h1 className="mt-5 text-3xl font-semibold">Module assessment is disabled</h1>
+          <p className="mt-3 text-neutral-600 dark:text-neutral-300">This flexible course does not gate modules behind assessments.</p>
+        </div>
+      </main>
+    );
+  }
 
   const version = await ensureModuleAssessment(
     user.id,

@@ -2,9 +2,10 @@
 
 import { useFormStatus } from "react-dom";
 
-import { useAsyncActionContext } from "@/components/ui/async-action-form";
-
-type ServerAction = (...args: never[]) => Promise<unknown>;
+import {
+  useAsyncActionContext,
+  type FormAction,
+} from "@/components/ui/async-action-form";
 
 export function PendingActionButton({
   children,
@@ -24,7 +25,7 @@ export function PendingActionButton({
   errorLabel?: string;
   className: string;
   disabled?: boolean;
-  formAction?: ServerAction;
+  formAction?: FormAction;
   successMessage?: string;
   errorMessage?: string;
   type?: "submit" | "button";

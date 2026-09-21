@@ -11,7 +11,10 @@ import { findRelevantSourceChunks } from "@/lib/sources/rag";
 export async function createCourse(
   userId: string,
   input: CourseOnboarding,
-  options: { sourceIds?: string[] } = {},
+  options: {
+    sourceIds?: string[];
+    draftCourseId?: string;
+  } = {},
 ) {
   const onboarding = courseOnboardingSchema.parse(input);
   const sourceIds = [...new Set(options.sourceIds ?? [])];
@@ -31,48 +34,69 @@ export async function createCourse(
     sourceContext,
   );
 
-  const course = await prisma.course.create({
-    data: {
-      ownerId: userId,
-      title: plan.title,
-      description: plan.description,
-      goal: plan.goal,
-      prompt: onboarding.prompt,
-      currentLevel: onboarding.currentLevel,
-      targetLevel: onboarding.targetLevel,
-      weeklyStudyMinutes: onboarding.weeklyStudyMinutes,
-      learningStyle: onboarding.learningStyle,
-      status: "ACTIVE",
-      modules: {
-        create: plan.modules.map((courseModule, moduleIndex) => ({
-          title: courseModule.title,
-          description: courseModule.description,
-          objective: courseModule.objective,
-          order: moduleIndex + 1,
-          lessons: {
-            create: courseModule.lessons.map((lesson, lessonIndex) => ({
-              title: lesson.title,
-              description: lesson.description,
-              objectives: lesson.objectives,
-              concepts: lesson.concepts,
-              difficulty: lesson.difficulty,
-              isOptional: lesson.isOptional,
-              order: lessonIndex + 1,
-              status: "LOCKED",
-            })),
-          },
-        })),
-      },
-    },
-    include: {
-      modules: {
-        orderBy: { order: "asc" },
-        include: {
-          lessons: { orderBy: { order: "asc" } },
+  const courseData = {
+    title: plan.title,
+    description: plan.description,
+    goal: plan.goal,
+    prompt: onboarding.prompt,
+    currentLevel: onboarding.currentLevel,
+    targetLevel: onboarding.targetLevel,
+    weeklyStudyMinutes: onboarding.weeklyStudyMinutes,
+    learningStyle: onboarding.learningStyle,
+    status: "ACTIVE" as const,
+    modules: {
+      create: plan.modules.map((courseModule, moduleIndex) => ({
+        title: courseModule.title,
+        description: courseModule.description,
+        objective: courseModule.objective,
+        order: moduleIndex + 1,
+        lessons: {
+          create: courseModule.lessons.map((lesson, lessonIndex) => ({
+            title: lesson.title,
+            description: lesson.description,
+            objectives: lesson.objectives,
+            concepts: lesson.concepts,
+            difficulty: lesson.difficulty,
+            isOptional: lesson.isOptional,
+            order: lessonIndex + 1,
+            status: "LOCKED" as const,
+          })),
         },
-      },
+      })),
     },
-  });
+  };
+
+  const course = options.draftCourseId
+    ? await prisma.course.update({
+        where: {
+          id: options.draftCourseId,
+          ownerId: userId,
+          status: "DRAFT",
+        },
+        data: courseData,
+        include: {
+          modules: {
+            orderBy: { order: "asc" },
+            include: {
+              lessons: { orderBy: { order: "asc" } },
+            },
+          },
+        },
+      })
+    : await prisma.course.create({
+        data: {
+          ownerId: userId,
+          ...courseData,
+        },
+        include: {
+          modules: {
+            orderBy: { order: "asc" },
+            include: {
+              lessons: { orderBy: { order: "asc" } },
+            },
+          },
+        },
+      });
 
   const planned = plan.modules.flatMap((courseModule) =>
     courseModule.lessons,
@@ -118,7 +142,7 @@ export async function createCourse(
     });
   }
 
-  if (sourceIds.length > 0) {
+  if (sourceIds.length > 0 && !options.draftCourseId) {
     await attachSourcesToCourse({
       ownerId: userId,
       courseId: course.id,

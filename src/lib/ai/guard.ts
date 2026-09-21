@@ -6,6 +6,7 @@ type GuardedOperation =
   | "COURSE_GENERATION"
   | "LESSON_GENERATION"
   | "QUIZ_GENERATION"
+  | "SOURCE_INGESTION"
   | "TUTOR";
 
 const LIMITS: Record<
@@ -15,6 +16,7 @@ const LIMITS: Record<
   COURSE_GENERATION: { user: 5, global: 25, windowMs: 60 * 60 * 1000 },
   LESSON_GENERATION: { user: 20, global: 100, windowMs: 60 * 60 * 1000 },
   QUIZ_GENERATION: { user: 30, global: 150, windowMs: 60 * 60 * 1000 },
+  SOURCE_INGESTION: { user: 10, global: 50, windowMs: 60 * 60 * 1000 },
   TUTOR: { user: 60, global: 300, windowMs: 10 * 60 * 1000 },
 };
 

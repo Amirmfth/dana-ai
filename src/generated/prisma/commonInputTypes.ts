@@ -667,6 +667,40 @@ export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
 }
 
+export type EnumSourceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceType | Prisma.EnumSourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceTypeFilter<$PrismaModel> | $Enums.SourceType
+}
+
+export type EnumSourceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceStatus | Prisma.EnumSourceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceStatusFilter<$PrismaModel> | $Enums.SourceStatus
+}
+
+export type EnumSourceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceType | Prisma.EnumSourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.SourceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSourceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSourceTypeFilter<$PrismaModel>
+}
+
+export type EnumSourceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceStatus | Prisma.EnumSourceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceStatusWithAggregatesFilter<$PrismaModel> | $Enums.SourceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSourceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSourceStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1275,6 +1309,40 @@ export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumSourceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceType | Prisma.EnumSourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceTypeFilter<$PrismaModel> | $Enums.SourceType
+}
+
+export type NestedEnumSourceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceStatus | Prisma.EnumSourceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceStatusFilter<$PrismaModel> | $Enums.SourceStatus
+}
+
+export type NestedEnumSourceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceType | Prisma.EnumSourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceType[] | Prisma.ListEnumSourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.SourceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSourceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSourceTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumSourceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SourceStatus | Prisma.EnumSourceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SourceStatus[] | Prisma.ListEnumSourceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSourceStatusWithAggregatesFilter<$PrismaModel> | $Enums.SourceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSourceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSourceStatusFilter<$PrismaModel>
 }
 
 

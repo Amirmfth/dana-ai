@@ -61,7 +61,7 @@ export function LessonTutor({
       "ask-dana-trigger-mobile",
     ) as HTMLButtonElement | null;
     document.body.style.overflow = "hidden";
-    document.getElementById("lesson-tutor-input-mobile")?.focus();
+    // document.getElementById("lesson-tutor-input-mobile")?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") setTutorOpen(false);

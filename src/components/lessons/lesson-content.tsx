@@ -1,10 +1,26 @@
 import type { GeneratedLessonContent } from "@/lib/ai/schemas/lesson";
 
-type LessonContentProps = {
-  lesson: GeneratedLessonContent;
+type LessonCitationView = {
+  id: string;
+  marker: string;
+  location: string;
+  sourceTitle: string;
+  sourceType: string;
+  originalUrl: string | null;
+  pageStart: number | null;
+  pageEnd: number | null;
+  heading: string | null;
 };
 
-export function LessonContent({ lesson }: LessonContentProps) {
+type LessonContentProps = {
+  lesson: GeneratedLessonContent;
+  citations?: LessonCitationView[];
+};
+
+export function LessonContent({
+  lesson,
+  citations = [],
+}: LessonContentProps) {
   return (
     <article className="min-w-0">
       <p className="mb-12 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
@@ -121,6 +137,42 @@ export function LessonContent({ lesson }: LessonContentProps) {
           {lesson.summary}
         </p>
       </section>
+
+      {citations.length > 0 && (
+        <section className="mt-12 border-t border-neutral-200 pt-8 dark:border-neutral-800">
+          <h2 className="text-xl font-semibold dark:text-white">Sources</h2>
+          <div className="mt-4 space-y-3">
+            {citations.map((citation) => (
+              <article
+                key={citation.id}
+                className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800"
+              >
+                <div className="flex gap-3">
+                  <span className="shrink-0 font-mono text-sm font-semibold">
+                    {citation.marker}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-semibold">{citation.sourceTitle}</p>
+                    <p className="mt-1 text-sm text-neutral-500">
+                      {citation.location}
+                    </p>
+                    {citation.originalUrl && (
+                      <a
+                        href={citation.originalUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 block truncate text-sm underline underline-offset-4"
+                      >
+                        Open source
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   );
 }

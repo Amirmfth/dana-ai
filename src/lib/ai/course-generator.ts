@@ -10,6 +10,14 @@ import {
 export async function generateCoursePlan(
   userId: string,
   onboarding: CourseOnboarding,
+  sourceContext: Array<{
+    id: string;
+    sourceTitle: string;
+    content: string;
+    pageStart: number | null;
+    pageEnd: number | null;
+    heading: string | null;
+  }> = [],
 ): Promise<{
   plan: CoursePlan;
   providerResponseId: string;
@@ -41,13 +49,29 @@ PREREQUISITE RULES
 5. Optional lessons should not be required by essential lessons unless genuinely necessary.
 
 Adapt course depth, pacing, examples, and scope to the learner profile.
+
+SOURCE GROUNDING
+If SOURCE CONTEXT is provided, design the curriculum around the supplied material.
+Do not invent source-specific topics that are not supported by the supplied evidence.
+You may still add essential connective/foundational topics required to teach the material coherently.
       `.trim(),
       },
       {
         role: "user",
         content:
           "LEARNER REQUEST\n\n" +
-          JSON.stringify(onboarding, null, 2),
+          JSON.stringify(onboarding, null, 2) +
+          (sourceContext.length
+            ? "\n\nSOURCE CONTEXT\n\n" +
+              JSON.stringify(
+                sourceContext.map((chunk, index) => ({
+                  marker: "[S" + (index + 1) + "]",
+                  ...chunk,
+                })),
+                null,
+                2,
+              )
+            : ""),
       },
     ],
     text: {

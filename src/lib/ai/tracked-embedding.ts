@@ -85,3 +85,79 @@ export async function createTrackedEmbedding({
     throw error;
   }
 }
+
+
+export async function createTrackedEmbeddings({
+  inputs,
+  model = "text-embedding-3-small",
+  userId: explicitUserId,
+  courseId,
+}: {
+  inputs: string[];
+  model?: "text-embedding-3-small" | "text-embedding-3-large";
+  userId?: string;
+  courseId?: string;
+}): Promise<number[][]> {
+  const values = inputs.map((input) => input.trim()).filter(Boolean);
+  if (values.length === 0) return [];
+
+  const startedAt = Date.now();
+  const userId = await resolveAiUsageUserId({
+    userId: explicitUserId,
+    courseId,
+  });
+  const privacy = await getPrivacySettings(userId);
+  const storedInput = aiPayloadForStorage(
+    { batchSize: values.length, inputs: values },
+    privacy,
+  );
+
+  try {
+    const response = await openai.embeddings.create({
+      model,
+      input: values,
+    });
+
+    await prisma.aiUsage.create({
+      data: {
+        userId,
+        operation: "EMBEDDING",
+        status: "SUCCESS",
+        model: response.model,
+        providerResponseId: response._request_id ?? null,
+        input:
+          storedInput === null
+            ? Prisma.DbNull
+            : (storedInput as Prisma.InputJsonValue),
+        inputTokens: response.usage.prompt_tokens,
+        outputTokens: 0,
+        totalTokens: response.usage.total_tokens,
+        durationMs: Date.now() - startedAt,
+        courseId,
+      },
+    });
+
+    return response.data
+      .sort((a, b) => a.index - b.index)
+      .map((item) => item.embedding);
+  } catch (error) {
+    await prisma.aiUsage.create({
+      data: {
+        userId,
+        operation: "EMBEDDING",
+        status: "ERROR",
+        model,
+        input:
+          storedInput === null
+            ? Prisma.DbNull
+            : (storedInput as Prisma.InputJsonValue),
+        durationMs: Date.now() - startedAt,
+        errorMessage:
+          error instanceof Error ? error.message : "Unknown embedding error",
+        courseId,
+      },
+    });
+
+    throw error;
+  }
+}

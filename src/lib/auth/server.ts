@@ -117,6 +117,11 @@ export async function signOut() {
   cookieStore.delete(AUTH_REFRESH_COOKIE);
 }
 
+export async function getCurrentAccessToken() {
+  const cookieStore = await cookies();
+  return cookieStore.get(AUTH_ACCESS_COOKIE)?.value ?? null;
+}
+
 export async function getCurrentUser(): Promise<DanaAuthUser | null> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(AUTH_ACCESS_COOKIE)?.value;

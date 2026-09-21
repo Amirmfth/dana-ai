@@ -30,6 +30,9 @@ export default async function LessonVersionsPage({
     include: {
       contentVersions: {
         orderBy: { version: "desc" },
+        include: {
+          _count: { select: { citations: true } },
+        },
       },
       quizVersions: {
         orderBy: { version: "desc" },
@@ -90,7 +93,7 @@ export default async function LessonVersionsPage({
                     {version.id === lesson.activeContentVersionId ? " · Active" : ""}
                   </p>
                   <p className="mt-1 text-xs text-neutral-500">
-                    {version.createdAt.toLocaleString()}
+                    {version.createdAt.toLocaleString()} · {version._count.citations} source citations
                   </p>
                 </div>
                 {version.id !== lesson.activeContentVersionId && (

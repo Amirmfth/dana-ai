@@ -20,6 +20,7 @@ import {
 } from "@/lib/courses/structure";
 import { prisma } from "@/lib/db/prisma";
 import { hasPrerequisiteCycle } from "@/lib/progression/prerequisites";
+import { deleteSourceFile } from "@/lib/sources/storage";
 
 function requiredText(
   value: FormDataEntryValue | null,
@@ -90,6 +91,28 @@ export async function archiveCourseAction(
 
 export async function deleteCourseAction(courseId: string) {
   const user = await requireUser();
+
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, ownerId: user.id },
+    select: {
+      id: true,
+      sources: {
+        where: { storagePath: { not: null } },
+        select: { storagePath: true },
+      },
+    },
+  });
+
+  if (!course) {
+    throw new Error("Course not found.");
+  }
+
+  await Promise.all(
+    course.sources
+      .map((source) => source.storagePath)
+      .filter((path): path is string => Boolean(path))
+      .map((path) => deleteSourceFile(path)),
+  );
 
   const deleted = await prisma.course.deleteMany({
     where: { id: courseId, ownerId: user.id },

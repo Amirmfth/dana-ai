@@ -4,11 +4,85 @@ import { generateLesson } from "@/lib/ai/lesson-generator";
 import { lessonContentSchema } from "@/lib/ai/schemas/lesson";
 import { prisma } from "@/lib/db/prisma";
 import { claimRegeneration, failRegeneration, finishRegeneration } from "@/lib/regeneration/locks";
+import { sourceLocation } from "@/lib/sources/rag";
+
+async function persistCitations(
+  tx: Prisma.TransactionClient,
+  {
+    userId,
+    courseId,
+    lessonContentVersionId,
+    citations,
+  }: {
+    userId: string;
+    courseId: string;
+    lessonContentVersionId: string;
+    citations: Array<{
+      marker: string;
+      sourceChunkId: string;
+      location: string;
+    }>;
+  },
+) {
+  const uniqueIds = [...new Set(citations.map((citation) => citation.sourceChunkId))];
+  if (uniqueIds.length === 0) return;
+
+  const validChunks = await tx.sourceChunk.findMany({
+    where: {
+      id: { in: uniqueIds },
+      source: {
+        ownerId: userId,
+        courseId,
+        status: "READY",
+      },
+    },
+    select: {
+      id: true,
+      pageStart: true,
+      pageEnd: true,
+      heading: true,
+      source: {
+        select: { title: true },
+      },
+    },
+  });
+
+  const valid = new Map(validChunks.map((chunk) => [chunk.id, chunk]));
+  const rows = citations
+    .filter((citation) => valid.has(citation.sourceChunkId))
+    .filter(
+      (citation, index, all) =>
+        all.findIndex(
+          (item) =>
+            item.sourceChunkId === citation.sourceChunkId &&
+            item.marker === citation.marker,
+        ) === index,
+    );
+
+  if (rows.length > 0) {
+    await tx.lessonCitation.createMany({
+      data: rows.map((citation) => ({
+        lessonContentVersionId,
+        sourceChunkId: citation.sourceChunkId,
+        marker: citation.marker,
+        location: sourceLocation({
+          sourceTitle: valid.get(citation.sourceChunkId)!.source.title,
+          pageStart: valid.get(citation.sourceChunkId)!.pageStart,
+          pageEnd: valid.get(citation.sourceChunkId)!.pageEnd,
+          heading: valid.get(citation.sourceChunkId)!.heading,
+        }),
+      })),
+    });
+  }
+}
 
 export async function persistInitialLessonVersion(userId: string, lessonId: string, generated: unknown) {
   const lesson = await prisma.lesson.findFirst({
     where: { id: lessonId, module: { course: { ownerId: userId } } },
-    select: { id: true },
+    select: {
+      id: true,
+      module: { select: { courseId: true } },
+    },
   });
   if (!lesson) throw new Error("Lesson not found.");
   const parsed = lessonContentSchema.parse(generated);
@@ -21,7 +95,18 @@ export async function persistInitialLessonVersion(userId: string, lessonId: stri
       create: { lessonId, content: parsed as Prisma.InputJsonValue, generationVersion: 1 },
       update: { content: parsed as Prisma.InputJsonValue, generationVersion: 1, generatedAt: new Date() },
     });
-    await tx.lesson.update({ where: { id: lessonId }, data: { activeContentVersionId: version.id } });
+    await persistCitations(tx, {
+      userId,
+      courseId: lesson.module.courseId,
+      lessonContentVersionId: version.id,
+      citations: parsed.citations,
+    });
+
+    await tx.lesson.update({
+      where: { id: lessonId },
+      data: { activeContentVersionId: version.id },
+    });
+
     return parsed;
   });
 }
@@ -57,7 +142,18 @@ export async function regenerateLessonContent(userId: string, lessonId: string, 
         create: { lessonId, content: generated as Prisma.InputJsonValue, generationVersion: nextVersion },
         update: { content: generated as Prisma.InputJsonValue, generationVersion: nextVersion, generatedAt: new Date() },
       });
-      await tx.lesson.update({ where: { id: lessonId }, data: { activeContentVersionId: version.id } });
+      await persistCitations(tx, {
+        userId,
+        courseId: lesson.module.courseId,
+        lessonContentVersionId: version.id,
+        citations: generated.citations,
+      });
+
+      await tx.lesson.update({
+        where: { id: lessonId },
+        data: { activeContentVersionId: version.id },
+      });
+
       return version;
     });
     await finishRegeneration("LESSON_CONTENT", lessonId, claimToken);

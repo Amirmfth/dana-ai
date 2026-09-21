@@ -1,7 +1,6 @@
 import { Prisma } from "@/generated/prisma/client";
 
 import { validateExactOrder } from "@/lib/courses/curriculum";
-import { nextStatusesFromPrerequisites } from "@/lib/progression/prerequisites";
 import {
   courseStructureSchema,
   type CourseStructure,

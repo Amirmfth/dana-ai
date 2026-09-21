@@ -116,6 +116,49 @@ export default async function HomePage() {
               </label>
             </div>
 
+            <details className="mb-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+              <summary className="cursor-pointer text-sm font-semibold">
+                Add source material (optional)
+              </summary>
+              <div className="mt-4 grid gap-4">
+                <label className="text-sm font-medium">
+                  PDF / text file
+                  <input
+                    type="file"
+                    name="sourceFile"
+                    accept=".pdf,.txt,.md,application/pdf,text/plain,text/markdown"
+                    className="mt-2 block w-full text-sm"
+                  />
+                </label>
+                <label className="text-sm font-medium">
+                  Public URL
+                  <input
+                    type="url"
+                    name="sourceUrl"
+                    placeholder="https://docs.example.com/guide"
+                    className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950"
+                  />
+                </label>
+                <label className="text-sm font-medium">
+                  Notes title
+                  <input
+                    name="sourceTitle"
+                    placeholder="My study notes"
+                    className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950"
+                  />
+                </label>
+                <label className="text-sm font-medium">
+                  Pasted notes
+                  <textarea
+                    name="sourceText"
+                    rows={4}
+                    placeholder="Paste notes or reference material…"
+                    className="mt-2 w-full rounded-xl border border-neutral-300 bg-white p-3 dark:border-neutral-700 dark:bg-neutral-950"
+                  />
+                </label>
+              </div>
+            </details>
+
             <textarea
               id="learning-goal"
               name="prompt"

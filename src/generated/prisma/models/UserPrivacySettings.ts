@@ -38,6 +38,7 @@ export type UserPrivacySettingsMinAggregateOutputType = {
   userId: string | null
   storeAiPayloads: boolean | null
   retentionDays: number | null
+  useLearnerMemory: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +47,7 @@ export type UserPrivacySettingsMaxAggregateOutputType = {
   userId: string | null
   storeAiPayloads: boolean | null
   retentionDays: number | null
+  useLearnerMemory: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +56,7 @@ export type UserPrivacySettingsCountAggregateOutputType = {
   userId: number
   storeAiPayloads: number
   retentionDays: number
+  useLearnerMemory: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -72,6 +75,7 @@ export type UserPrivacySettingsMinAggregateInputType = {
   userId?: true
   storeAiPayloads?: true
   retentionDays?: true
+  useLearnerMemory?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -80,6 +84,7 @@ export type UserPrivacySettingsMaxAggregateInputType = {
   userId?: true
   storeAiPayloads?: true
   retentionDays?: true
+  useLearnerMemory?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type UserPrivacySettingsCountAggregateInputType = {
   userId?: true
   storeAiPayloads?: true
   retentionDays?: true
+  useLearnerMemory?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -183,6 +189,7 @@ export type UserPrivacySettingsGroupByOutputType = {
   userId: string
   storeAiPayloads: boolean
   retentionDays: number
+  useLearnerMemory: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserPrivacySettingsCountAggregateOutputType | null
@@ -214,6 +221,7 @@ export type UserPrivacySettingsWhereInput = {
   userId?: Prisma.UuidFilter<"UserPrivacySettings"> | string
   storeAiPayloads?: Prisma.BoolFilter<"UserPrivacySettings"> | boolean
   retentionDays?: Prisma.IntFilter<"UserPrivacySettings"> | number
+  useLearnerMemory?: Prisma.BoolFilter<"UserPrivacySettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserPrivacySettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPrivacySettings"> | Date | string
 }
@@ -222,6 +230,7 @@ export type UserPrivacySettingsOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   storeAiPayloads?: Prisma.SortOrder
   retentionDays?: Prisma.SortOrder
+  useLearnerMemory?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -233,6 +242,7 @@ export type UserPrivacySettingsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserPrivacySettingsWhereInput | Prisma.UserPrivacySettingsWhereInput[]
   storeAiPayloads?: Prisma.BoolFilter<"UserPrivacySettings"> | boolean
   retentionDays?: Prisma.IntFilter<"UserPrivacySettings"> | number
+  useLearnerMemory?: Prisma.BoolFilter<"UserPrivacySettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserPrivacySettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPrivacySettings"> | Date | string
 }, "userId">
@@ -241,6 +251,7 @@ export type UserPrivacySettingsOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   storeAiPayloads?: Prisma.SortOrder
   retentionDays?: Prisma.SortOrder
+  useLearnerMemory?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserPrivacySettingsCountOrderByAggregateInput
@@ -257,6 +268,7 @@ export type UserPrivacySettingsScalarWhereWithAggregatesInput = {
   userId?: Prisma.UuidWithAggregatesFilter<"UserPrivacySettings"> | string
   storeAiPayloads?: Prisma.BoolWithAggregatesFilter<"UserPrivacySettings"> | boolean
   retentionDays?: Prisma.IntWithAggregatesFilter<"UserPrivacySettings"> | number
+  useLearnerMemory?: Prisma.BoolWithAggregatesFilter<"UserPrivacySettings"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserPrivacySettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserPrivacySettings"> | Date | string
 }
@@ -265,6 +277,7 @@ export type UserPrivacySettingsCreateInput = {
   userId: string
   storeAiPayloads?: boolean
   retentionDays?: number
+  useLearnerMemory?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -273,6 +286,7 @@ export type UserPrivacySettingsUncheckedCreateInput = {
   userId: string
   storeAiPayloads?: boolean
   retentionDays?: number
+  useLearnerMemory?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -281,6 +295,7 @@ export type UserPrivacySettingsUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   storeAiPayloads?: Prisma.BoolFieldUpdateOperationsInput | boolean
   retentionDays?: Prisma.IntFieldUpdateOperationsInput | number
+  useLearnerMemory?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -289,6 +304,7 @@ export type UserPrivacySettingsUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   storeAiPayloads?: Prisma.BoolFieldUpdateOperationsInput | boolean
   retentionDays?: Prisma.IntFieldUpdateOperationsInput | number
+  useLearnerMemory?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -297,6 +313,7 @@ export type UserPrivacySettingsCreateManyInput = {
   userId: string
   storeAiPayloads?: boolean
   retentionDays?: number
+  useLearnerMemory?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -305,6 +322,7 @@ export type UserPrivacySettingsUpdateManyMutationInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   storeAiPayloads?: Prisma.BoolFieldUpdateOperationsInput | boolean
   retentionDays?: Prisma.IntFieldUpdateOperationsInput | number
+  useLearnerMemory?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -313,6 +331,7 @@ export type UserPrivacySettingsUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   storeAiPayloads?: Prisma.BoolFieldUpdateOperationsInput | boolean
   retentionDays?: Prisma.IntFieldUpdateOperationsInput | number
+  useLearnerMemory?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -321,6 +340,7 @@ export type UserPrivacySettingsCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   storeAiPayloads?: Prisma.SortOrder
   retentionDays?: Prisma.SortOrder
+  useLearnerMemory?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -333,6 +353,7 @@ export type UserPrivacySettingsMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   storeAiPayloads?: Prisma.SortOrder
   retentionDays?: Prisma.SortOrder
+  useLearnerMemory?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -341,6 +362,7 @@ export type UserPrivacySettingsMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   storeAiPayloads?: Prisma.SortOrder
   retentionDays?: Prisma.SortOrder
+  useLearnerMemory?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -355,6 +377,7 @@ export type UserPrivacySettingsSelect<ExtArgs extends runtime.Types.Extensions.I
   userId?: boolean
   storeAiPayloads?: boolean
   retentionDays?: boolean
+  useLearnerMemory?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["userPrivacySettings"]>
@@ -363,6 +386,7 @@ export type UserPrivacySettingsSelectCreateManyAndReturn<ExtArgs extends runtime
   userId?: boolean
   storeAiPayloads?: boolean
   retentionDays?: boolean
+  useLearnerMemory?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["userPrivacySettings"]>
@@ -371,6 +395,7 @@ export type UserPrivacySettingsSelectUpdateManyAndReturn<ExtArgs extends runtime
   userId?: boolean
   storeAiPayloads?: boolean
   retentionDays?: boolean
+  useLearnerMemory?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["userPrivacySettings"]>
@@ -379,11 +404,12 @@ export type UserPrivacySettingsSelectScalar = {
   userId?: boolean
   storeAiPayloads?: boolean
   retentionDays?: boolean
+  useLearnerMemory?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserPrivacySettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userId" | "storeAiPayloads" | "retentionDays" | "createdAt" | "updatedAt", ExtArgs["result"]["userPrivacySettings"]>
+export type UserPrivacySettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userId" | "storeAiPayloads" | "retentionDays" | "useLearnerMemory" | "createdAt" | "updatedAt", ExtArgs["result"]["userPrivacySettings"]>
 
 export type $UserPrivacySettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserPrivacySettings"
@@ -392,6 +418,7 @@ export type $UserPrivacySettingsPayload<ExtArgs extends runtime.Types.Extensions
     userId: string
     storeAiPayloads: boolean
     retentionDays: number
+    useLearnerMemory: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["userPrivacySettings"]>
@@ -820,6 +847,7 @@ export interface UserPrivacySettingsFieldRefs {
   readonly userId: Prisma.FieldRef<"UserPrivacySettings", 'String'>
   readonly storeAiPayloads: Prisma.FieldRef<"UserPrivacySettings", 'Boolean'>
   readonly retentionDays: Prisma.FieldRef<"UserPrivacySettings", 'Int'>
+  readonly useLearnerMemory: Prisma.FieldRef<"UserPrivacySettings", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"UserPrivacySettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserPrivacySettings", 'DateTime'>
 }

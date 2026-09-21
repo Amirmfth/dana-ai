@@ -130,9 +130,9 @@ export function CourseCurriculum({
                   aria-expanded={isOpen}
                   aria-controls={contentId}
                   onClick={() => toggleModule(module.id)}
-                  className="group grid min-h-20 w-full grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-3 py-4 text-left transition hover:bg-neutral-100/70 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-950 dark:hover:bg-neutral-900/70 dark:focus-visible:outline-white sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:gap-5 sm:py-5"
+                  className="group grid min-h-20 w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-4 text-left transition hover:bg-neutral-100/70 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-950 dark:hover:bg-neutral-900/70 dark:focus-visible:outline-white sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:gap-5 sm:py-5"
                 >
-                  <span className="font-mono text-sm font-medium tabular-nums text-neutral-400 dark:text-neutral-500">
+                  <span className="hidden sm:block font-mono text-sm font-medium tabular-nums text-neutral-400 dark:text-neutral-500">
                     {String(module.order).padStart(2, "0")}
                   </span>
                   <span className="min-w-0">
@@ -155,7 +155,7 @@ export function CourseCurriculum({
                   className={`grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
                 >
                   <div className="overflow-hidden">
-                    <div className="pb-5 pl-9 sm:pb-7 sm:pl-[4.25rem]">
+                    <div className="pb-5 sm:pb-7 sm:pl-[4.25rem]">
                       {module.description && (
                         <p className="mb-4 max-w-2xl pr-4 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
                           {module.description}
@@ -233,9 +233,12 @@ function LessonRow({ courseId, lesson }: { courseId: string; lesson: Lesson }) {
               : isLocked
                 ? "Locked"
                 : topicPreview || lesson.description || "Open lesson"}
-          {" · "}{lesson.difficulty.toLowerCase()}
+          {" · "}
+          {lesson.difficulty.toLowerCase()}
           {lesson.isOptional ? " · optional" : ""}
-          {lesson.prerequisiteCount > 1 ? " · " + lesson.prerequisiteCount + " prerequisites" : ""}
+          {lesson.prerequisiteCount > 1
+            ? " · " + lesson.prerequisiteCount + " prerequisites"
+            : ""}
 
           {!isCompleted && !isCurrent && !isLocked && remainingTopics > 0
             ? ` +${remainingTopics}`
@@ -256,7 +259,7 @@ function LessonRow({ courseId, lesson }: { courseId: string; lesson: Lesson }) {
       {isLocked ? (
         <Link
           href={"/courses/" + courseId + "/lessons/" + lesson.id + "/test-out"}
-          className="grid min-h-16 grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3 rounded-lg px-2 py-3 opacity-80 transition hover:bg-neutral-100 dark:hover:bg-neutral-800/70 sm:min-h-18 sm:grid-cols-[2.25rem_minmax(0,1fr)_auto] sm:px-3"
+          className="grid ps-3 min-h-16 grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3 rounded-lg px-2 py-3 opacity-80 transition hover:bg-neutral-100 dark:hover:bg-neutral-800/70 sm:min-h-18 sm:grid-cols-[2.25rem_minmax(0,1fr)_auto] sm:px-3"
           title="This lesson is locked. Take a test-out assessment to demonstrate mastery."
         >
           <LessonMarker order={lesson.order} status={lesson.status} />
@@ -268,13 +271,15 @@ function LessonRow({ courseId, lesson }: { courseId: string; lesson: Lesson }) {
               Locked · {lesson.difficulty.toLowerCase()} · test out available
             </span>
           </span>
-          <span className="text-xs font-semibold text-neutral-500">Test out</span>
+          <span className="text-xs font-semibold text-neutral-500">
+            Test out
+          </span>
         </Link>
       ) : (
         <Link
           href={`/courses/${courseId}/lessons/${lesson.id}`}
           aria-current={isCurrent ? "step" : undefined}
-          className={`group grid min-h-16 grid-cols-[2rem_minmax(0,1fr)_2.25rem] items-center gap-3 rounded-lg px-2 py-3 transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-950 dark:hover:bg-neutral-800/70 dark:focus-visible:outline-white sm:min-h-18 sm:grid-cols-[2.25rem_minmax(0,1fr)_auto] sm:px-3 ${
+          className={`group ps-3 grid min-h-16 grid-cols-[2rem_minmax(0,1fr)_2.25rem] items-center gap-3 rounded-lg px-2 py-3 transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-950 dark:hover:bg-neutral-800/70 dark:focus-visible:outline-white sm:min-h-18 sm:grid-cols-[2.25rem_minmax(0,1fr)_auto] sm:px-3 ${
             isCurrent ? "bg-neutral-100 dark:bg-neutral-900" : ""
           }`}
         >

@@ -41,6 +41,7 @@ export type CourseMemoryMinAggregateOutputType = {
   type: $Enums.MemoryType | null
   content: string | null
   importance: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +53,7 @@ export type CourseMemoryMaxAggregateOutputType = {
   type: $Enums.MemoryType | null
   content: string | null
   importance: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -63,6 +65,7 @@ export type CourseMemoryCountAggregateOutputType = {
   type: number
   content: number
   importance: number
+  isActive: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -84,6 +87,7 @@ export type CourseMemoryMinAggregateInputType = {
   type?: true
   content?: true
   importance?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,6 +99,7 @@ export type CourseMemoryMaxAggregateInputType = {
   type?: true
   content?: true
   importance?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +111,7 @@ export type CourseMemoryCountAggregateInputType = {
   type?: true
   content?: true
   importance?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -204,6 +210,7 @@ export type CourseMemoryGroupByOutputType = {
   type: $Enums.MemoryType
   content: string
   importance: number
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
   _count: CourseMemoryCountAggregateOutputType | null
@@ -238,6 +245,7 @@ export type CourseMemoryWhereInput = {
   type?: Prisma.EnumMemoryTypeFilter<"CourseMemory"> | $Enums.MemoryType
   content?: Prisma.StringFilter<"CourseMemory"> | string
   importance?: Prisma.IntFilter<"CourseMemory"> | number
+  isActive?: Prisma.BoolFilter<"CourseMemory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CourseMemory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CourseMemory"> | Date | string
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
@@ -251,6 +259,7 @@ export type CourseMemoryOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   importance?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
@@ -267,6 +276,7 @@ export type CourseMemoryWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumMemoryTypeFilter<"CourseMemory"> | $Enums.MemoryType
   content?: Prisma.StringFilter<"CourseMemory"> | string
   importance?: Prisma.IntFilter<"CourseMemory"> | number
+  isActive?: Prisma.BoolFilter<"CourseMemory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CourseMemory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CourseMemory"> | Date | string
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
@@ -280,6 +290,7 @@ export type CourseMemoryOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   importance?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CourseMemoryCountOrderByAggregateInput
@@ -299,6 +310,7 @@ export type CourseMemoryScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumMemoryTypeWithAggregatesFilter<"CourseMemory"> | $Enums.MemoryType
   content?: Prisma.StringWithAggregatesFilter<"CourseMemory"> | string
   importance?: Prisma.IntWithAggregatesFilter<"CourseMemory"> | number
+  isActive?: Prisma.BoolWithAggregatesFilter<"CourseMemory"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CourseMemory"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CourseMemory"> | Date | string
 }
@@ -308,6 +320,7 @@ export type CourseMemoryCreateInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   course: Prisma.CourseCreateNestedOneWithoutCourseMemoriesInput
@@ -321,6 +334,7 @@ export type CourseMemoryUncheckedCreateInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -330,6 +344,7 @@ export type CourseMemoryUpdateInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneRequiredWithoutCourseMemoriesNestedInput
@@ -343,6 +358,7 @@ export type CourseMemoryUncheckedUpdateInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -354,6 +370,7 @@ export type CourseMemoryCreateManyInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -363,6 +380,7 @@ export type CourseMemoryUpdateManyMutationInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -374,6 +392,7 @@ export type CourseMemoryUncheckedUpdateManyInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -395,6 +414,7 @@ export type CourseMemoryCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   importance?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -410,6 +430,7 @@ export type CourseMemoryMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   importance?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -421,6 +442,7 @@ export type CourseMemoryMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   importance?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -522,6 +544,7 @@ export type CourseMemoryCreateWithoutCourseInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lesson?: Prisma.LessonCreateNestedOneWithoutCourseMemoriesInput
@@ -533,6 +556,7 @@ export type CourseMemoryUncheckedCreateWithoutCourseInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -573,6 +597,7 @@ export type CourseMemoryScalarWhereInput = {
   type?: Prisma.EnumMemoryTypeFilter<"CourseMemory"> | $Enums.MemoryType
   content?: Prisma.StringFilter<"CourseMemory"> | string
   importance?: Prisma.IntFilter<"CourseMemory"> | number
+  isActive?: Prisma.BoolFilter<"CourseMemory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CourseMemory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CourseMemory"> | Date | string
 }
@@ -582,6 +607,7 @@ export type CourseMemoryCreateWithoutLessonInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   course: Prisma.CourseCreateNestedOneWithoutCourseMemoriesInput
@@ -593,6 +619,7 @@ export type CourseMemoryUncheckedCreateWithoutLessonInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -629,6 +656,7 @@ export type CourseMemoryCreateManyCourseInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -638,6 +666,7 @@ export type CourseMemoryUpdateWithoutCourseInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneWithoutCourseMemoriesNestedInput
@@ -649,6 +678,7 @@ export type CourseMemoryUncheckedUpdateWithoutCourseInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -659,6 +689,7 @@ export type CourseMemoryUncheckedUpdateManyWithoutCourseInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -669,6 +700,7 @@ export type CourseMemoryCreateManyLessonInput = {
   type: $Enums.MemoryType
   content: string
   importance?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -678,6 +710,7 @@ export type CourseMemoryUpdateWithoutLessonInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneRequiredWithoutCourseMemoriesNestedInput
@@ -689,6 +722,7 @@ export type CourseMemoryUncheckedUpdateWithoutLessonInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -699,6 +733,7 @@ export type CourseMemoryUncheckedUpdateManyWithoutLessonInput = {
   type?: Prisma.EnumMemoryTypeFieldUpdateOperationsInput | $Enums.MemoryType
   content?: Prisma.StringFieldUpdateOperationsInput | string
   importance?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -712,6 +747,7 @@ export type CourseMemorySelect<ExtArgs extends runtime.Types.Extensions.Internal
   type?: boolean
   content?: boolean
   importance?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
@@ -725,6 +761,7 @@ export type CourseMemorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   type?: boolean
   content?: boolean
   importance?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
@@ -738,6 +775,7 @@ export type CourseMemorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   type?: boolean
   content?: boolean
   importance?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
@@ -751,11 +789,12 @@ export type CourseMemorySelectScalar = {
   type?: boolean
   content?: boolean
   importance?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CourseMemoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "lessonId" | "type" | "content" | "importance" | "createdAt" | "updatedAt", ExtArgs["result"]["courseMemory"]>
+export type CourseMemoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "lessonId" | "type" | "content" | "importance" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["courseMemory"]>
 export type CourseMemoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   lesson?: boolean | Prisma.CourseMemory$lessonArgs<ExtArgs>
@@ -782,6 +821,7 @@ export type $CourseMemoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     type: $Enums.MemoryType
     content: string
     importance: number
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["courseMemory"]>
@@ -1215,6 +1255,7 @@ export interface CourseMemoryFieldRefs {
   readonly type: Prisma.FieldRef<"CourseMemory", 'MemoryType'>
   readonly content: Prisma.FieldRef<"CourseMemory", 'String'>
   readonly importance: Prisma.FieldRef<"CourseMemory", 'Int'>
+  readonly isActive: Prisma.FieldRef<"CourseMemory", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"CourseMemory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CourseMemory", 'DateTime'>
 }

@@ -37,6 +37,14 @@ export const MessageRole = {
 export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]
 
 
+export const ConversationScope = {
+  LESSON: 'LESSON',
+  COURSE: 'COURSE'
+} as const
+
+export type ConversationScope = (typeof ConversationScope)[keyof typeof ConversationScope]
+
+
 export const MemoryType = {
   MISCONCEPTION: 'MISCONCEPTION',
   WEAKNESS: 'WEAKNESS',
@@ -159,6 +167,52 @@ export const LearningStyle = {
 } as const
 
 export type LearningStyle = (typeof LearningStyle)[keyof typeof LearningStyle]
+
+
+export const ReadingFontSize = {
+  SMALL: 'SMALL',
+  DEFAULT: 'DEFAULT',
+  LARGE: 'LARGE',
+  EXTRA_LARGE: 'EXTRA_LARGE'
+} as const
+
+export type ReadingFontSize = (typeof ReadingFontSize)[keyof typeof ReadingFontSize]
+
+
+export const ReadingDensity = {
+  COMPACT: 'COMPACT',
+  COMFORTABLE: 'COMFORTABLE',
+  SPACIOUS: 'SPACIOUS'
+} as const
+
+export type ReadingDensity = (typeof ReadingDensity)[keyof typeof ReadingDensity]
+
+
+export const ReadingLineHeight = {
+  TIGHT: 'TIGHT',
+  NORMAL: 'NORMAL',
+  RELAXED: 'RELAXED'
+} as const
+
+export type ReadingLineHeight = (typeof ReadingLineHeight)[keyof typeof ReadingLineHeight]
+
+
+export const ReadingWidth = {
+  NARROW: 'NARROW',
+  STANDARD: 'STANDARD',
+  WIDE: 'WIDE'
+} as const
+
+export type ReadingWidth = (typeof ReadingWidth)[keyof typeof ReadingWidth]
+
+
+export const MotionPreference = {
+  SYSTEM: 'SYSTEM',
+  REDUCED: 'REDUCED',
+  FULL: 'FULL'
+} as const
+
+export type MotionPreference = (typeof MotionPreference)[keyof typeof MotionPreference]
 
 
 export const LessonDifficulty = {

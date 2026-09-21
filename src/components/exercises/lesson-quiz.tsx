@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ExerciseQuestion } from "./exercise-question";
+import { AnimatedProgress } from "@/components/ui/animated-progress";
+import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
 type ExerciseType =
   | "MULTIPLE_CHOICE"
@@ -194,6 +196,14 @@ export function LessonQuiz({
         </button>
       </div>
 
+      {exercises.length > 0 && (
+        <AnimatedProgress
+          className="mb-8"
+          value={(completed / exercises.length) * 100}
+          label={completed + " of " + exercises.length + " questions answered"}
+        />
+      )}
+
       <div className="space-y-8">
         {exercises.map((exercise) => {
           const questionState = state[exercise.id];
@@ -259,14 +269,19 @@ export function LessonQuiz({
       </div>
 
       {completed === exercises.length && exercises.length > 0 && (
-        <div className="mt-8 rounded-2xl bg-neutral-100 p-6 dark:bg-neutral-900">
-          <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
-            Quiz complete
-          </p>
-
-          <p className="mt-1 text-2xl font-semibold">
-            {correct} / {exercises.length}
-          </p>
+        <div className="mt-8">
+          <CompletionFeedback
+            title="Knowledge check complete"
+            description={
+              correct === exercises.length
+                ? "You answered every question correctly."
+                : "Review the explanations before completing the lesson."
+            }
+          >
+            <p className="mt-2 text-2xl font-semibold">
+              {correct} / {exercises.length}
+            </p>
+          </CompletionFeedback>
         </div>
       )}
     </section>

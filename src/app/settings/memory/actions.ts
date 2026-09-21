@@ -83,6 +83,7 @@ export async function updateMemoryAction(
 export async function toggleMemoryAction(
   memoryId: string,
   isActive: boolean,
+  _formData?: FormData,
 ) {
   const user = await requireUser();
   const memory = await requireOwnedMemory(user.id, memoryId);
@@ -95,7 +96,10 @@ export async function toggleMemoryAction(
   revalidatePath("/settings/memory");
 }
 
-export async function deleteMemoryAction(memoryId: string) {
+export async function deleteMemoryAction(
+  memoryId: string,
+  _formData?: FormData,
+) {
   const user = await requireUser();
   const memory = await requireOwnedMemory(user.id, memoryId);
 

@@ -36,7 +36,7 @@ export async function buildCourseTutorContext(
     .filter(Boolean)
     .join("\n");
 
-  const [analytics, memories, sources] = await Promise.all([
+  const [analytics, memories, sources, experience] = await Promise.all([
     getCourseAnalytics(userId, courseId),
     findRelevantMemories({
       courseId,
@@ -48,6 +48,9 @@ export async function buildCourseTutorContext(
       courseId,
       query: retrievalQuery,
       limit: 8,
+    }),
+    prisma.userExperienceSettings.findUnique({
+      where: { userId },
     }),
   ]);
 
@@ -83,6 +86,10 @@ export async function buildCourseTutorContext(
       instructions: course.instructions,
       currentLevel: course.currentLevel,
       targetLevel: course.targetLevel,
+      contentLanguage: course.contentLanguage,
+    },
+    preferences: {
+      tutorLanguage: experience?.tutorLanguage ?? "English",
     },
     curriculum,
     learningState: analytics

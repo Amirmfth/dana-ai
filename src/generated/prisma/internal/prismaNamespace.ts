@@ -414,6 +414,7 @@ export const ModelName = {
   StudyTime: 'StudyTime',
   AiRequestWindow: 'AiRequestWindow',
   UserPrivacySettings: 'UserPrivacySettings',
+  UserExperienceSettings: 'UserExperienceSettings',
   GenerationJob: 'GenerationJob',
   CourseTemplate: 'CourseTemplate',
   RegenerationLock: 'RegenerationLock',
@@ -442,7 +443,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "course" | "module" | "lesson" | "lessonContent" | "lessonContentVersion" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt" | "quizRun" | "quizVersion" | "learningEvent" | "studyTime" | "aiRequestWindow" | "userPrivacySettings" | "generationJob" | "courseTemplate" | "regenerationLock" | "curriculumRevision" | "lessonPrerequisite" | "assessment" | "assessmentVersion" | "assessmentQuestion" | "assessmentRun" | "assessmentAnswer" | "courseSource" | "sourceChunk" | "lessonCitation"
+    modelProps: "course" | "module" | "lesson" | "lessonContent" | "lessonContentVersion" | "conversation" | "message" | "courseMemory" | "aiUsage" | "exercise" | "exerciseAttempt" | "quizRun" | "quizVersion" | "learningEvent" | "studyTime" | "aiRequestWindow" | "userPrivacySettings" | "userExperienceSettings" | "generationJob" | "courseTemplate" | "regenerationLock" | "curriculumRevision" | "lessonPrerequisite" | "assessment" | "assessmentVersion" | "assessmentQuestion" | "assessmentRun" | "assessmentAnswer" | "courseSource" | "sourceChunk" | "lessonCitation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1704,6 +1705,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserExperienceSettings: {
+      payload: Prisma.$UserExperienceSettingsPayload<ExtArgs>
+      fields: Prisma.UserExperienceSettingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserExperienceSettingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserExperienceSettingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>
+        }
+        findFirst: {
+          args: Prisma.UserExperienceSettingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserExperienceSettingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>
+        }
+        findMany: {
+          args: Prisma.UserExperienceSettingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>[]
+        }
+        create: {
+          args: Prisma.UserExperienceSettingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>
+        }
+        createMany: {
+          args: Prisma.UserExperienceSettingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserExperienceSettingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>[]
+        }
+        delete: {
+          args: Prisma.UserExperienceSettingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>
+        }
+        update: {
+          args: Prisma.UserExperienceSettingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserExperienceSettingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserExperienceSettingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserExperienceSettingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserExperienceSettingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperienceSettingsPayload>
+        }
+        aggregate: {
+          args: Prisma.UserExperienceSettingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserExperienceSettings>
+        }
+        groupBy: {
+          args: Prisma.UserExperienceSettingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserExperienceSettingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserExperienceSettingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserExperienceSettingsCountAggregateOutputType> | number
+        }
+      }
+    }
     GenerationJob: {
       payload: Prisma.$GenerationJobPayload<ExtArgs>
       fields: Prisma.GenerationJobFieldRefs
@@ -2718,6 +2793,7 @@ export const CourseScalarFieldEnum = {
   targetLevel: 'targetLevel',
   weeklyStudyMinutes: 'weeklyStudyMinutes',
   learningStyle: 'learningStyle',
+  contentLanguage: 'contentLanguage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2788,7 +2864,9 @@ export type LessonContentVersionScalarFieldEnum = (typeof LessonContentVersionSc
 
 export const ConversationScalarFieldEnum = {
   id: 'id',
+  courseId: 'courseId',
   lessonId: 'lessonId',
+  scope: 'scope',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2814,6 +2892,7 @@ export const CourseMemoryScalarFieldEnum = {
   type: 'type',
   content: 'content',
   importance: 'importance',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2943,11 +3022,31 @@ export const UserPrivacySettingsScalarFieldEnum = {
   userId: 'userId',
   storeAiPayloads: 'storeAiPayloads',
   retentionDays: 'retentionDays',
+  useLearnerMemory: 'useLearnerMemory',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserPrivacySettingsScalarFieldEnum = (typeof UserPrivacySettingsScalarFieldEnum)[keyof typeof UserPrivacySettingsScalarFieldEnum]
+
+
+export const UserExperienceSettingsScalarFieldEnum = {
+  userId: 'userId',
+  uiLanguage: 'uiLanguage',
+  defaultContentLanguage: 'defaultContentLanguage',
+  tutorLanguage: 'tutorLanguage',
+  fontSize: 'fontSize',
+  lineHeight: 'lineHeight',
+  readingWidth: 'readingWidth',
+  readingDensity: 'readingDensity',
+  motionPreference: 'motionPreference',
+  highContrast: 'highContrast',
+  dyslexiaFriendly: 'dyslexiaFriendly',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserExperienceSettingsScalarFieldEnum = (typeof UserExperienceSettingsScalarFieldEnum)[keyof typeof UserExperienceSettingsScalarFieldEnum]
 
 
 export const GenerationJobScalarFieldEnum = {
@@ -3340,6 +3439,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'ConversationScope'
+ */
+export type EnumConversationScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConversationScope'>
+    
+
+
+/**
+ * Reference to a field of type 'ConversationScope[]'
+ */
+export type ListEnumConversationScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConversationScope[]'>
+    
+
+
+/**
  * Reference to a field of type 'MessageRole'
  */
 export type EnumMessageRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageRole'>
@@ -3434,6 +3547,76 @@ export type EnumLearningEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'LearningEventType[]'
  */
 export type ListEnumLearningEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LearningEventType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingFontSize'
+ */
+export type EnumReadingFontSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingFontSize'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingFontSize[]'
+ */
+export type ListEnumReadingFontSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingFontSize[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingLineHeight'
+ */
+export type EnumReadingLineHeightFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingLineHeight'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingLineHeight[]'
+ */
+export type ListEnumReadingLineHeightFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingLineHeight[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingWidth'
+ */
+export type EnumReadingWidthFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingWidth'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingWidth[]'
+ */
+export type ListEnumReadingWidthFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingWidth[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingDensity'
+ */
+export type EnumReadingDensityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingDensity'>
+    
+
+
+/**
+ * Reference to a field of type 'ReadingDensity[]'
+ */
+export type ListEnumReadingDensityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReadingDensity[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MotionPreference'
+ */
+export type EnumMotionPreferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MotionPreference'>
+    
+
+
+/**
+ * Reference to a field of type 'MotionPreference[]'
+ */
+export type ListEnumMotionPreferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MotionPreference[]'>
     
 
 
@@ -3730,6 +3913,7 @@ export type GlobalOmitConfig = {
   studyTime?: Prisma.StudyTimeOmit
   aiRequestWindow?: Prisma.AiRequestWindowOmit
   userPrivacySettings?: Prisma.UserPrivacySettingsOmit
+  userExperienceSettings?: Prisma.UserExperienceSettingsOmit
   generationJob?: Prisma.GenerationJobOmit
   courseTemplate?: Prisma.CourseTemplateOmit
   regenerationLock?: Prisma.RegenerationLockOmit

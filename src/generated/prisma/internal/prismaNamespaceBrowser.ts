@@ -68,6 +68,7 @@ export const ModelName = {
   StudyTime: 'StudyTime',
   AiRequestWindow: 'AiRequestWindow',
   UserPrivacySettings: 'UserPrivacySettings',
+  UserExperienceSettings: 'UserExperienceSettings',
   GenerationJob: 'GenerationJob',
   CourseTemplate: 'CourseTemplate',
   RegenerationLock: 'RegenerationLock',
@@ -112,6 +113,7 @@ export const CourseScalarFieldEnum = {
   targetLevel: 'targetLevel',
   weeklyStudyMinutes: 'weeklyStudyMinutes',
   learningStyle: 'learningStyle',
+  contentLanguage: 'contentLanguage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -182,7 +184,9 @@ export type LessonContentVersionScalarFieldEnum = (typeof LessonContentVersionSc
 
 export const ConversationScalarFieldEnum = {
   id: 'id',
+  courseId: 'courseId',
   lessonId: 'lessonId',
+  scope: 'scope',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -208,6 +212,7 @@ export const CourseMemoryScalarFieldEnum = {
   type: 'type',
   content: 'content',
   importance: 'importance',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -337,11 +342,31 @@ export const UserPrivacySettingsScalarFieldEnum = {
   userId: 'userId',
   storeAiPayloads: 'storeAiPayloads',
   retentionDays: 'retentionDays',
+  useLearnerMemory: 'useLearnerMemory',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserPrivacySettingsScalarFieldEnum = (typeof UserPrivacySettingsScalarFieldEnum)[keyof typeof UserPrivacySettingsScalarFieldEnum]
+
+
+export const UserExperienceSettingsScalarFieldEnum = {
+  userId: 'userId',
+  uiLanguage: 'uiLanguage',
+  defaultContentLanguage: 'defaultContentLanguage',
+  tutorLanguage: 'tutorLanguage',
+  fontSize: 'fontSize',
+  lineHeight: 'lineHeight',
+  readingWidth: 'readingWidth',
+  readingDensity: 'readingDensity',
+  motionPreference: 'motionPreference',
+  highContrast: 'highContrast',
+  dyslexiaFriendly: 'dyslexiaFriendly',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserExperienceSettingsScalarFieldEnum = (typeof UserExperienceSettingsScalarFieldEnum)[keyof typeof UserExperienceSettingsScalarFieldEnum]
 
 
 export const GenerationJobScalarFieldEnum = {

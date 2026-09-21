@@ -30,6 +30,7 @@ export async function buildTutorContext(
               title: true,
               goal: true,
               instructions: true,
+              contentLanguage: true,
             },
           },
         },
@@ -72,6 +73,9 @@ export async function buildTutorContext(
     .join("\n");
 
   const privacy = await getPrivacySettings(lesson.module.course.ownerId);
+  const experience = await prisma.userExperienceSettings.findUnique({
+    where: { userId: lesson.module.course.ownerId },
+  });
 
   const [memories, relevantSources] = await Promise.all([
     privacy.useLearnerMemory
@@ -112,6 +116,11 @@ export async function buildTutorContext(
       title: lesson.module.course.title,
       goal: lesson.module.course.goal,
       instructions: lesson.module.course.instructions,
+      contentLanguage: lesson.module.course.contentLanguage,
+    },
+
+    preferences: {
+      tutorLanguage: experience?.tutorLanguage ?? "English",
     },
 
     module: {

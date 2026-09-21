@@ -382,6 +382,23 @@ export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonFilter<$PrismaModel>
 }
 
+export type EnumConversationScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ConversationScope | Prisma.EnumConversationScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumConversationScopeFilter<$PrismaModel> | $Enums.ConversationScope
+}
+
+export type EnumConversationScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ConversationScope | Prisma.EnumConversationScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumConversationScopeWithAggregatesFilter<$PrismaModel> | $Enums.ConversationScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumConversationScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumConversationScopeFilter<$PrismaModel>
+}
+
 export type EnumMessageRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.MessageRole | Prisma.EnumMessageRoleFieldRefInput<$PrismaModel>
   in?: $Enums.MessageRole[] | Prisma.ListEnumMessageRoleFieldRefInput<$PrismaModel>
@@ -550,6 +567,91 @@ export type EnumLearningEventTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
+}
+
+export type EnumReadingFontSizeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingFontSize | Prisma.EnumReadingFontSizeFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingFontSizeFilter<$PrismaModel> | $Enums.ReadingFontSize
+}
+
+export type EnumReadingLineHeightFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingLineHeight | Prisma.EnumReadingLineHeightFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingLineHeightFilter<$PrismaModel> | $Enums.ReadingLineHeight
+}
+
+export type EnumReadingWidthFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingWidth | Prisma.EnumReadingWidthFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingWidthFilter<$PrismaModel> | $Enums.ReadingWidth
+}
+
+export type EnumReadingDensityFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingDensity | Prisma.EnumReadingDensityFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingDensityFilter<$PrismaModel> | $Enums.ReadingDensity
+}
+
+export type EnumMotionPreferenceFilter<$PrismaModel = never> = {
+  equals?: $Enums.MotionPreference | Prisma.EnumMotionPreferenceFieldRefInput<$PrismaModel>
+  in?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMotionPreferenceFilter<$PrismaModel> | $Enums.MotionPreference
+}
+
+export type EnumReadingFontSizeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingFontSize | Prisma.EnumReadingFontSizeFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingFontSizeWithAggregatesFilter<$PrismaModel> | $Enums.ReadingFontSize
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingFontSizeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingFontSizeFilter<$PrismaModel>
+}
+
+export type EnumReadingLineHeightWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingLineHeight | Prisma.EnumReadingLineHeightFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingLineHeightWithAggregatesFilter<$PrismaModel> | $Enums.ReadingLineHeight
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingLineHeightFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingLineHeightFilter<$PrismaModel>
+}
+
+export type EnumReadingWidthWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingWidth | Prisma.EnumReadingWidthFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingWidthWithAggregatesFilter<$PrismaModel> | $Enums.ReadingWidth
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingWidthFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingWidthFilter<$PrismaModel>
+}
+
+export type EnumReadingDensityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingDensity | Prisma.EnumReadingDensityFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingDensityWithAggregatesFilter<$PrismaModel> | $Enums.ReadingDensity
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingDensityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingDensityFilter<$PrismaModel>
+}
+
+export type EnumMotionPreferenceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MotionPreference | Prisma.EnumMotionPreferenceFieldRefInput<$PrismaModel>
+  in?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMotionPreferenceWithAggregatesFilter<$PrismaModel> | $Enums.MotionPreference
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMotionPreferenceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMotionPreferenceFilter<$PrismaModel>
 }
 
 export type EnumGenerationKindFilter<$PrismaModel = never> = {
@@ -1053,6 +1155,23 @@ export type NestedJsonFilterBase<$PrismaModel = never> = {
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
 }
 
+export type NestedEnumConversationScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ConversationScope | Prisma.EnumConversationScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumConversationScopeFilter<$PrismaModel> | $Enums.ConversationScope
+}
+
+export type NestedEnumConversationScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ConversationScope | Prisma.EnumConversationScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ConversationScope[] | Prisma.ListEnumConversationScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumConversationScopeWithAggregatesFilter<$PrismaModel> | $Enums.ConversationScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumConversationScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumConversationScopeFilter<$PrismaModel>
+}
+
 export type NestedEnumMessageRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.MessageRole | Prisma.EnumMessageRoleFieldRefInput<$PrismaModel>
   in?: $Enums.MessageRole[] | Prisma.ListEnumMessageRoleFieldRefInput<$PrismaModel>
@@ -1194,6 +1313,91 @@ export type NestedEnumLearningEventTypeWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumLearningEventTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumReadingFontSizeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingFontSize | Prisma.EnumReadingFontSizeFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingFontSizeFilter<$PrismaModel> | $Enums.ReadingFontSize
+}
+
+export type NestedEnumReadingLineHeightFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingLineHeight | Prisma.EnumReadingLineHeightFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingLineHeightFilter<$PrismaModel> | $Enums.ReadingLineHeight
+}
+
+export type NestedEnumReadingWidthFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingWidth | Prisma.EnumReadingWidthFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingWidthFilter<$PrismaModel> | $Enums.ReadingWidth
+}
+
+export type NestedEnumReadingDensityFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingDensity | Prisma.EnumReadingDensityFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingDensityFilter<$PrismaModel> | $Enums.ReadingDensity
+}
+
+export type NestedEnumMotionPreferenceFilter<$PrismaModel = never> = {
+  equals?: $Enums.MotionPreference | Prisma.EnumMotionPreferenceFieldRefInput<$PrismaModel>
+  in?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMotionPreferenceFilter<$PrismaModel> | $Enums.MotionPreference
+}
+
+export type NestedEnumReadingFontSizeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingFontSize | Prisma.EnumReadingFontSizeFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingFontSize[] | Prisma.ListEnumReadingFontSizeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingFontSizeWithAggregatesFilter<$PrismaModel> | $Enums.ReadingFontSize
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingFontSizeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingFontSizeFilter<$PrismaModel>
+}
+
+export type NestedEnumReadingLineHeightWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingLineHeight | Prisma.EnumReadingLineHeightFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingLineHeight[] | Prisma.ListEnumReadingLineHeightFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingLineHeightWithAggregatesFilter<$PrismaModel> | $Enums.ReadingLineHeight
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingLineHeightFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingLineHeightFilter<$PrismaModel>
+}
+
+export type NestedEnumReadingWidthWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingWidth | Prisma.EnumReadingWidthFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingWidth[] | Prisma.ListEnumReadingWidthFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingWidthWithAggregatesFilter<$PrismaModel> | $Enums.ReadingWidth
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingWidthFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingWidthFilter<$PrismaModel>
+}
+
+export type NestedEnumReadingDensityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReadingDensity | Prisma.EnumReadingDensityFieldRefInput<$PrismaModel>
+  in?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReadingDensity[] | Prisma.ListEnumReadingDensityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReadingDensityWithAggregatesFilter<$PrismaModel> | $Enums.ReadingDensity
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReadingDensityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReadingDensityFilter<$PrismaModel>
+}
+
+export type NestedEnumMotionPreferenceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MotionPreference | Prisma.EnumMotionPreferenceFieldRefInput<$PrismaModel>
+  in?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MotionPreference[] | Prisma.ListEnumMotionPreferenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMotionPreferenceWithAggregatesFilter<$PrismaModel> | $Enums.MotionPreference
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMotionPreferenceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMotionPreferenceFilter<$PrismaModel>
 }
 
 export type NestedEnumGenerationKindFilter<$PrismaModel = never> = {

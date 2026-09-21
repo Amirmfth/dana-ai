@@ -152,6 +152,7 @@ export async function buildLessonContext(lessonId: string) {
       description: course.description,
       goal: course.goal,
       instructions: course.instructions,
+      contentLanguage: course.contentLanguage,
     },
 
     curriculum,

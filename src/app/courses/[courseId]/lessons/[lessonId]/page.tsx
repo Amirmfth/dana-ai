@@ -35,10 +35,15 @@ export default async function LessonPage({
   const { courseId, lessonId } = await params;
   const query = await searchParams;
 
-  const lessonInfo = await prisma.lesson.findFirst({
-    where: { id: lessonId, module: { courseId, course: { ownerId: user.id } } },
-    include: { module: true },
-  });
+  const [lessonInfo, experienceSettings] = await Promise.all([
+    prisma.lesson.findFirst({
+      where: { id: lessonId, module: { courseId, course: { ownerId: user.id } } },
+      include: { module: true },
+    }),
+    prisma.userExperienceSettings.findUnique({
+      where: { userId: user.id },
+    }),
+  ]);
 
   if (!lessonInfo) {
     notFound();
@@ -178,8 +183,20 @@ export default async function LessonPage({
       className="min-h-dvh bg-white text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50"
     >
       <LessonStudyTracker lessonId={lessonId} />
-      <LessonWorkspace lessonId={lessonId} conversation={initialConversation}>
-        <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:max-w-none lg:px-12 lg:pb-10">
+      <LessonWorkspace
+        lessonId={lessonId}
+        conversation={initialConversation}
+        preferences={{
+          fontSize: experienceSettings?.fontSize ?? "DEFAULT",
+          lineHeight: experienceSettings?.lineHeight ?? "NORMAL",
+          readingWidth: experienceSettings?.readingWidth ?? "STANDARD",
+          readingDensity: experienceSettings?.readingDensity ?? "COMFORTABLE",
+          motionPreference: experienceSettings?.motionPreference ?? "SYSTEM",
+          highContrast: experienceSettings?.highContrast ?? false,
+          dyslexiaFriendly: experienceSettings?.dyslexiaFriendly ?? false,
+        }}
+      >
+        <div className="lesson-distraction mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:max-w-none lg:px-12 lg:pb-10">
           <div className="flex items-center justify-between gap-4">
             <Link
               href={`/courses/${courseId}`}
@@ -208,7 +225,7 @@ export default async function LessonPage({
           )}
 
           <header className="mb-10 border-b border-neutral-200 pb-9 sm:mb-12 sm:pb-10 dark:border-neutral-800">
-            <div className="mx-auto w-full max-w-2xl lg:translate-x-8">
+            <div className="lesson-reading-column mx-auto w-full max-w-2xl lg:translate-x-8">
               <p className="mb-3 text-sm font-medium text-neutral-500 dark:text-neutral-400">
                 Module {lessonInfo.module.order}{" "}
                 <span aria-hidden="true">·</span> Lesson {lessonInfo.order}
@@ -231,11 +248,13 @@ export default async function LessonPage({
         </div>
 
         <div className="px-5 pb-24 sm:px-8 lg:grid lg:grid-cols-[2rem_minmax(0,1fr)] lg:items-start lg:gap-8 lg:px-12 lg:pb-12">
-          <LessonTableOfContents sections={tocSections} />
+          <div className="lesson-toc-container">
+            <LessonTableOfContents sections={tocSections} />
+          </div>
 
           <div className="min-w-0">
-            <div className="mx-auto w-full max-w-2xl">
-              <div className="mb-6 flex flex-wrap gap-2">
+            <div className="lesson-reading-column mx-auto w-full max-w-2xl">
+              <div className="lesson-distraction mb-6 flex flex-wrap gap-2">
                 <Link
                   href={"/courses/" + courseId + "/lessons/" + lessonId + "/test-out"}
                   className="inline-flex min-h-10 items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700"

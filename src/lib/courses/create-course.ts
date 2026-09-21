@@ -43,6 +43,7 @@ export async function createCourse(
     targetLevel: onboarding.targetLevel,
     weeklyStudyMinutes: onboarding.weeklyStudyMinutes,
     learningStyle: onboarding.learningStyle,
+    contentLanguage: onboarding.contentLanguage,
     status: "ACTIVE" as const,
     modules: {
       create: plan.modules.map((courseModule, moduleIndex) => ({

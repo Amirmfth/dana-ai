@@ -32,6 +32,7 @@ export function UserMenu({
 
         <MenuLink href="/search">Search</MenuLink>
         <MenuLink href="/settings/memory">Memory</MenuLink>
+        <MenuLink href="/settings/experience">Language & reading</MenuLink>
         <MenuLink href="/templates">Templates</MenuLink>
         <MenuLink href="/settings/privacy">Privacy</MenuLink>
 

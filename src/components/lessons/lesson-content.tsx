@@ -23,7 +23,7 @@ export function LessonContent({
   citations = [],
 }: LessonContentProps) {
   return (
-    <article className="min-w-0">
+    <article className="lesson-reading-surface min-w-0">
       <p className="mb-12 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
         {lesson.introduction}
       </p>

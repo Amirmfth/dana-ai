@@ -1,10 +1,19 @@
 import { zodTextFormat } from "openai/helpers/zod";
 
 import { createTrackedResponse } from "@/lib/ai/tracked-response";
+import { prisma } from "@/lib/db/prisma";
 import {
   generatedAssessmentSchema,
   type GeneratedAssessment,
 } from "@/lib/ai/schemas/assessment";
+
+async function contentLanguage(courseId: string) {
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    select: { contentLanguage: true },
+  });
+  return course?.contentLanguage ?? "English";
+}
 
 type AssessmentTarget = {
   id: string;
@@ -26,6 +35,7 @@ export async function generatePlacementAssessment(
   },
   lessons: AssessmentTarget[],
 ): Promise<GeneratedAssessment> {
+  const language = await contentLanguage(course.id);
   const response = await createTrackedResponse({
     userId,
     operation: "QUIZ_GENERATION",
@@ -36,7 +46,7 @@ export async function generatePlacementAssessment(
       {
         role: "system",
         content:
-          "Create a placement assessment using only objective multiple-choice questions. Test prerequisite knowledge, not trivia. Select up to 10 foundational lessons and create two distinct questions for each selected lesson when possible. Each question must target exactly one supplied lesson ID. Use four options and exactly one correct answer. Do not assume generated lesson prose exists.",
+          "Create a placement assessment using only objective multiple-choice questions. Test prerequisite knowledge, not trivia. Select up to 10 foundational lessons and create two distinct questions for each selected lesson when possible. Each question must target exactly one supplied lesson ID. Use four options and exactly one correct answer. Do not assume generated lesson prose exists. Write all learner-facing assessment text in " + language + ".",
       },
       {
         role: "user",
@@ -61,6 +71,7 @@ export async function generateTestOutAssessment(
   courseId: string,
   lesson: AssessmentTarget,
 ): Promise<GeneratedAssessment> {
+  const language = await contentLanguage(courseId);
   const response = await createTrackedResponse({
     userId,
     operation: "QUIZ_GENERATION",
@@ -72,7 +83,7 @@ export async function generateTestOutAssessment(
       {
         role: "system",
         content:
-          "Create a rigorous 5 to 8 question test-out assessment using only objective multiple-choice questions. A passing learner should demonstrate the lesson objectives without studying the generated lesson. Use four options, one correct answer, and target the supplied lesson ID on every question.",
+          "Create a rigorous 5 to 8 question test-out assessment using only objective multiple-choice questions. A passing learner should demonstrate the lesson objectives without studying the generated lesson. Use four options, one correct answer, and target the supplied lesson ID on every question. Write all learner-facing assessment text in " + language + ".",
       },
       {
         role: "user",
@@ -103,6 +114,7 @@ export async function generateModuleAssessment(
   },
   lessons: AssessmentTarget[],
 ): Promise<GeneratedAssessment> {
+  const language = await contentLanguage(courseId);
   const response = await createTrackedResponse({
     userId,
     operation: "QUIZ_GENERATION",
@@ -113,7 +125,7 @@ export async function generateModuleAssessment(
       {
         role: "system",
         content:
-          "Create a rigorous 8 to 12 question module-end assessment using only objective multiple-choice questions. Cover the important objectives and concepts across the supplied lessons, emphasize understanding and application over trivia, use four options with exactly one correct answer, and target each question to the most relevant supplied lesson ID.",
+          "Create a rigorous 8 to 12 question module-end assessment using only objective multiple-choice questions. Cover the important objectives and concepts across the supplied lessons, emphasize understanding and application over trivia, use four options with exactly one correct answer, and target each question to the most relevant supplied lesson ID. Write all learner-facing assessment text in " + language + ".",
       },
       {
         role: "user",
@@ -147,6 +159,7 @@ export async function generateCourseFinalAssessment(
     lessons: AssessmentTarget[];
   }>,
 ): Promise<GeneratedAssessment> {
+  const language = await contentLanguage(course.id);
   const response = await createTrackedResponse({
     userId,
     operation: "QUIZ_GENERATION",
@@ -157,7 +170,7 @@ export async function generateCourseFinalAssessment(
       {
         role: "system",
         content:
-          "Create a comprehensive 12 to 20 question course-final assessment using only objective multiple-choice questions. Sample important objectives across modules, emphasize integration and application, avoid minor trivia, use four options with exactly one correct answer, and target every question to the most relevant supplied lesson ID so results can be broken down by module.",
+          "Create a comprehensive 12 to 20 question course-final assessment using only objective multiple-choice questions. Sample important objectives across modules, emphasize integration and application, avoid minor trivia, use four options with exactly one correct answer, and target every question to the most relevant supplied lesson ID so results can be broken down by module. Write all learner-facing assessment text in " + language + ".",
       },
       {
         role: "user",

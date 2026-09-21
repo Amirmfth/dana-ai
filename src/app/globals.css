@@ -60,3 +60,53 @@ body {
     animation: none;
   }
 }
+
+
+.lesson-reading-column {
+  max-width: var(--dana-reading-width, 42rem);
+}
+
+.lesson-reading-surface {
+  font-size: var(--dana-reading-font-size, 1rem);
+}
+
+.lesson-reading-surface :where(p, li) {
+  line-height: var(--dana-reading-line-height, 1.75);
+}
+
+.lesson-reading-surface .space-y-12 > :not(:last-child) {
+  margin-bottom: var(--dana-section-gap, 3rem);
+}
+
+.dana-dyslexia-friendly .lesson-reading-surface {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  letter-spacing: 0.015em;
+  word-spacing: 0.04em;
+}
+
+.dana-high-contrast .lesson-reading-surface :where(p, li) {
+  color: #111 !important;
+}
+
+.dark .dana-high-contrast .lesson-reading-surface :where(p, li) {
+  color: #fff !important;
+}
+
+.focus-mode .lesson-distraction,
+.focus-mode .lesson-toc-container {
+  display: none !important;
+}
+
+.focus-mode .lesson-reading-column {
+  transform: none !important;
+  margin-inline: auto;
+}
+
+[data-reduced-motion="true"] *,
+[data-reduced-motion="true"] *::before,
+[data-reduced-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+}

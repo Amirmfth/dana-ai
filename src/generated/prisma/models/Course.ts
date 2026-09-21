@@ -47,6 +47,7 @@ export type CourseMinAggregateOutputType = {
   targetLevel: $Enums.CourseLevel | null
   weeklyStudyMinutes: number | null
   learningStyle: $Enums.LearningStyle | null
+  contentLanguage: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,6 +65,7 @@ export type CourseMaxAggregateOutputType = {
   targetLevel: $Enums.CourseLevel | null
   weeklyStudyMinutes: number | null
   learningStyle: $Enums.LearningStyle | null
+  contentLanguage: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -81,6 +83,7 @@ export type CourseCountAggregateOutputType = {
   targetLevel: number
   weeklyStudyMinutes: number
   learningStyle: number
+  contentLanguage: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -108,6 +111,7 @@ export type CourseMinAggregateInputType = {
   targetLevel?: true
   weeklyStudyMinutes?: true
   learningStyle?: true
+  contentLanguage?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -125,6 +129,7 @@ export type CourseMaxAggregateInputType = {
   targetLevel?: true
   weeklyStudyMinutes?: true
   learningStyle?: true
+  contentLanguage?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -142,6 +147,7 @@ export type CourseCountAggregateInputType = {
   targetLevel?: true
   weeklyStudyMinutes?: true
   learningStyle?: true
+  contentLanguage?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -246,6 +252,7 @@ export type CourseGroupByOutputType = {
   targetLevel: $Enums.CourseLevel | null
   weeklyStudyMinutes: number | null
   learningStyle: $Enums.LearningStyle | null
+  contentLanguage: string
   createdAt: Date
   updatedAt: Date
   _count: CourseCountAggregateOutputType | null
@@ -286,6 +293,7 @@ export type CourseWhereInput = {
   targetLevel?: Prisma.EnumCourseLevelNullableFilter<"Course"> | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.IntNullableFilter<"Course"> | number | null
   learningStyle?: Prisma.EnumLearningStyleNullableFilter<"Course"> | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFilter<"Course"> | string
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   modules?: Prisma.ModuleListRelationFilter
@@ -296,6 +304,7 @@ export type CourseWhereInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionListRelationFilter
   assessments?: Prisma.AssessmentListRelationFilter
   sources?: Prisma.CourseSourceListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
 }
 
 export type CourseOrderByWithRelationInput = {
@@ -311,6 +320,7 @@ export type CourseOrderByWithRelationInput = {
   targetLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   weeklyStudyMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
   learningStyle?: Prisma.SortOrderInput | Prisma.SortOrder
+  contentLanguage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   modules?: Prisma.ModuleOrderByRelationAggregateInput
@@ -321,6 +331,7 @@ export type CourseOrderByWithRelationInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionOrderByRelationAggregateInput
   assessments?: Prisma.AssessmentOrderByRelationAggregateInput
   sources?: Prisma.CourseSourceOrderByRelationAggregateInput
+  conversations?: Prisma.ConversationOrderByRelationAggregateInput
 }
 
 export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -339,6 +350,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   targetLevel?: Prisma.EnumCourseLevelNullableFilter<"Course"> | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.IntNullableFilter<"Course"> | number | null
   learningStyle?: Prisma.EnumLearningStyleNullableFilter<"Course"> | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFilter<"Course"> | string
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   modules?: Prisma.ModuleListRelationFilter
@@ -349,6 +361,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   curriculumRevisions?: Prisma.CurriculumRevisionListRelationFilter
   assessments?: Prisma.AssessmentListRelationFilter
   sources?: Prisma.CourseSourceListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
 }, "id">
 
 export type CourseOrderByWithAggregationInput = {
@@ -364,6 +377,7 @@ export type CourseOrderByWithAggregationInput = {
   targetLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   weeklyStudyMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
   learningStyle?: Prisma.SortOrderInput | Prisma.SortOrder
+  contentLanguage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CourseCountOrderByAggregateInput
@@ -389,6 +403,7 @@ export type CourseScalarWhereWithAggregatesInput = {
   targetLevel?: Prisma.EnumCourseLevelNullableWithAggregatesFilter<"Course"> | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.IntNullableWithAggregatesFilter<"Course"> | number | null
   learningStyle?: Prisma.EnumLearningStyleNullableWithAggregatesFilter<"Course"> | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringWithAggregatesFilter<"Course"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
 }
@@ -406,6 +421,7 @@ export type CourseCreateInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -416,6 +432,7 @@ export type CourseCreateInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateInput = {
@@ -431,6 +448,7 @@ export type CourseUncheckedCreateInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -441,6 +459,7 @@ export type CourseUncheckedCreateInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUpdateInput = {
@@ -456,6 +475,7 @@ export type CourseUpdateInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -466,6 +486,7 @@ export type CourseUpdateInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateInput = {
@@ -481,6 +502,7 @@ export type CourseUncheckedUpdateInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -491,6 +513,7 @@ export type CourseUncheckedUpdateInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyInput = {
@@ -506,6 +529,7 @@ export type CourseCreateManyInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -523,6 +547,7 @@ export type CourseUpdateManyMutationInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -540,6 +565,7 @@ export type CourseUncheckedUpdateManyInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -557,6 +583,7 @@ export type CourseCountOrderByAggregateInput = {
   targetLevel?: Prisma.SortOrder
   weeklyStudyMinutes?: Prisma.SortOrder
   learningStyle?: Prisma.SortOrder
+  contentLanguage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -578,6 +605,7 @@ export type CourseMaxOrderByAggregateInput = {
   targetLevel?: Prisma.SortOrder
   weeklyStudyMinutes?: Prisma.SortOrder
   learningStyle?: Prisma.SortOrder
+  contentLanguage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -595,6 +623,7 @@ export type CourseMinOrderByAggregateInput = {
   targetLevel?: Prisma.SortOrder
   weeklyStudyMinutes?: Prisma.SortOrder
   learningStyle?: Prisma.SortOrder
+  contentLanguage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -657,6 +686,20 @@ export type CourseUpdateOneRequiredWithoutModulesNestedInput = {
   upsert?: Prisma.CourseUpsertWithoutModulesInput
   connect?: Prisma.CourseWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutModulesInput, Prisma.CourseUpdateWithoutModulesInput>, Prisma.CourseUncheckedUpdateWithoutModulesInput>
+}
+
+export type CourseCreateNestedOneWithoutConversationsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutConversationsInput, Prisma.CourseUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutConversationsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutConversationsInput, Prisma.CourseUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutConversationsInput
+  upsert?: Prisma.CourseUpsertWithoutConversationsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutConversationsInput, Prisma.CourseUpdateWithoutConversationsInput>, Prisma.CourseUncheckedUpdateWithoutConversationsInput>
 }
 
 export type CourseCreateNestedOneWithoutCourseMemoriesInput = {
@@ -774,6 +817,7 @@ export type CourseCreateWithoutModulesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutCourseInput
@@ -783,6 +827,7 @@ export type CourseCreateWithoutModulesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutModulesInput = {
@@ -798,6 +843,7 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutCourseInput
@@ -807,6 +853,7 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutModulesInput = {
@@ -838,6 +885,7 @@ export type CourseUpdateWithoutModulesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   courseMemories?: Prisma.CourseMemoryUpdateManyWithoutCourseNestedInput
@@ -847,6 +895,7 @@ export type CourseUpdateWithoutModulesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutModulesInput = {
@@ -862,8 +911,130 @@ export type CourseUncheckedUpdateWithoutModulesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutCourseNestedInput
+  templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
+  learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
+  studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
+  assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
+  sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutConversationsInput = {
+  id?: string
+  ownerId: string
+  title: string
+  description?: string | null
+  goal: string
+  status?: $Enums.CourseStatus
+  prompt: string
+  instructions?: string | null
+  currentLevel?: $Enums.CourseLevel | null
+  targetLevel?: $Enums.CourseLevel | null
+  weeklyStudyMinutes?: number | null
+  learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
+  courseMemories?: Prisma.CourseMemoryCreateNestedManyWithoutCourseInput
+  templates?: Prisma.CourseTemplateCreateNestedManyWithoutSourceCourseInput
+  learningEvents?: Prisma.LearningEventCreateNestedManyWithoutCourseInput
+  studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
+  assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
+  sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutConversationsInput = {
+  id?: string
+  ownerId: string
+  title: string
+  description?: string | null
+  goal: string
+  status?: $Enums.CourseStatus
+  prompt: string
+  instructions?: string | null
+  currentLevel?: $Enums.CourseLevel | null
+  targetLevel?: $Enums.CourseLevel | null
+  weeklyStudyMinutes?: number | null
+  learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
+  courseMemories?: Prisma.CourseMemoryUncheckedCreateNestedManyWithoutCourseInput
+  templates?: Prisma.CourseTemplateUncheckedCreateNestedManyWithoutSourceCourseInput
+  learningEvents?: Prisma.LearningEventUncheckedCreateNestedManyWithoutCourseInput
+  studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
+  assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
+  sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutConversationsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutConversationsInput, Prisma.CourseUncheckedCreateWithoutConversationsInput>
+}
+
+export type CourseUpsertWithoutConversationsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutConversationsInput, Prisma.CourseUncheckedUpdateWithoutConversationsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutConversationsInput, Prisma.CourseUncheckedCreateWithoutConversationsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutConversationsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutConversationsInput, Prisma.CourseUncheckedUpdateWithoutConversationsInput>
+}
+
+export type CourseUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  goal?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
+  targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
+  weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
+  courseMemories?: Prisma.CourseMemoryUpdateManyWithoutCourseNestedInput
+  templates?: Prisma.CourseTemplateUpdateManyWithoutSourceCourseNestedInput
+  learningEvents?: Prisma.LearningEventUpdateManyWithoutCourseNestedInput
+  studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
+  curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
+  assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
+  sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  goal?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
+  targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
+  weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   courseMemories?: Prisma.CourseMemoryUncheckedUpdateManyWithoutCourseNestedInput
   templates?: Prisma.CourseTemplateUncheckedUpdateManyWithoutSourceCourseNestedInput
   learningEvents?: Prisma.LearningEventUncheckedUpdateManyWithoutCourseNestedInput
@@ -886,6 +1057,7 @@ export type CourseCreateWithoutCourseMemoriesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -895,6 +1067,7 @@ export type CourseCreateWithoutCourseMemoriesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutCourseMemoriesInput = {
@@ -910,6 +1083,7 @@ export type CourseUncheckedCreateWithoutCourseMemoriesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -919,6 +1093,7 @@ export type CourseUncheckedCreateWithoutCourseMemoriesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutCourseMemoriesInput = {
@@ -950,6 +1125,7 @@ export type CourseUpdateWithoutCourseMemoriesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -959,6 +1135,7 @@ export type CourseUpdateWithoutCourseMemoriesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutCourseMemoriesInput = {
@@ -974,6 +1151,7 @@ export type CourseUncheckedUpdateWithoutCourseMemoriesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -983,6 +1161,7 @@ export type CourseUncheckedUpdateWithoutCourseMemoriesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutLearningEventsInput = {
@@ -998,6 +1177,7 @@ export type CourseCreateWithoutLearningEventsInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -1007,6 +1187,7 @@ export type CourseCreateWithoutLearningEventsInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutLearningEventsInput = {
@@ -1022,6 +1203,7 @@ export type CourseUncheckedCreateWithoutLearningEventsInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -1031,6 +1213,7 @@ export type CourseUncheckedCreateWithoutLearningEventsInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutLearningEventsInput = {
@@ -1062,6 +1245,7 @@ export type CourseUpdateWithoutLearningEventsInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -1071,6 +1255,7 @@ export type CourseUpdateWithoutLearningEventsInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutLearningEventsInput = {
@@ -1086,6 +1271,7 @@ export type CourseUncheckedUpdateWithoutLearningEventsInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -1095,6 +1281,7 @@ export type CourseUncheckedUpdateWithoutLearningEventsInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutStudyTimeInput = {
@@ -1110,6 +1297,7 @@ export type CourseCreateWithoutStudyTimeInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -1119,6 +1307,7 @@ export type CourseCreateWithoutStudyTimeInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutStudyTimeInput = {
@@ -1134,6 +1323,7 @@ export type CourseUncheckedCreateWithoutStudyTimeInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -1143,6 +1333,7 @@ export type CourseUncheckedCreateWithoutStudyTimeInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutStudyTimeInput = {
@@ -1174,6 +1365,7 @@ export type CourseUpdateWithoutStudyTimeInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -1183,6 +1375,7 @@ export type CourseUpdateWithoutStudyTimeInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutStudyTimeInput = {
@@ -1198,6 +1391,7 @@ export type CourseUncheckedUpdateWithoutStudyTimeInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -1207,6 +1401,7 @@ export type CourseUncheckedUpdateWithoutStudyTimeInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutTemplatesInput = {
@@ -1222,6 +1417,7 @@ export type CourseCreateWithoutTemplatesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -1231,6 +1427,7 @@ export type CourseCreateWithoutTemplatesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutTemplatesInput = {
@@ -1246,6 +1443,7 @@ export type CourseUncheckedCreateWithoutTemplatesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -1255,6 +1453,7 @@ export type CourseUncheckedCreateWithoutTemplatesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutTemplatesInput = {
@@ -1286,6 +1485,7 @@ export type CourseUpdateWithoutTemplatesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -1295,6 +1495,7 @@ export type CourseUpdateWithoutTemplatesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutTemplatesInput = {
@@ -1310,6 +1511,7 @@ export type CourseUncheckedUpdateWithoutTemplatesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -1319,6 +1521,7 @@ export type CourseUncheckedUpdateWithoutTemplatesInput = {
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutCurriculumRevisionsInput = {
@@ -1334,6 +1537,7 @@ export type CourseCreateWithoutCurriculumRevisionsInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -1343,6 +1547,7 @@ export type CourseCreateWithoutCurriculumRevisionsInput = {
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutCurriculumRevisionsInput = {
@@ -1358,6 +1563,7 @@ export type CourseUncheckedCreateWithoutCurriculumRevisionsInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -1367,6 +1573,7 @@ export type CourseUncheckedCreateWithoutCurriculumRevisionsInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutCurriculumRevisionsInput = {
@@ -1398,6 +1605,7 @@ export type CourseUpdateWithoutCurriculumRevisionsInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -1407,6 +1615,7 @@ export type CourseUpdateWithoutCurriculumRevisionsInput = {
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutCurriculumRevisionsInput = {
@@ -1422,6 +1631,7 @@ export type CourseUncheckedUpdateWithoutCurriculumRevisionsInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -1431,6 +1641,7 @@ export type CourseUncheckedUpdateWithoutCurriculumRevisionsInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutAssessmentsInput = {
@@ -1446,6 +1657,7 @@ export type CourseCreateWithoutAssessmentsInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -1455,6 +1667,7 @@ export type CourseCreateWithoutAssessmentsInput = {
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutAssessmentsInput = {
@@ -1470,6 +1683,7 @@ export type CourseUncheckedCreateWithoutAssessmentsInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -1479,6 +1693,7 @@ export type CourseUncheckedCreateWithoutAssessmentsInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   sources?: Prisma.CourseSourceUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutAssessmentsInput = {
@@ -1510,6 +1725,7 @@ export type CourseUpdateWithoutAssessmentsInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -1519,6 +1735,7 @@ export type CourseUpdateWithoutAssessmentsInput = {
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutAssessmentsInput = {
@@ -1534,6 +1751,7 @@ export type CourseUncheckedUpdateWithoutAssessmentsInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -1543,6 +1761,7 @@ export type CourseUncheckedUpdateWithoutAssessmentsInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
   sources?: Prisma.CourseSourceUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutSourcesInput = {
@@ -1558,6 +1777,7 @@ export type CourseCreateWithoutSourcesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -1567,6 +1787,7 @@ export type CourseCreateWithoutSourcesInput = {
   studyTime?: Prisma.StudyTimeCreateNestedManyWithoutCourseInput
   curriculumRevisions?: Prisma.CurriculumRevisionCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutSourcesInput = {
@@ -1582,6 +1803,7 @@ export type CourseUncheckedCreateWithoutSourcesInput = {
   targetLevel?: $Enums.CourseLevel | null
   weeklyStudyMinutes?: number | null
   learningStyle?: $Enums.LearningStyle | null
+  contentLanguage?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -1591,6 +1813,7 @@ export type CourseUncheckedCreateWithoutSourcesInput = {
   studyTime?: Prisma.StudyTimeUncheckedCreateNestedManyWithoutCourseInput
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedCreateNestedManyWithoutCourseInput
   assessments?: Prisma.AssessmentUncheckedCreateNestedManyWithoutCourseInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutSourcesInput = {
@@ -1622,6 +1845,7 @@ export type CourseUpdateWithoutSourcesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -1631,6 +1855,7 @@ export type CourseUpdateWithoutSourcesInput = {
   studyTime?: Prisma.StudyTimeUpdateManyWithoutCourseNestedInput
   curriculumRevisions?: Prisma.CurriculumRevisionUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutSourcesInput = {
@@ -1646,6 +1871,7 @@ export type CourseUncheckedUpdateWithoutSourcesInput = {
   targetLevel?: Prisma.NullableEnumCourseLevelFieldUpdateOperationsInput | $Enums.CourseLevel | null
   weeklyStudyMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   learningStyle?: Prisma.NullableEnumLearningStyleFieldUpdateOperationsInput | $Enums.LearningStyle | null
+  contentLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -1655,6 +1881,7 @@ export type CourseUncheckedUpdateWithoutSourcesInput = {
   studyTime?: Prisma.StudyTimeUncheckedUpdateManyWithoutCourseNestedInput
   curriculumRevisions?: Prisma.CurriculumRevisionUncheckedUpdateManyWithoutCourseNestedInput
   assessments?: Prisma.AssessmentUncheckedUpdateManyWithoutCourseNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 
@@ -1671,6 +1898,7 @@ export type CourseCountOutputType = {
   curriculumRevisions: number
   assessments: number
   sources: number
+  conversations: number
 }
 
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1682,6 +1910,7 @@ export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   curriculumRevisions?: boolean | CourseCountOutputTypeCountCurriculumRevisionsArgs
   assessments?: boolean | CourseCountOutputTypeCountAssessmentsArgs
   sources?: boolean | CourseCountOutputTypeCountSourcesArgs
+  conversations?: boolean | CourseCountOutputTypeCountConversationsArgs
 }
 
 /**
@@ -1750,6 +1979,13 @@ export type CourseCountOutputTypeCountSourcesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.CourseSourceWhereInput
 }
 
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationWhereInput
+}
+
 
 export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1764,6 +2000,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   targetLevel?: boolean
   weeklyStudyMinutes?: boolean
   learningStyle?: boolean
+  contentLanguage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
@@ -1774,6 +2011,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   curriculumRevisions?: boolean | Prisma.Course$curriculumRevisionsArgs<ExtArgs>
   assessments?: boolean | Prisma.Course$assessmentsArgs<ExtArgs>
   sources?: boolean | Prisma.Course$sourcesArgs<ExtArgs>
+  conversations?: boolean | Prisma.Course$conversationsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
@@ -1790,6 +2028,7 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   targetLevel?: boolean
   weeklyStudyMinutes?: boolean
   learningStyle?: boolean
+  contentLanguage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["course"]>
@@ -1807,6 +2046,7 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   targetLevel?: boolean
   weeklyStudyMinutes?: boolean
   learningStyle?: boolean
+  contentLanguage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["course"]>
@@ -1824,11 +2064,12 @@ export type CourseSelectScalar = {
   targetLevel?: boolean
   weeklyStudyMinutes?: boolean
   learningStyle?: boolean
+  contentLanguage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "title" | "description" | "goal" | "status" | "prompt" | "instructions" | "currentLevel" | "targetLevel" | "weeklyStudyMinutes" | "learningStyle" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "title" | "description" | "goal" | "status" | "prompt" | "instructions" | "currentLevel" | "targetLevel" | "weeklyStudyMinutes" | "learningStyle" | "contentLanguage" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
   courseMemories?: boolean | Prisma.Course$courseMemoriesArgs<ExtArgs>
@@ -1838,6 +2079,7 @@ export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   curriculumRevisions?: boolean | Prisma.Course$curriculumRevisionsArgs<ExtArgs>
   assessments?: boolean | Prisma.Course$assessmentsArgs<ExtArgs>
   sources?: boolean | Prisma.Course$sourcesArgs<ExtArgs>
+  conversations?: boolean | Prisma.Course$conversationsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1854,6 +2096,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     curriculumRevisions: Prisma.$CurriculumRevisionPayload<ExtArgs>[]
     assessments: Prisma.$AssessmentPayload<ExtArgs>[]
     sources: Prisma.$CourseSourcePayload<ExtArgs>[]
+    conversations: Prisma.$ConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1868,6 +2111,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     targetLevel: $Enums.CourseLevel | null
     weeklyStudyMinutes: number | null
     learningStyle: $Enums.LearningStyle | null
+    contentLanguage: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["course"]>
@@ -2272,6 +2516,7 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
   curriculumRevisions<T extends Prisma.Course$curriculumRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$curriculumRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CurriculumRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assessments<T extends Prisma.Course$assessmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$assessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssessmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sources<T extends Prisma.Course$sourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$sourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseSourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversations<T extends Prisma.Course$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2313,6 +2558,7 @@ export interface CourseFieldRefs {
   readonly targetLevel: Prisma.FieldRef<"Course", 'CourseLevel'>
   readonly weeklyStudyMinutes: Prisma.FieldRef<"Course", 'Int'>
   readonly learningStyle: Prisma.FieldRef<"Course", 'LearningStyle'>
+  readonly contentLanguage: Prisma.FieldRef<"Course", 'String'>
   readonly createdAt: Prisma.FieldRef<"Course", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Course", 'DateTime'>
 }
@@ -2897,6 +3143,30 @@ export type Course$sourcesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.CourseSourceScalarFieldEnum | Prisma.CourseSourceScalarFieldEnum[]
+}
+
+/**
+ * Course.conversations
+ */
+export type Course$conversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Conversation
+   */
+  select?: Prisma.ConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Conversation
+   */
+  omit?: Prisma.ConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationInclude<ExtArgs> | null
+  where?: Prisma.ConversationWhereInput
+  orderBy?: Prisma.ConversationOrderByWithRelationInput | Prisma.ConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
 }
 
 /**

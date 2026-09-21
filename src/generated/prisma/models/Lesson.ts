@@ -885,10 +885,12 @@ export type LessonCreateNestedOneWithoutConversationsInput = {
   connect?: Prisma.LessonWhereUniqueInput
 }
 
-export type LessonUpdateOneRequiredWithoutConversationsNestedInput = {
+export type LessonUpdateOneWithoutConversationsNestedInput = {
   create?: Prisma.XOR<Prisma.LessonCreateWithoutConversationsInput, Prisma.LessonUncheckedCreateWithoutConversationsInput>
   connectOrCreate?: Prisma.LessonCreateOrConnectWithoutConversationsInput
   upsert?: Prisma.LessonUpsertWithoutConversationsInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
   connect?: Prisma.LessonWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutConversationsInput, Prisma.LessonUpdateWithoutConversationsInput>, Prisma.LessonUncheckedUpdateWithoutConversationsInput>
 }

@@ -50,6 +50,11 @@ PREREQUISITE RULES
 
 Adapt course depth, pacing, examples, and scope to the learner profile.
 
+LANGUAGE
+The learner request includes contentLanguage.
+Write all learner-facing curriculum text (course title, description, module text, lesson titles, descriptions, objectives, and concepts) in exactly that language.
+Do not infer the course language from the topic when contentLanguage is present.
+
 SOURCE GROUNDING
 If SOURCE CONTEXT is provided, design the curriculum around the supplied material.
 Do not invent source-specific topics that are not supported by the supplied evidence.

@@ -46,6 +46,8 @@ export async function askCourseTutor({
         "- If sourceContext is present, use it as primary evidence for source-specific factual claims.",
         "- Cite source-backed claims only with supplied markers such as [S1].",
         "- Never invent source markers.",
+        "- Respond in context.preferences.tutorLanguage, independently of the course content language.",
+        "- Only switch response language when the learner explicitly requests it in the current message.",
         "- Do not dump the full curriculum unless the learner asks for it.",
       ].join("\n"),
     },

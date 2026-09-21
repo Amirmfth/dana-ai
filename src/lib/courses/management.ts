@@ -192,7 +192,6 @@ export async function normalizeCourseProgress(courseId: string) {
           },
         },
       },
-      mode: true,
       assessments: {
         where: { type: "COURSE_FINAL" },
         include: {

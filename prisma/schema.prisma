@@ -129,6 +129,24 @@ enum ReadingDensity {
   SPACIOUS
 }
 
+enum ReadingLineHeight {
+  TIGHT
+  NORMAL
+  RELAXED
+}
+
+enum ReadingWidth {
+  NARROW
+  STANDARD
+  WIDE
+}
+
+enum MotionPreference {
+  SYSTEM
+  REDUCED
+  FULL
+}
+
 enum LessonDifficulty {
   INTRODUCTORY
   EASY
@@ -525,12 +543,19 @@ model UserPrivacySettings {
 }
 
 model UserExperienceSettings {
-  userId         String          @id @db.Uuid
-  fontSize       ReadingFontSize @default(DEFAULT)
-  readingDensity ReadingDensity  @default(COMFORTABLE)
-  highContrast   Boolean         @default(false)
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  userId                 String            @id @db.Uuid
+  uiLanguage             String            @default("English")
+  defaultContentLanguage String            @default("English")
+  tutorLanguage          String            @default("English")
+  fontSize               ReadingFontSize   @default(DEFAULT)
+  lineHeight             ReadingLineHeight @default(NORMAL)
+  readingWidth           ReadingWidth      @default(STANDARD)
+  readingDensity         ReadingDensity    @default(COMFORTABLE)
+  motionPreference       MotionPreference  @default(SYSTEM)
+  highContrast           Boolean           @default(false)
+  dyslexiaFriendly       Boolean           @default(false)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
 }
 
 model GenerationJob {

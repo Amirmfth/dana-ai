@@ -174,6 +174,7 @@ export async function markGenerationFailed(
     },
     data: {
       status: "FAILED",
+      stage: "FAILED",
       claimToken: null,
       errorMessage: safeGenerationError(error),
       completedAt: null,

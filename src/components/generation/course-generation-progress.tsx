@@ -77,6 +77,9 @@ export function CourseGenerationProgress({ courseId }: { courseId: string }) {
           Generation failed
         </p>
         <h1 className="mt-2 text-2xl font-semibold">Dana could not finish this course.</h1>
+        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-300">
+          Failed during {stages.find((item) => item.key === progress.stage)?.label ?? "generation"}
+        </p>
         <p className="mt-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
           {progress.errorMessage || requestError || "Please retry course generation."}
         </p>

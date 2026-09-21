@@ -1,5 +1,6 @@
 import { extractMemories } from "@/lib/ai/memory-extractor";
 import { prisma } from "@/lib/db/prisma";
+import { getPrivacySettings } from "@/lib/ai/privacy";
 import {
   createMemoryEmbedding,
   findNearestMemory,
@@ -22,7 +23,14 @@ export async function saveExchangeMemories({
     where: { id: lessonId },
     select: {
       module: {
-        select: { courseId: true },
+        select: {
+          course: {
+            select: {
+              id: true,
+              ownerId: true,
+            },
+          },
+        },
       },
     },
   });
@@ -31,7 +39,10 @@ export async function saveExchangeMemories({
     throw new Error("Lesson not found.");
   }
 
-  const courseId = lesson.module.courseId;
+  const courseId = lesson.module.course.id;
+  const settings = await getPrivacySettings(lesson.module.course.ownerId);
+  if (!settings.useLearnerMemory) return;
+
   const extracted = await extractMemories({
     lessonId,
     courseId,
@@ -44,7 +55,7 @@ export async function saveExchangeMemories({
   if (extracted.length === 0) return;
 
   const existing = await prisma.courseMemory.findMany({
-    where: { courseId },
+    where: { courseId, isActive: true },
     select: { content: true },
   });
 
@@ -98,6 +109,7 @@ export async function saveExchangeMemories({
         type: memory.type,
         content: memory.content,
         importance: memory.importance,
+        isActive: true,
       },
     });
 

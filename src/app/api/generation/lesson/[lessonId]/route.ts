@@ -16,6 +16,11 @@ export async function GET(
       module: { course: { ownerId: user.id } },
     },
     select: {
+      module: {
+        select: {
+          course: { select: { mode: true } },
+        },
+      },
       generationJobs: {
         select: {
           kind: true,
@@ -35,5 +40,9 @@ export async function GET(
   const content = lesson.generationJobs.find((job) => job.kind === "LESSON_CONTENT");
   const quiz = lesson.generationJobs.find((job) => job.kind === "LESSON_QUIZ");
 
-  return NextResponse.json({ content: content ?? null, quiz: quiz ?? null });
+  return NextResponse.json({
+    mode: lesson.module.course.mode,
+    content: content ?? null,
+    quiz: quiz ?? null,
+  });
 }

@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
     const total = graded.length;
 
     await prisma.$transaction(async (tx) => {
-      const activeRun = await tx.quizRun.findFirst({
+      const claimed = await tx.quizRun.updateMany({
         where: {
           id: quizRunId,
           userId: user.id,
@@ -142,10 +142,14 @@ export async function POST(request: NextRequest) {
           quizVersionId: run.quizVersionId,
           lessonId: run.lessonId,
         },
-        select: { id: true },
+        data: {
+          score,
+          total,
+          completedAt: new Date(),
+        },
       });
 
-      if (!activeRun) {
+      if (claimed.count !== 1) {
         throw new Error("QUIZ_RUN_NOT_ACTIVE");
       }
 
@@ -160,15 +164,6 @@ export async function POST(request: NextRequest) {
           answer: answer as Prisma.InputJsonValue,
           result: correct ? "CORRECT" : "INCORRECT",
         })),
-      });
-
-      await tx.quizRun.update({
-        where: { id: quizRunId },
-        data: {
-          score,
-          total,
-          completedAt: new Date(),
-        },
       });
 
       await tx.learningEvent.create({

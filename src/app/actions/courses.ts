@@ -176,7 +176,10 @@ export async function createCourseDraftAction(formData: FormData) {
 
     await prisma.courseGenerationJob.update({
       where: { courseId: draftCourse.id },
-      data: { stage: "PLANNING_CURRICULUM" },
+      data: {
+        status: "NOT_STARTED",
+        stage: "PLANNING_CURRICULUM",
+      },
     });
 
     return { courseId: draftCourse.id };
@@ -227,11 +230,18 @@ export async function finishCourseGenerationAction(courseId: string) {
     where: { courseId },
     create: {
       courseId,
-      status: "GENERATING",
+      status: "NOT_STARTED",
       stage: "PLANNING_CURRICULUM",
-      startedAt: new Date(),
     },
-    update: {
+    update: {},
+  });
+
+  const claimed = await prisma.courseGenerationJob.updateMany({
+    where: {
+      courseId,
+      status: { in: ["NOT_STARTED", "FAILED"] },
+    },
+    data: {
       status: "GENERATING",
       stage: "PLANNING_CURRICULUM",
       errorMessage: null,
@@ -239,6 +249,15 @@ export async function finishCourseGenerationAction(courseId: string) {
       completedAt: null,
     },
   });
+
+  if (claimed.count === 0) {
+    const current = await prisma.courseGenerationJob.findUnique({
+      where: { courseId },
+      select: { status: true },
+    });
+    if (current?.status === "READY") return { courseId };
+    return { courseId, alreadyGenerating: true };
+  }
 
   try {
     await createCourse(user.id, parsed, {

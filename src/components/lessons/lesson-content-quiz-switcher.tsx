@@ -54,16 +54,17 @@ export function LessonContentQuizSwitcher({
         </button>
       </div>
 
-      <div className={activeView === "content" ? "lg:block" : "lg:hidden"}>
+      <div className={activeView === "content" || isFocusMode ? "lg:block" : "lg:hidden"}>
         {content}
       </div>
 
       <div
-        aria-hidden={!isQuizOpen && activeView !== "quiz"}
+        id="lesson-quiz-sheet"
+        aria-hidden={!isQuizOpen && (activeView !== "quiz" || isFocusMode)}
         className={[
           "fixed inset-x-0 bottom-0 z-50 max-h-[88dvh] overflow-y-auto rounded-t-3xl border border-neutral-200 bg-white shadow-2xl transition-transform duration-200 dark:border-neutral-800 dark:bg-neutral-950",
           isQuizOpen && !isFocusMode ? "translate-y-0" : "translate-y-full pointer-events-none",
-          activeView === "quiz"
+          activeView === "quiz" && !isFocusMode
             ? "lg:static lg:block lg:max-h-none lg:translate-y-0 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:shadow-none lg:pointer-events-auto"
             : "lg:hidden",
         ].join(" ")}

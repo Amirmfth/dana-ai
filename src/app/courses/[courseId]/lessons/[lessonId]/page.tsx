@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { LessonContent } from "@/components/lessons/lesson-content";
 import { LessonTableOfContents } from "@/components/lessons/lesson-table-of-contents";
 import { LessonWorkspace } from "@/components/lessons/lesson-workspace";
+import { LessonContentQuizSwitcher } from "@/components/lessons/lesson-content-quiz-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
@@ -158,18 +159,14 @@ export default async function LessonPage({
         ? [
             {
               id: latestAttempt.id,
-
               answer: latestAttempt.answer,
-
-              result: latestAttempt.result,
-
               createdAt: latestAttempt.createdAt.toISOString(),
-
-              /*
-               * Only expose the answer key after this
-               * exercise has already been answered.
-               */
-              answerKey: exercise.answerKey,
+              ...(quiz?.run.completedAt
+                ? {
+                    result: latestAttempt.result,
+                    answerKey: exercise.answerKey,
+                  }
+                : {}),
             },
           ]
         : [],
@@ -185,6 +182,7 @@ export default async function LessonPage({
   const tocSections = lesson.sections.map((section, index) => ({
     id: `lesson-section-${index}`,
     title: section.title || `Section ${index + 1}`,
+    type: section.type,
   }));
 
   return (
@@ -195,6 +193,7 @@ export default async function LessonPage({
       <LessonStudyTracker lessonId={lessonId} />
       <LessonWorkspace
         lessonId={lessonId}
+        hasQuiz={Boolean(quiz)}
         conversation={initialConversation}
         preferences={{
           fontSize: experienceSettings?.fontSize ?? "DEFAULT",
@@ -265,38 +264,50 @@ export default async function LessonPage({
 
           <div className="min-w-0">
             <div className="lesson-reading-column mx-auto w-full max-w-2xl">
-              <div className="lesson-distraction mb-6 flex flex-wrap gap-2">
-                {!isFlexibleCourse && (
-                  <Link
-                    href={"/courses/" + courseId + "/lessons/" + lessonId + "/test-out"}
-                    className="inline-flex min-h-10 items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700"
-                  >
-                    Test out of this lesson
-                  </Link>
-                )}
-                {lessonInfo.isOptional && lessonInfo.status !== "COMPLETED" && (
-                  <AsyncActionForm action={skipLessonAction}>
-                    <input type="hidden" name="courseId" value={courseId} />
-                    <input type="hidden" name="lessonId" value={lessonId} />
-                    <button className="min-h-10 rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700">
-                      Skip optional lesson
-                    </button>
-                  </AsyncActionForm>
-                )}
-              </div>
-              <LessonContent lesson={lesson} citations={citations} />
-              {quiz && (
-                <LessonQuiz
-                  exercises={quizExercises}
-                  lessonId={lessonId}
-                  quizRunId={quiz.run.id}
-                />
-              )}
+              <LessonContentQuizSwitcher
+                content={
+                  <>
+                    <div className="lesson-distraction mb-6 flex flex-wrap gap-2">
+                      {!isFlexibleCourse && (
+                        <Link
+                          href={"/courses/" + courseId + "/lessons/" + lessonId + "/test-out"}
+                          className="inline-flex min-h-10 items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700"
+                        >
+                          Test out of this lesson
+                        </Link>
+                      )}
+                      {lessonInfo.isOptional && lessonInfo.status !== "COMPLETED" && (
+                        <AsyncActionForm action={skipLessonAction}>
+                          <input type="hidden" name="courseId" value={courseId} />
+                          <input type="hidden" name="lessonId" value={lessonId} />
+                          <button className="min-h-10 rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700">
+                            Skip optional lesson
+                          </button>
+                        </AsyncActionForm>
+                      )}
+                    </div>
 
-              <LessonCompletion
-                courseId={courseId}
-                lessonId={lessonId}
-                isCompleted={lessonInfo.status === "COMPLETED"}
+                    <LessonContent lesson={lesson} citations={citations} />
+
+                    <LessonCompletion
+                      courseId={courseId}
+                      lessonId={lessonId}
+                      isCompleted={lessonInfo.status === "COMPLETED"}
+                    />
+                  </>
+                }
+                quiz={
+                  quiz ? (
+                    <LessonQuiz
+                      exercises={quizExercises}
+                      lessonId={lessonId}
+                      quizRunId={quiz.run.id}
+                      initialCompleted={Boolean(quiz.run.completedAt)}
+                      initialScore={quiz.run.score}
+                      initialTotal={quiz.run.total}
+                    />
+                  ) : undefined
+                }
               />
             </div>
           </div>

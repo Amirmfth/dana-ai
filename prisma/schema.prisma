@@ -14,6 +14,11 @@ enum CourseStatus {
   ARCHIVED
 }
 
+enum CourseMode {
+  GUIDED
+  FLEXIBLE
+}
+
 enum LessonStatus {
   LOCKED
   AVAILABLE
@@ -147,6 +152,14 @@ enum MotionPreference {
   FULL
 }
 
+enum ReadingTheme {
+  DEFAULT
+  PAPER
+  SEPIA
+  DARK
+  HIGH_CONTRAST
+}
+
 enum LessonDifficulty {
   INTRODUCTORY
   EASY
@@ -195,6 +208,7 @@ model Course {
   weeklyStudyMinutes Int?
   learningStyle      LearningStyle?
   contentLanguage    String        @default("English")
+  mode               CourseMode    @default(GUIDED)
 
   modules         Module[]
   courseMemories  CourseMemory[]
@@ -205,6 +219,7 @@ model Course {
   assessments          Assessment[]
   sources              CourseSource[]
   conversations        Conversation[]
+  generationJob        CourseGenerationJob?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -554,8 +569,27 @@ model UserExperienceSettings {
   motionPreference       MotionPreference  @default(SYSTEM)
   highContrast           Boolean           @default(false)
   dyslexiaFriendly       Boolean           @default(false)
+  readingTheme            ReadingTheme      @default(DEFAULT)
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
+}
+
+model CourseGenerationJob {
+  id String @id @default(cuid())
+
+  courseId String @unique
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  status       GenerationStatus @default(NOT_STARTED)
+  stage        String           @default("PREPARING")
+  errorMessage String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, updatedAt])
 }
 
 model GenerationJob {
@@ -566,6 +600,7 @@ model GenerationJob {
 
   kind       GenerationKind
   status     GenerationStatus @default(NOT_STARTED)
+  stage      String?
   claimToken String?
 
   attemptCount Int @default(0)

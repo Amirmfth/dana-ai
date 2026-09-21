@@ -215,6 +215,39 @@ export async function normalizeCourseProgress(courseId: string) {
 
   if (!course) return;
 
+  if (course.mode === "FLEXIBLE") {
+    const lessons = course.modules.flatMap((courseModule) => courseModule.lessons);
+    const requiredLessons = lessons.filter((lesson) => !lesson.isOptional);
+    const allRequiredComplete = requiredLessons.every(
+      (lesson) => lesson.status === "COMPLETED",
+    );
+
+    await prisma.$transaction([
+      ...lessons
+        .filter((lesson) => lesson.status !== "COMPLETED")
+        .map((lesson) =>
+          prisma.lesson.update({
+            where: { id: lesson.id },
+            data: {
+              status: lesson.status === "IN_PROGRESS" ? "IN_PROGRESS" : "AVAILABLE",
+            },
+          }),
+        ),
+      prisma.course.update({
+        where: { id: courseId },
+        data: {
+          status:
+            course.status === "ARCHIVED"
+              ? "ARCHIVED"
+              : allRequiredComplete
+                ? "COMPLETED"
+                : "ACTIVE",
+        },
+      }),
+    ]);
+    return;
+  }
+
   const completed = new Set(
     course.modules
       .flatMap((courseModule) => courseModule.lessons)

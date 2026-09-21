@@ -6,6 +6,7 @@ import {
   markGenerationReady,
   markObservedGenerationReady,
   waitForGeneratedValue,
+  updateGenerationStage,
 } from "@/lib/generation/coordinator";
 import { getOrCreateCurrentQuizRun } from "@/lib/exercises/quiz-runs";
 import { persistQuizVersion } from "@/lib/regeneration/quiz";
@@ -53,11 +54,20 @@ export async function getOrGenerateQuiz(userId: string, lessonId: string) {
     select: {
       id: true,
       activeQuizVersionId: true,
+      module: {
+        select: {
+          course: { select: { mode: true } },
+        },
+      },
     },
   });
 
   if (!lesson) {
     throw new Error("Lesson not found or locked.");
+  }
+
+  if (lesson.module.course.mode === "FLEXIBLE") {
+    throw new Error("Quizzes are disabled for flexible courses.");
   }
 
   let activeQuizVersionId = lesson.activeQuizVersionId;
@@ -85,7 +95,10 @@ export async function getOrGenerateQuiz(userId: string, lessonId: string) {
       activeQuizVersionId = current?.activeQuizVersionId ?? null;
     } else {
       try {
+        await updateGenerationStage(lessonId, "LESSON_QUIZ", claimToken, "GENERATING_QUIZ");
         const quiz = await generateLessonQuiz(userId, lessonId);
+
+        await updateGenerationStage(lessonId, "LESSON_QUIZ", claimToken, "SAVING_QUIZ");
         const version = await persistQuizVersion(
           lessonId,
           1,

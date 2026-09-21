@@ -93,7 +93,7 @@ body {
 }
 
 .focus-mode .lesson-distraction,
-.focus-mode .lesson-toc-container {
+.focus-mode .lesson-toc-desktop {
   display: none !important;
 }
 
@@ -109,4 +109,42 @@ body {
   animation-iteration-count: 1 !important;
   scroll-behavior: auto !important;
   transition-duration: 0.01ms !important;
+}
+
+
+.dana-reading-theme-paper .lesson-reading-surface {
+  background: #fffdf7;
+  color: #25231f;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.dana-reading-theme-sepia .lesson-reading-surface {
+  background: #f4ecd8;
+  color: #3b2f22;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.dana-reading-theme-dark .lesson-reading-surface {
+  background: #161616;
+  color: #f3f3f3;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.dana-reading-theme-dark .lesson-reading-surface :where(p, li, h1, h2, h3, h4, strong) {
+  color: inherit !important;
+}
+
+.dana-reading-theme-high-contrast .lesson-reading-surface {
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.dana-reading-theme-high-contrast .lesson-reading-surface :where(p, li, h1, h2, h3, h4, strong) {
+  color: #fff !important;
 }

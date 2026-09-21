@@ -40,12 +40,24 @@ export function LessonTableOfContents({
 }: LessonTableOfContentsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDesktopOpen, setIsDesktopOpen] = useState(false);
+  const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
   const [activeId, setActiveId] = useState(sections[0]?.id);
   const visibleSections = useRef(new Set<string>());
   const desktopCloseTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
-  const { setTutorOpen } = useLessonMobileControls();
+  const {
+    setTutorOpen,
+    isFocusMode,
+    toggleFocusMode,
+    fontSize,
+    setFontSize,
+    readingTheme,
+    setReadingTheme,
+    dyslexiaFriendly,
+    setDyslexiaFriendly,
+    isSavingReadingPreferences,
+  } = useLessonMobileControls();
 
   useEffect(() => {
     if (sections.length === 0) return;
@@ -107,7 +119,7 @@ export function LessonTableOfContents({
     <>
       <nav
         aria-label="Lesson sections"
-        className="sticky top-2 hidden h-[calc(100dvh-4rem)] max-h-168 w-8 self-start lg:block"
+        className="lesson-toc-desktop sticky top-2 hidden h-[calc(100dvh-4rem)] max-h-168 w-8 self-start lg:block"
         onMouseEnter={openDesktopToc}
         onMouseLeave={closeDesktopToc}
         onFocus={openDesktopToc}
@@ -200,53 +212,193 @@ export function LessonTableOfContents({
           )}
         </AnimatePresence>
 
+        <AnimatePresence>
+          {isAppearanceOpen && (
+            <motion.div
+              key="mobile-reading-appearance"
+              initial={{ opacity: 0, x: "-50%", y: 12, scale: 0.96 }}
+              animate={{ opacity: 1, x: "-50%", y: 0, scale: 1 }}
+              exit={{ opacity: 0, x: "-50%", y: 12, scale: 0.96 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="fixed bottom-20 left-1/2 z-20 w-[min(22rem,calc(100vw-2.5rem))] rounded-2xl border border-neutral-200 bg-white p-4 shadow-xl dark:border-neutral-700 dark:bg-neutral-900"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold">Reading appearance</p>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    Applies to lesson content only.
+                  </p>
+                </div>
+                {isSavingReadingPreferences && (
+                  <span className="text-xs text-neutral-500">Saving…</span>
+                )}
+              </div>
+
+              <div className="mt-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                  Font size
+                </p>
+                <div className="mt-2 grid grid-cols-4 gap-2">
+                  {([
+                    ["SMALL", "S"],
+                    ["DEFAULT", "M"],
+                    ["LARGE", "L"],
+                    ["EXTRA_LARGE", "XL"],
+                  ] as const).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setFontSize(value)}
+                      aria-pressed={fontSize === value}
+                      className={
+                        "min-h-10 rounded-xl border px-2 text-sm font-semibold " +
+                        (fontSize === value
+                          ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                          : "border-neutral-200 dark:border-neutral-700")
+                      }
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                  Font family
+                </p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDyslexiaFriendly(false)}
+                    aria-pressed={!dyslexiaFriendly}
+                    className={
+                      "min-h-10 rounded-xl border px-3 text-sm font-medium " +
+                      (!dyslexiaFriendly
+                        ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                        : "border-neutral-200 dark:border-neutral-700")
+                    }
+                  >
+                    Default
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDyslexiaFriendly(true)}
+                    aria-pressed={dyslexiaFriendly}
+                    className={
+                      "min-h-10 rounded-xl border px-3 text-sm font-medium " +
+                      (dyslexiaFriendly
+                        ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                        : "border-neutral-200 dark:border-neutral-700")
+                    }
+                  >
+                    Dyslexia friendly
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                  Lesson theme
+                </p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {([
+                    ["DEFAULT", "Default"],
+                    ["PAPER", "Paper"],
+                    ["SEPIA", "Sepia"],
+                    ["DARK", "Dark"],
+                    ["HIGH_CONTRAST", "Contrast"],
+                  ] as const).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setReadingTheme(value)}
+                      aria-pressed={readingTheme === value}
+                      className={
+                        "min-h-10 rounded-xl border px-3 text-sm font-medium " +
+                        (readingTheme === value
+                          ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                          : "border-neutral-200 dark:border-neutral-700")
+                      }
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="fixed bottom-5 left-1/2 z-20 flex h-11 -translate-x-1/2 items-center rounded-full bg-white p-1 shadow-lg ring-1 ring-neutral-200 dark:bg-neutral-900 dark:ring-neutral-700">
+          {!isFocusMode && (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAppearanceOpen(false);
+                  setIsOpen((open) => !open);
+                }}
+                className="flex size-9 items-center justify-center rounded-full text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
+                aria-label={isOpen ? "Close table of contents" : "Open table of contents"}
+                aria-expanded={isOpen}
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5">
+                  <path d="M8 6h11M8 12h11M8 18h11M4 6h.01M4 12h.01M4 18h.01" strokeLinecap="round" />
+                </svg>
+              </button>
+              <span aria-hidden="true" className="h-5 w-px bg-neutral-200 dark:bg-neutral-700" />
+            </>
+          )}
+
           <button
             type="button"
-            onClick={() => setIsOpen((open) => !open)}
-            className="flex size-9 items-center justify-center rounded-full text-neutral-950 transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-white dark:hover:bg-neutral-800 dark:focus-visible:outline-white"
-            aria-label={
-              isOpen ? "Close table of contents" : "Open table of contents"
-            }
-            aria-expanded={isOpen}
+            onClick={() => {
+              setIsOpen(false);
+              toggleFocusMode();
+            }}
+            className="flex size-9 items-center justify-center rounded-full text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
+            aria-label={isFocusMode ? "Exit focus mode" : "Enter focus mode"}
+            aria-pressed={isFocusMode}
           >
-            {isOpen ? (
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="size-5"
-              >
-                <path d="M6 6l12 12M18 6L6 18" />
-              </svg>
-            ) : (
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="size-5"
-              >
-                <path
-                  d="M8 6h11M8 12h11M8 18h11M4 6h.01M4 12h.01M4 18h.01"
-                  strokeLinecap="round"
-                />
-              </svg>
-            )}
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" className="size-5">
+              <path d="M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </button>
+
           <span aria-hidden="true" className="h-5 w-px bg-neutral-200 dark:bg-neutral-700" />
+
           <button
-            id="ask-dana-trigger-mobile"
             type="button"
-            onClick={() => setTutorOpen(true)}
-            className="min-h-9 rounded-full px-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-white dark:hover:bg-neutral-800 dark:focus-visible:outline-white"
-            aria-haspopup="dialog"
+            onClick={() => {
+              setIsOpen(false);
+              setIsAppearanceOpen((open) => !open);
+            }}
+            className="flex size-9 items-center justify-center rounded-full text-sm font-bold text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
+            aria-label="Reading appearance"
+            aria-expanded={isAppearanceOpen}
           >
-            Ask Dana
+            Aa
           </button>
+
+          {!isFocusMode && (
+            <>
+              <span aria-hidden="true" className="h-5 w-px bg-neutral-200 dark:bg-neutral-700" />
+              <button
+                id="ask-dana-trigger-mobile"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsAppearanceOpen(false);
+                  setTutorOpen(true);
+                }}
+                className="min-h-9 rounded-full px-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
+                aria-haspopup="dialog"
+              >
+                Ask Dana
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>

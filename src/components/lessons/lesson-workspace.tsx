@@ -1,10 +1,15 @@
 "use client";
 
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useRef, useState, useTransition, type CSSProperties, type ReactNode } from "react";
 
 import { motion, useReducedMotion } from "framer-motion";
 
-import { LessonMobileControlsContext } from "@/components/lessons/lesson-mobile-controls";
+import {
+  LessonMobileControlsContext,
+  type LessonFontSize,
+  type LessonReadingTheme,
+} from "@/components/lessons/lesson-mobile-controls";
+import { updateLessonReadingPreferencesAction } from "@/app/settings/experience/actions";
 import { tutorPanelTransition } from "@/components/lessons/tutor-panel-motion";
 import { LessonTutor } from "@/components/tutor/lesson-tutor";
 
@@ -19,6 +24,7 @@ type LessonWorkspaceProps = {
     motionPreference: "SYSTEM" | "REDUCED" | "FULL";
     highContrast: boolean;
     dyslexiaFriendly: boolean;
+    readingTheme: LessonReadingTheme;
   };
   conversation?: {
     id: string;
@@ -41,6 +47,22 @@ export function LessonWorkspace({
   const [isTutorOpen, setTutorOpenState] = useState(false);
   const [isTutorMounted, setTutorMounted] = useState(false);
   const [isFocusMode, setFocusMode] = useState(false);
+  const [fontSize, setFontSizeState] = useState<LessonFontSize>(
+    preferences?.fontSize ?? "DEFAULT",
+  );
+  const [readingTheme, setReadingThemeState] = useState<LessonReadingTheme>(
+    preferences?.readingTheme ?? "DEFAULT",
+  );
+  const [dyslexiaFriendly, setDyslexiaFriendlyState] = useState(
+    preferences?.dyslexiaFriendly ?? false,
+  );
+  const readingPreferencesRef = useRef({
+    fontSize,
+    readingTheme,
+    dyslexiaFriendly,
+  });
+  const [isSavingReadingPreferences, startSavingReadingPreferences] =
+    useTransition();
 
   const reduceMotion =
     preferences?.motionPreference === "REDUCED" ||
@@ -52,7 +74,7 @@ export function LessonWorkspace({
       DEFAULT: "1rem",
       LARGE: "1.125rem",
       EXTRA_LARGE: "1.25rem",
-    }[preferences?.fontSize ?? "DEFAULT"],
+    }[fontSize],
     "--dana-reading-line-height": {
       TIGHT: "1.55",
       NORMAL: "1.75",
@@ -79,6 +101,41 @@ export function LessonWorkspace({
     setTutorOpenState(isOpen);
   }
 
+  function persistReadingPreferences(
+    nextFontSize: LessonFontSize,
+    nextTheme: LessonReadingTheme,
+    nextDyslexiaFriendly: boolean,
+  ) {
+    startSavingReadingPreferences(async () => {
+      await updateLessonReadingPreferencesAction({
+        fontSize: nextFontSize,
+        readingTheme: nextTheme,
+        dyslexiaFriendly: nextDyslexiaFriendly,
+      });
+    });
+  }
+
+  function setFontSize(nextFontSize: LessonFontSize) {
+    setFontSizeState(nextFontSize);
+    const next = { ...readingPreferencesRef.current, fontSize: nextFontSize };
+    readingPreferencesRef.current = next;
+    persistReadingPreferences(next.fontSize, next.readingTheme, next.dyslexiaFriendly);
+  }
+
+  function setReadingTheme(nextTheme: LessonReadingTheme) {
+    setReadingThemeState(nextTheme);
+    const next = { ...readingPreferencesRef.current, readingTheme: nextTheme };
+    readingPreferencesRef.current = next;
+    persistReadingPreferences(next.fontSize, next.readingTheme, next.dyslexiaFriendly);
+  }
+
+  function setDyslexiaFriendly(enabled: boolean) {
+    setDyslexiaFriendlyState(enabled);
+    const next = { ...readingPreferencesRef.current, dyslexiaFriendly: enabled };
+    readingPreferencesRef.current = next;
+    persistReadingPreferences(next.fontSize, next.readingTheme, next.dyslexiaFriendly);
+  }
+
   function toggleFocusMode() {
     setFocusMode((current) => {
       const next = !current;
@@ -95,6 +152,15 @@ export function LessonWorkspace({
       value={{
         isTutorOpen,
         setTutorOpen,
+        isFocusMode,
+        toggleFocusMode,
+        fontSize,
+        setFontSize,
+        readingTheme,
+        setReadingTheme,
+        dyslexiaFriendly,
+        setDyslexiaFriendly,
+        isSavingReadingPreferences,
       }}
     >
       <motion.div
@@ -106,13 +172,14 @@ export function LessonWorkspace({
           "lesson-workspace relative min-h-dvh lg:grid lg:items-start",
           isFocusMode ? "focus-mode" : "",
           preferences?.highContrast ? "dana-high-contrast" : "",
-          preferences?.dyslexiaFriendly ? "dana-dyslexia-friendly" : "",
+          dyslexiaFriendly ? "dana-dyslexia-friendly" : "",
+          "dana-reading-theme-" + readingTheme.toLowerCase().replaceAll("_", "-"),
         ].filter(Boolean).join(" ")}
       >
         <button
           type="button"
           onClick={toggleFocusMode}
-          className="fixed right-5 top-5 z-40 min-h-10 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold shadow-sm dark:border-neutral-700 dark:bg-neutral-900"
+          className="fixed right-5 top-5 z-40 hidden min-h-10 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold shadow-sm lg:inline-flex lg:items-center dark:border-neutral-700 dark:bg-neutral-900"
           aria-pressed={isFocusMode}
         >
           {isFocusMode ? "Exit focus" : "Focus"}

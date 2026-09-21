@@ -10,7 +10,6 @@ import {
 import { prisma } from "@/lib/db/prisma";
 import { retakeAssessmentAction } from "@/app/courses/[courseId]/assessment-actions";
 import { AsyncActionForm } from "@/components/ui/async-action-form";
-import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 function optionsFrom(data: unknown) {
   if (
@@ -34,9 +33,21 @@ export default async function PlacementPage({
 
   const course = await prisma.course.findFirst({
     where: { id: courseId, ownerId: user.id },
-    select: { id: true, title: true },
+    select: { id: true, title: true, mode: true },
   });
   if (!course) notFound();
+
+  if (course.mode === "FLEXIBLE") {
+    return (
+      <main className="min-h-dvh bg-neutral-50 px-5 py-10 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+        <div className="mx-auto max-w-2xl">
+          <Link href={"/courses/" + courseId} className="text-sm font-medium underline underline-offset-4">Back to course</Link>
+          <h1 className="mt-5 text-3xl font-semibold">Placement is disabled</h1>
+          <p className="mt-3 text-neutral-600 dark:text-neutral-300">Flexible courses unlock every lesson immediately and do not use placement assessments.</p>
+        </div>
+      </main>
+    );
+  }
 
   const version = await ensurePlacementAssessment(user.id, courseId);
 

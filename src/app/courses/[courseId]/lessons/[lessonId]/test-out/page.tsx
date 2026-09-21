@@ -10,7 +10,6 @@ import {
 import { prisma } from "@/lib/db/prisma";
 import { retakeAssessmentAction } from "@/app/courses/[courseId]/assessment-actions";
 import { AsyncActionForm } from "@/components/ui/async-action-form";
-import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 function optionsFrom(data: unknown) {
   if (
@@ -42,9 +41,26 @@ export default async function TestOutPage({
       title: true,
       status: true,
       completionMethod: true,
+      module: {
+        select: {
+          course: { select: { mode: true } },
+        },
+      },
     },
   });
   if (!lesson) notFound();
+
+  if (lesson.module.course.mode === "FLEXIBLE") {
+    return (
+      <main className="min-h-dvh bg-neutral-50 px-5 py-10 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+        <div className="mx-auto max-w-2xl">
+          <Link href={"/courses/" + courseId} className="text-sm font-medium underline underline-offset-4">Back to course</Link>
+          <h1 className="mt-5 text-3xl font-semibold">Test-out is disabled</h1>
+          <p className="mt-3 text-neutral-600 dark:text-neutral-300">This flexible course keeps every lesson unlocked, so there is no test-out requirement.</p>
+        </div>
+      </main>
+    );
+  }
 
   if (lesson.status === "COMPLETED") {
     return (

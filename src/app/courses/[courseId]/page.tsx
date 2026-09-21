@@ -94,7 +94,7 @@ export default async function CoursePage({
             <span aria-hidden="true" className="text-neutral-300 dark:text-neutral-700">/</span>
             <span aria-current="page" className="truncate font-medium text-neutral-800 dark:text-neutral-200">{course.title}</span>
           </nav>
-          <UserMenu courseId={course.id} />
+          <UserMenu courseId={course.id} courseMode={course.mode} />
         </div>
       </header>
 
@@ -120,6 +120,7 @@ export default async function CoursePage({
             {course.description && <p className="mt-4 max-w-2xl line-clamp-3 text-base leading-7 text-neutral-600 dark:text-neutral-300 sm:text-lg sm:leading-8">{course.description}</p>}
             <p className="mt-5 text-sm font-medium text-neutral-500 dark:text-neutral-400">
               {course.modules.length} {course.modules.length === 1 ? "module" : "modules"}<span aria-hidden="true"> · </span>{lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
+              <span aria-hidden="true"> · </span>{course.mode === "FLEXIBLE" ? "flexible" : "guided"}
               {course.currentLevel && course.targetLevel && (
                 <>
                   <span aria-hidden="true"> · </span>

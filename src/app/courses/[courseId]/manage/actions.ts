@@ -263,6 +263,7 @@ export async function createLessonAction(
       course: { ownerId: user.id },
     },
     include: {
+      course: { select: { mode: true } },
       lessons: { orderBy: { order: "asc" } },
     },
   });
@@ -286,12 +287,12 @@ export async function createLessonAction(
       difficulty,
       isOptional: formData.get("isOptional") === "on",
       order: courseModule.lessons.length + 1,
-      status: "LOCKED",
+      status: courseModule.course.mode === "FLEXIBLE" ? "AVAILABLE" : "LOCKED",
     },
   });
 
   const previous = courseModule.lessons.at(-1);
-  if (previous) {
+  if (previous && courseModule.course.mode !== "FLEXIBLE") {
     await prisma.lessonPrerequisite.create({
       data: {
         lessonId: created.id,

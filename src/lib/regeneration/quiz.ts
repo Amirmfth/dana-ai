@@ -53,9 +53,15 @@ export async function persistQuizVersion(lessonId: string, versionNumber: number
 export async function regenerateQuiz(userId: string, lessonId: string, instructions?: string) {
   const lesson = await prisma.lesson.findFirst({
     where: { id: lessonId, module: { course: { ownerId: userId } } },
-    include: { quizVersions: { orderBy: { version: "desc" }, take: 1 } },
+    include: {
+      module: { include: { course: { select: { mode: true } } } },
+      quizVersions: { orderBy: { version: "desc" }, take: 1 },
+    },
   });
   if (!lesson) throw new Error("Lesson not found.");
+  if (lesson.module.course.mode === "FLEXIBLE") {
+    throw new Error("Quizzes are disabled for flexible courses.");
+  }
   const claimToken = await claimRegeneration(userId, "LESSON_QUIZ", lessonId);
   if (!claimToken) throw new Error("Quiz regeneration is already in progress.");
 
@@ -82,8 +88,18 @@ export async function regenerateQuiz(userId: string, lessonId: string, instructi
 export async function activateQuizVersion(userId: string, lessonId: string, versionId: string) {
   const version = await prisma.quizVersion.findFirst({
     where: { id: versionId, lessonId, lesson: { module: { course: { ownerId: userId } } } },
+    include: {
+      lesson: {
+        include: {
+          module: { include: { course: { select: { mode: true } } } },
+        },
+      },
+    },
   });
   if (!version) throw new Error("Quiz version not found.");
+  if (version.lesson.module.course.mode === "FLEXIBLE") {
+    throw new Error("Quizzes are disabled for flexible courses.");
+  }
   await prisma.$transaction([
     prisma.quizRun.updateMany({ where: { userId, lessonId, completedAt: null }, data: { completedAt: new Date() } }),
     prisma.lesson.update({ where: { id: lessonId }, data: { activeQuizVersionId: version.id } }),

@@ -28,11 +28,25 @@ export async function createCourse(
         })
       : [];
 
+  if (options.draftCourseId) {
+    await prisma.courseGenerationJob.update({
+      where: { courseId: options.draftCourseId },
+      data: { stage: "PLANNING_CURRICULUM" },
+    }).catch(() => null);
+  }
+
   const { plan, providerResponseId } = await generateCoursePlan(
     userId,
     onboarding,
     sourceContext,
   );
+
+  if (options.draftCourseId) {
+    await prisma.courseGenerationJob.update({
+      where: { courseId: options.draftCourseId },
+      data: { stage: "BUILDING_COURSE" },
+    }).catch(() => null);
+  }
 
   const courseData = {
     title: plan.title,
@@ -44,6 +58,7 @@ export async function createCourse(
     weeklyStudyMinutes: onboarding.weeklyStudyMinutes,
     learningStyle: onboarding.learningStyle,
     contentLanguage: onboarding.contentLanguage,
+    mode: onboarding.courseMode,
     status: "ACTIVE" as const,
     modules: {
       create: plan.modules.map((courseModule, moduleIndex) => ({
@@ -60,7 +75,7 @@ export async function createCourse(
             difficulty: lesson.difficulty,
             isOptional: lesson.isOptional,
             order: lessonIndex + 1,
-            status: "LOCKED" as const,
+            status: onboarding.courseMode === "FLEXIBLE" ? "AVAILABLE" as const : "LOCKED" as const,
           })),
         },
       })),
@@ -112,7 +127,10 @@ export async function createCourse(
     keyToLessonId.set(key, created[index].id);
   });
 
-  const prerequisiteRows = planned.flatMap((lesson, index) => {
+  const prerequisiteRows =
+    onboarding.courseMode === "FLEXIBLE"
+      ? []
+      : planned.flatMap((lesson, index) => {
     const lessonId = created[index].id;
     const explicit = lesson.prerequisiteKeys
       .map((key) => keyToLessonId.get(key))
@@ -135,6 +153,13 @@ export async function createCourse(
 
     return [];
   });
+
+  if (options.draftCourseId) {
+    await prisma.courseGenerationJob.update({
+      where: { courseId: options.draftCourseId },
+      data: { stage: "FINALIZING" },
+    }).catch(() => null);
+  }
 
   if (prerequisiteRows.length > 0) {
     await prisma.lessonPrerequisite.createMany({

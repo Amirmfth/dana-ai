@@ -2,12 +2,30 @@
 
 import { createContext, useContext } from "react";
 
+export type LessonFontSize = "SMALL" | "DEFAULT" | "LARGE" | "EXTRA_LARGE";
+export type LessonReadingTheme =
+  | "DEFAULT"
+  | "PAPER"
+  | "SEPIA"
+  | "DARK"
+  | "HIGH_CONTRAST";
+
 type LessonMobileControls = {
   isTutorOpen: boolean;
   setTutorOpen: (isOpen: boolean) => void;
+  isFocusMode: boolean;
+  toggleFocusMode: () => void;
+  fontSize: LessonFontSize;
+  setFontSize: (fontSize: LessonFontSize) => void;
+  readingTheme: LessonReadingTheme;
+  setReadingTheme: (theme: LessonReadingTheme) => void;
+  dyslexiaFriendly: boolean;
+  setDyslexiaFriendly: (enabled: boolean) => void;
+  isSavingReadingPreferences: boolean;
 };
 
-export const LessonMobileControlsContext = createContext<LessonMobileControls | null>(null);
+export const LessonMobileControlsContext =
+  createContext<LessonMobileControls | null>(null);
 
 export function useLessonMobileControls() {
   const controls = useContext(LessonMobileControlsContext);

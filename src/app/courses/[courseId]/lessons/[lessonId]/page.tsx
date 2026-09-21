@@ -39,7 +39,13 @@ export default async function LessonPage({
   const [lessonInfo, experienceSettings] = await Promise.all([
     prisma.lesson.findFirst({
       where: { id: lessonId, module: { courseId, course: { ownerId: user.id } } },
-      include: { module: true },
+      include: {
+        module: {
+          include: {
+            course: { select: { mode: true } },
+          },
+        },
+      },
     }),
     prisma.userExperienceSettings.findUnique({
       where: { userId: user.id },
@@ -128,8 +134,11 @@ export default async function LessonPage({
       heading: citation.sourceChunk.heading,
     })) ?? [];
 
-  const quiz = await getOrGenerateQuiz(user.id, lessonId);
-  const quizExercises = quiz.exercises.map((exercise) => {
+  const isFlexibleCourse = lessonInfo.module.course.mode === "FLEXIBLE";
+  const quiz = isFlexibleCourse
+    ? null
+    : await getOrGenerateQuiz(user.id, lessonId);
+  const quizExercises = (quiz?.exercises ?? []).map((exercise) => {
     const latestAttempt = exercise.attempts[0];
 
     return {
@@ -170,7 +179,7 @@ export default async function LessonPage({
     content: lesson,
     objectivesCount: lessonInfo.objectives.length,
     conceptsCount: lessonInfo.concepts.length,
-    exerciseCount: quiz.exercises.length,
+    exerciseCount: quiz?.exercises.length ?? 0,
   });
 
   const tocSections = lesson.sections.map((section, index) => ({
@@ -195,6 +204,7 @@ export default async function LessonPage({
           motionPreference: experienceSettings?.motionPreference ?? "SYSTEM",
           highContrast: experienceSettings?.highContrast ?? false,
           dyslexiaFriendly: experienceSettings?.dyslexiaFriendly ?? false,
+          readingTheme: experienceSettings?.readingTheme ?? "DEFAULT",
         }}
       >
         <div className="lesson-distraction mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:max-w-none lg:px-12 lg:pb-10">
@@ -256,12 +266,14 @@ export default async function LessonPage({
           <div className="min-w-0">
             <div className="lesson-reading-column mx-auto w-full max-w-2xl">
               <div className="lesson-distraction mb-6 flex flex-wrap gap-2">
-                <Link
-                  href={"/courses/" + courseId + "/lessons/" + lessonId + "/test-out"}
-                  className="inline-flex min-h-10 items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700"
-                >
-                  Test out of this lesson
-                </Link>
+                {!isFlexibleCourse && (
+                  <Link
+                    href={"/courses/" + courseId + "/lessons/" + lessonId + "/test-out"}
+                    className="inline-flex min-h-10 items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700"
+                  >
+                    Test out of this lesson
+                  </Link>
+                )}
                 {lessonInfo.isOptional && lessonInfo.status !== "COMPLETED" && (
                   <AsyncActionForm action={skipLessonAction}>
                     <input type="hidden" name="courseId" value={courseId} />
@@ -273,11 +285,13 @@ export default async function LessonPage({
                 )}
               </div>
               <LessonContent lesson={lesson} citations={citations} />
-              <LessonQuiz
-                exercises={quizExercises}
-                lessonId={lessonId}
-                quizRunId={quiz.run.id}
-              />
+              {quiz && (
+                <LessonQuiz
+                  exercises={quizExercises}
+                  lessonId={lessonId}
+                  quizRunId={quiz.run.id}
+                />
+              )}
 
               <LessonCompletion
                 courseId={courseId}

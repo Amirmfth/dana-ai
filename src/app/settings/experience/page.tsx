@@ -23,6 +23,7 @@ export default async function ExperienceSettingsPage() {
     motionPreference: settings?.motionPreference ?? "SYSTEM",
     highContrast: settings?.highContrast ?? false,
     dyslexiaFriendly: settings?.dyslexiaFriendly ?? false,
+    readingTheme: settings?.readingTheme ?? "DEFAULT",
   };
 
   return (
@@ -62,6 +63,7 @@ export default async function ExperienceSettingsPage() {
             <SelectField name="readingWidth" label="Reading width" value={value.readingWidth} options={[["NARROW","Narrow"],["STANDARD","Standard"],["WIDE","Wide"]]} />
             <SelectField name="readingDensity" label="Reading density" value={value.readingDensity} options={[["COMPACT","Compact"],["COMFORTABLE","Comfortable"],["SPACIOUS","Spacious"]]} />
             <SelectField name="motionPreference" label="Motion" value={value.motionPreference} options={[["SYSTEM","Follow system"],["REDUCED","Reduce motion"],["FULL","Allow motion"]]} />
+            <SelectField name="readingTheme" label="Lesson reading theme" value={value.readingTheme} options={[["DEFAULT","Default"],["PAPER","Paper"],["SEPIA","Sepia"],["DARK","Dark reading"],["HIGH_CONTRAST","High contrast"]]} />
           </div>
           <div className="mt-6 space-y-4">
             <Check name="highContrast" label="Higher contrast" checked={value.highContrast} />

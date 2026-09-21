@@ -31,6 +31,11 @@ export default async function LessonVersionsPage({
       },
     },
     include: {
+      module: {
+        include: {
+          course: { select: { mode: true } },
+        },
+      },
       contentVersions: {
         orderBy: { version: "desc" },
         include: {
@@ -168,7 +173,7 @@ export default async function LessonVersionsPage({
           </div>
         </section>
 
-        {quizJob?.status === "GENERATING" && (
+        {lesson.module.course.mode !== "FLEXIBLE" && quizJob?.status === "GENERATING" && (
           <div className="mt-6">
             <GenerationSkeleton
               title="Quiz generation in progress"
@@ -188,12 +193,13 @@ export default async function LessonVersionsPage({
           </div>
         )}
 
-        {quizJob?.status === "FAILED" && quizJob.errorMessage && (
+        {lesson.module.course.mode !== "FLEXIBLE" && quizJob?.status === "FAILED" && quizJob.errorMessage && (
           <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
             Quiz generation failed: {quizJob.errorMessage}
           </div>
         )}
 
+        {lesson.module.course.mode !== "FLEXIBLE" && (
         <section className="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -243,6 +249,7 @@ export default async function LessonVersionsPage({
             ))}
           </div>
         </section>
+        )}
       </div>
     </main>
   );

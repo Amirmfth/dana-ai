@@ -60,6 +60,22 @@ export default async function AssessmentsHubPage({
 
   if (!course) notFound();
 
+  if (course.mode === "FLEXIBLE") {
+    return (
+      <main className="min-h-dvh bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+        <div className="mx-auto max-w-3xl px-5 py-10 sm:px-8">
+          <Link href={"/courses/" + courseId} className="text-sm font-medium underline underline-offset-4">
+            Back to course
+          </Link>
+          <h1 className="mt-5 text-3xl font-semibold tracking-tight">Assessments are off</h1>
+          <p className="mt-3 leading-7 text-neutral-600 dark:text-neutral-300">
+            This is a flexible course. Quizzes, placement tests, test-out flows, module assessments, and the final assessment are disabled.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   const moduleEligibility = await Promise.all(
     course.modules.map((courseModule) =>
       getModuleAssessmentEligibility(user.id, courseId, courseModule.id),

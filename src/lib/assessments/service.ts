@@ -83,6 +83,9 @@ export async function ensurePlacementAssessment(
     },
   });
   if (!course) throw new Error("Course not found.");
+  if (course.mode === "FLEXIBLE") {
+    throw new Error("Assessments are disabled for flexible courses.");
+  }
 
   let assessment = await prisma.assessment.findFirst({
     where: { courseId, type: "PLACEMENT", lessonId: null, moduleId: null },
@@ -159,6 +162,9 @@ export async function ensureTestOutAssessment(
     },
   });
   if (!lesson) throw new Error("Lesson not found.");
+  if (lesson.module.course.mode === "FLEXIBLE") {
+    throw new Error("Assessments are disabled for flexible courses.");
+  }
 
   let assessment = await prisma.assessment.findFirst({
     where: { courseId, lessonId, type: "TEST_OUT" },
@@ -362,11 +368,13 @@ export async function getModuleAssessmentEligibility(
       course: { ownerId: userId },
     },
     include: {
+      course: { select: { mode: true } },
       lessons: { orderBy: { order: "asc" } },
     },
   });
 
   if (!courseModule) throw new Error("Module not found.");
+  if (courseModule.course.mode === "FLEXIBLE") return false;
 
   return moduleAssessmentEligible(courseModule.lessons);
 }
@@ -390,6 +398,9 @@ export async function ensureModuleAssessment(
   });
 
   if (!courseModule) throw new Error("Module not found.");
+  if (courseModule.course.mode === "FLEXIBLE") {
+    throw new Error("Assessments are disabled for flexible courses.");
+  }
 
   if (!moduleAssessmentEligible(courseModule.lessons)) {
     throw new Error("Complete all required lessons in this module first.");
@@ -495,6 +506,7 @@ export async function getCourseFinalEligibility(
   });
 
   if (!course) throw new Error("Course not found.");
+  if (course.mode === "FLEXIBLE") return false;
 
   const modulePasses = await Promise.all(
     course.modules.map((courseModule) =>
@@ -526,6 +538,9 @@ export async function ensureCourseFinalAssessment(
   });
 
   if (!course) throw new Error("Course not found.");
+  if (course.mode === "FLEXIBLE") {
+    throw new Error("Assessments are disabled for flexible courses.");
+  }
 
   if (!(await getCourseFinalEligibility(userId, courseId))) {
     throw new Error(

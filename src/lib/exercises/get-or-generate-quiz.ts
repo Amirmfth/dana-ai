@@ -6,6 +6,7 @@ import {
   markGenerationReady,
   markObservedGenerationReady,
   waitForGeneratedValue,
+  updateGenerationStage,
 } from "@/lib/generation/coordinator";
 import { getOrCreateCurrentQuizRun } from "@/lib/exercises/quiz-runs";
 import { persistQuizVersion } from "@/lib/regeneration/quiz";
@@ -85,7 +86,10 @@ export async function getOrGenerateQuiz(userId: string, lessonId: string) {
       activeQuizVersionId = current?.activeQuizVersionId ?? null;
     } else {
       try {
+        await updateGenerationStage(lessonId, "LESSON_QUIZ", claimToken, "GENERATING_QUIZ");
         const quiz = await generateLessonQuiz(userId, lessonId);
+
+        await updateGenerationStage(lessonId, "LESSON_QUIZ", claimToken, "SAVING_QUIZ");
         const version = await persistQuizVersion(
           lessonId,
           1,

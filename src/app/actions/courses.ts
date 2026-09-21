@@ -41,7 +41,6 @@ export async function createCourseAction(formData: FormData) {
   });
 
   const sourceIds: string[] = [];
-  let createdCourseId: string | null = null;
 
   try {
     const file = formData.get("sourceFile");
@@ -83,7 +82,6 @@ export async function createCourseAction(formData: FormData) {
       sourceIds,
       draftCourseId: draftCourse.id,
     });
-    createdCourseId = course.id;
   } catch (error) {
     await prisma.course
       .update({
@@ -98,5 +96,5 @@ export async function createCourseAction(formData: FormData) {
     throw error;
   }
 
-  redirect("/courses/" + createdCourseId);
+  redirect("/courses/" + draftCourse.id);
 }

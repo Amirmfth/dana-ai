@@ -13,6 +13,7 @@ type Job = {
 };
 
 type Payload = {
+  mode?: "GUIDED" | "FLEXIBLE";
   content: Job | null;
   quiz: Job | null;
 };
@@ -62,6 +63,7 @@ export function LessonGenerationProgress() {
       : null;
 
   const stage = useMemo(() => {
+    if (payload.mode === "FLEXIBLE" && payload.content?.status === "READY") return "READY";
     if (payload.quiz?.status === "READY") return "READY";
     if (payload.quiz?.status === "GENERATING") return payload.quiz.stage ?? "PREPARING_QUIZ";
     if (payload.content?.status === "READY") return "PREPARING_QUIZ";

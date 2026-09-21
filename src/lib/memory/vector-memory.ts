@@ -1,5 +1,6 @@
 import { createEmbedding } from "@/lib/ai/embeddings";
 import { prisma } from "@/lib/db/prisma";
+import { getPrivacySettings } from "@/lib/ai/privacy";
 
 type RelevantMemory = {
   id: string;
@@ -62,6 +63,7 @@ export async function findNearestMemory({
     WHERE
       "courseId" = ${courseId}
       AND "type" = ${type}::"MemoryType"
+      AND "isActive" = true
       AND "embedding" IS NOT NULL
     ORDER BY ("embedding" <=> ${vector}::vector) ASC
     LIMIT 1
@@ -118,9 +120,20 @@ export async function findRelevantMemories({
   query: string;
   limit?: number;
 }): Promise<RelevantMemory[]> {
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    select: { ownerId: true },
+  });
+
+  if (!course) return [];
+
+  const settings = await getPrivacySettings(course.ownerId);
+  if (!settings.useLearnerMemory) return [];
+
   const embedding = await createEmbedding({
     text: query,
     courseId,
+    userId: course.ownerId,
   });
 
   const vector = vectorToSql(embedding);
@@ -135,6 +148,7 @@ export async function findRelevantMemories({
     FROM "CourseMemory"
     WHERE
       "courseId" = ${courseId}
+      AND "isActive" = true
       AND "embedding" IS NOT NULL
     ORDER BY
       ("embedding" <=> ${vector}::vector) ASC,

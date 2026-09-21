@@ -4,11 +4,13 @@ import { prisma } from "@/lib/db/prisma";
 export type PrivacySettings = {
   storeAiPayloads: boolean;
   retentionDays: number;
+  useLearnerMemory: boolean;
 };
 
 export const DEFAULT_PRIVACY_SETTINGS: PrivacySettings = {
   storeAiPayloads: false,
   retentionDays: 30,
+  useLearnerMemory: true,
 };
 
 export async function getPrivacySettings(userId: string) {
@@ -18,6 +20,7 @@ export async function getPrivacySettings(userId: string) {
       select: {
         storeAiPayloads: true,
         retentionDays: true,
+        useLearnerMemory: true,
       },
     })) ?? DEFAULT_PRIVACY_SETTINGS
   );
@@ -25,7 +28,11 @@ export async function getPrivacySettings(userId: string) {
 
 export function aiPayloadForStorage<T>(
   value: T,
-  settings: PrivacySettings,
+  settings: {
+    storeAiPayloads: boolean;
+    retentionDays?: number;
+    useLearnerMemory?: boolean;
+  },
 ): T | null {
   return settings.storeAiPayloads ? value : null;
 }

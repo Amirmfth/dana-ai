@@ -9,6 +9,7 @@ import { prisma } from "@/lib/db/prisma";
 export async function updatePrivacySettingsAction(formData: FormData) {
   const user = await requireUser();
   const storeAiPayloads = formData.get("storeAiPayloads") === "on";
+  const useLearnerMemory = formData.get("useLearnerMemory") === "on";
   const requestedRetention = Number(formData.get("retentionDays"));
   const retentionDays = [7, 30, 90].includes(requestedRetention)
     ? requestedRetention
@@ -16,8 +17,17 @@ export async function updatePrivacySettingsAction(formData: FormData) {
 
   await prisma.userPrivacySettings.upsert({
     where: { userId: user.id },
-    create: { userId: user.id, storeAiPayloads, retentionDays },
-    update: { storeAiPayloads, retentionDays },
+    create: {
+      userId: user.id,
+      storeAiPayloads,
+      retentionDays,
+      useLearnerMemory,
+    },
+    update: {
+      storeAiPayloads,
+      retentionDays,
+      useLearnerMemory,
+    },
   });
 
   if (!storeAiPayloads) {

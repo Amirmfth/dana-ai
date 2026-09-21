@@ -1,12 +1,12 @@
 import { after, type NextRequest } from "next/server";
 
 import { getCurrentUser } from "@/lib/auth/server";
-import { askTutor } from "@/lib/ai/tutor";
+import { askCourseTutor } from "@/lib/ai/course-tutor";
 import { prisma } from "@/lib/db/prisma";
-import { saveExchangeMemories } from "@/lib/memory/save-exchange-memories";
+import { saveCourseExchangeMemories } from "@/lib/memory/save-course-exchange-memories";
 
-type TutorRequest = {
-  lessonId: string;
+type CourseTutorRequest = {
+  courseId: string;
   conversationId?: string;
   message: string;
 };
@@ -14,48 +14,38 @@ type TutorRequest = {
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-
     if (!user) {
       return Response.json({ error: "Unauthorized." }, { status: 401 });
     }
 
-    const body = (await request.json()) as TutorRequest;
-    const lessonId = body.lessonId;
+    const body = (await request.json()) as CourseTutorRequest;
+    const courseId = body.courseId;
     const message = body.message?.trim();
 
-    if (!lessonId || !message) {
+    if (!courseId || !message) {
       return Response.json(
-        { error: "Lesson ID and message are required." },
+        { error: "Course ID and message are required." },
         { status: 400 },
       );
     }
 
-    const lesson = await prisma.lesson.findFirst({
-      where: {
-        id: lessonId,
-        status: { not: "LOCKED" },
-        module: { course: { ownerId: user.id } },
-      },
-      select: {
-        id: true,
-        module: { select: { courseId: true } },
-      },
+    const course = await prisma.course.findFirst({
+      where: { id: courseId, ownerId: user.id },
+      select: { id: true },
     });
 
-    if (!lesson) {
-      return Response.json(
-        { error: "Lesson not found." },
-        { status: 404 },
-      );
+    if (!course) {
+      return Response.json({ error: "Course not found." }, { status: 404 });
     }
 
     let conversation = body.conversationId
       ? await prisma.conversation.findFirst({
           where: {
             id: body.conversationId,
-            lessonId,
-            courseId: lesson.module.courseId,
-            scope: "LESSON",
+            courseId,
+            scope: "COURSE",
+            lessonId: null,
+            course: { ownerId: user.id },
           },
         })
       : null;
@@ -63,9 +53,9 @@ export async function POST(request: NextRequest) {
     if (!conversation) {
       conversation = await prisma.conversation.create({
         data: {
-          courseId: lesson.module.courseId,
-          lessonId,
-          scope: "LESSON",
+          courseId,
+          lessonId: null,
+          scope: "COURSE",
         },
       });
     }
@@ -83,7 +73,7 @@ export async function POST(request: NextRequest) {
     const storedMessages = await prisma.message.findMany({
       where: { conversationId },
       orderBy: { createdAt: "desc" },
-      take: 8,
+      take: 10,
     });
 
     const history = storedMessages.reverse().map((item) => ({
@@ -94,8 +84,9 @@ export async function POST(request: NextRequest) {
       content: item.content,
     }));
 
-    const tracked = await askTutor({
-      lessonId,
+    const tracked = await askCourseTutor({
+      userId: user.id,
+      courseId,
       conversationId,
       messages: history,
     });
@@ -105,7 +96,8 @@ export async function POST(request: NextRequest) {
     let finishMemoryTask!: (
       exchange:
         | {
-            lessonId: string;
+            userId: string;
+            courseId: string;
             userMessage: string;
             assistantMessage: string;
           }
@@ -114,7 +106,8 @@ export async function POST(request: NextRequest) {
 
     const memoryTask = new Promise<
       | {
-          lessonId: string;
+          userId: string;
+          courseId: string;
           userMessage: string;
           assistantMessage: string;
         }
@@ -125,16 +118,12 @@ export async function POST(request: NextRequest) {
 
     after(async () => {
       const exchange = await memoryTask;
-
       if (!exchange) return;
 
       try {
-        await saveExchangeMemories(exchange);
+        await saveCourseExchangeMemories(exchange);
       } catch (error) {
-        console.error(
-          "Tutor memory enrichment failed:",
-          error,
-        );
+        console.error("Course tutor memory enrichment failed:", error);
       }
     });
 
@@ -146,9 +135,7 @@ export async function POST(request: NextRequest) {
           for await (const event of tracked.stream) {
             if (event.type === "response.output_text.delta") {
               answer += event.delta;
-              controller.enqueue(
-                encoder.encode(event.delta),
-              );
+              controller.enqueue(encoder.encode(event.delta));
             }
 
             if (event.type === "response.completed") {
@@ -156,9 +143,7 @@ export async function POST(request: NextRequest) {
             }
 
             if (event.type === "error") {
-              throw new Error(
-                event.message || "OpenAI streaming error",
-              );
+              throw new Error(event.message || "OpenAI streaming error");
             }
           }
 
@@ -172,7 +157,8 @@ export async function POST(request: NextRequest) {
             });
 
             finishMemoryTask({
-              lessonId,
+              userId: user.id,
+              courseId,
               userMessage: message,
               assistantMessage: answer,
             });
@@ -183,7 +169,6 @@ export async function POST(request: NextRequest) {
           controller.close();
         } catch (error) {
           finishMemoryTask(null);
-          console.error("Tutor stream failed:", error);
           await tracked.fail(error);
           controller.error(error);
         }
@@ -198,13 +183,11 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Tutor request failed:", error);
+    console.error("Course tutor request failed:", error);
 
-    const message =
-      error instanceof Error ? error.message : "";
+    const message = error instanceof Error ? error.message : "";
     const status =
-      message.includes("RATE_LIMIT") ||
-      message.includes("BUDGET")
+      message.includes("RATE_LIMIT") || message.includes("BUDGET")
         ? 429
         : 500;
 
@@ -213,7 +196,7 @@ export async function POST(request: NextRequest) {
         error:
           status === 429
             ? "AI usage limit reached."
-            : "Failed to get a response from the tutor.",
+            : "Failed to get a response from the course tutor.",
       },
       { status },
     );

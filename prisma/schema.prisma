@@ -26,6 +26,11 @@ enum MessageRole {
   ASSISTANT
 }
 
+enum ConversationScope {
+  LESSON
+  COURSE
+}
+
 enum MemoryType {
   MISCONCEPTION
   WEAKNESS
@@ -167,6 +172,7 @@ model Course {
   curriculumRevisions  CurriculumRevision[]
   assessments          Assessment[]
   sources              CourseSource[]
+  conversations        Conversation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -273,15 +279,21 @@ model LessonContentVersion {
 model Conversation {
   id String @id @default(cuid())
 
-  lessonId String
-  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessonId String?
+  lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  scope ConversationScope @default(LESSON)
 
   messages Message[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([lessonId])
+  @@index([courseId, scope, updatedAt])
+  @@index([lessonId, updatedAt])
 }
 
 model Message {
@@ -309,6 +321,7 @@ model CourseMemory {
   type       MemoryType
   content    String
   importance Int        @default(3)
+  isActive   Boolean    @default(true)
   embedding  Unsupported("vector(1536)")?
 
   createdAt DateTime @default(now())
@@ -489,9 +502,10 @@ model AiRequestWindow {
 }
 
 model UserPrivacySettings {
-  userId          String   @id @db.Uuid
-  storeAiPayloads Boolean  @default(false)
-  retentionDays   Int      @default(30)
+  userId            String   @id @db.Uuid
+  storeAiPayloads   Boolean  @default(false)
+  retentionDays     Int      @default(30)
+  useLearnerMemory  Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

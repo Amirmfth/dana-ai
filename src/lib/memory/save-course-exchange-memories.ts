@@ -1,50 +1,45 @@
-import { extractMemories } from "@/lib/ai/memory-extractor";
-import { prisma } from "@/lib/db/prisma";
 import { getPrivacySettings } from "@/lib/ai/privacy";
+import { extractCourseMemories } from "@/lib/ai/course-memory-extractor";
+import { prisma } from "@/lib/db/prisma";
 import {
   createMemoryEmbedding,
   findNearestMemory,
   isSemanticDuplicate,
   setMemoryEmbedding,
-} from "./vector-memory";
+} from "@/lib/memory/vector-memory";
 
 const MEMORY_DUPLICATE_THRESHOLD = 0.9;
 
-export async function saveExchangeMemories({
-  lessonId,
+function normalizeMemory(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ");
+}
+
+export async function saveCourseExchangeMemories({
+  userId,
+  courseId,
   userMessage,
   assistantMessage,
 }: {
-  lessonId: string;
+  userId: string;
+  courseId: string;
   userMessage: string;
   assistantMessage: string;
 }) {
-  const lesson = await prisma.lesson.findUnique({
-    where: { id: lessonId },
-    select: {
-      module: {
-        select: {
-          course: {
-            select: {
-              id: true,
-              ownerId: true,
-            },
-          },
-        },
-      },
-    },
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, ownerId: userId },
+    select: { id: true },
   });
+  if (!course) throw new Error("Course not found.");
 
-  if (!lesson) {
-    throw new Error("Lesson not found.");
-  }
-
-  const courseId = lesson.module.course.id;
-  const settings = await getPrivacySettings(lesson.module.course.ownerId);
+  const settings = await getPrivacySettings(userId);
   if (!settings.useLearnerMemory) return;
 
-  const extracted = await extractMemories({
-    lessonId,
+  const extracted = await extractCourseMemories({
+    userId,
     courseId,
     exchange: {
       user: userMessage,
@@ -58,25 +53,19 @@ export async function saveExchangeMemories({
     where: { courseId, isActive: true },
     select: { content: true },
   });
-
-  const existingNormalized = new Set(
+  const normalizedExisting = new Set(
     existing.map((memory) => normalizeMemory(memory.content)),
   );
 
   for (const memory of extracted) {
     const normalized = normalizeMemory(memory.content);
-
-    if (existingNormalized.has(normalized)) {
-      continue;
-    }
+    if (normalizedExisting.has(normalized)) continue;
 
     let embedding: number[] | null = null;
-
     try {
       embedding = await createMemoryEmbedding({
         content: memory.content,
         courseId,
-        lessonId,
       });
 
       const nearest = await findNearestMemory({
@@ -92,20 +81,17 @@ export async function saveExchangeMemories({
           MEMORY_DUPLICATE_THRESHOLD,
         )
       ) {
-        existingNormalized.add(normalized);
+        normalizedExisting.add(normalized);
         continue;
       }
     } catch (error) {
-      console.error(
-        "Semantic memory duplicate check failed:",
-        error,
-      );
+      console.error("Course memory duplicate check failed:", error);
     }
 
     const created = await prisma.courseMemory.create({
       data: {
         courseId,
-        lessonId,
+        lessonId: null,
         type: memory.type,
         content: memory.content,
         importance: memory.importance,
@@ -113,28 +99,17 @@ export async function saveExchangeMemories({
       },
     });
 
-    existingNormalized.add(normalized);
+    normalizedExisting.add(normalized);
 
-    if (!embedding) continue;
-
-    try {
-      await setMemoryEmbedding({
-        memoryId: created.id,
-        embedding,
-      });
-    } catch (error) {
-      console.error(
-        "Failed to persist memory embedding:",
-        error,
-      );
+    if (embedding) {
+      try {
+        await setMemoryEmbedding({
+          memoryId: created.id,
+          embedding,
+        });
+      } catch (error) {
+        console.error("Failed to persist course memory embedding:", error);
+      }
     }
   }
-}
-
-function normalizeMemory(value: string) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^\p{L}\p{N}\s]/gu, "")
-    .replace(/\s+/g, " ");
 }

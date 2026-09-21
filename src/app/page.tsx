@@ -36,6 +36,12 @@ export default async function HomePage() {
             Dana AI
           </Link>
           <div className="flex items-center gap-2">
+            <Link href="/search" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
+              Search
+            </Link>
+            <Link href="/settings/memory" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
+              Memory
+            </Link>
             <Link href="/templates" className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:text-white dark:focus-visible:outline-white">
               Templates
             </Link>

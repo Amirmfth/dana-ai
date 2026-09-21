@@ -36,7 +36,10 @@ export async function POST(request: NextRequest) {
         status: { not: "LOCKED" },
         module: { course: { ownerId: user.id } },
       },
-      select: { id: true },
+      select: {
+        id: true,
+        module: { select: { courseId: true } },
+      },
     });
 
     if (!lesson) {
@@ -51,13 +54,19 @@ export async function POST(request: NextRequest) {
           where: {
             id: body.conversationId,
             lessonId,
+            courseId: lesson.module.courseId,
+            scope: "LESSON",
           },
         })
       : null;
 
     if (!conversation) {
       conversation = await prisma.conversation.create({
-        data: { lessonId },
+        data: {
+          courseId: lesson.module.courseId,
+          lessonId,
+          scope: "LESSON",
+        },
       });
     }
 

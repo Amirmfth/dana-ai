@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { CourseContinueCard } from "@/components/courses/course-continue-card";
 import { CourseCurriculum } from "@/components/courses/course-curriculum";
 import { MobileCourseAction } from "@/components/courses/mobile-course-action";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { UserMenu } from "@/components/ui/user-menu";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 import { CompletionFeedback } from "@/components/ui/completion-feedback";
@@ -83,45 +83,7 @@ export default async function CoursePage({
             <span aria-hidden="true" className="text-neutral-300 dark:text-neutral-700">/</span>
             <span aria-current="page" className="truncate font-medium text-neutral-800 dark:text-neutral-200">{course.title}</span>
           </nav>
-          <div className="flex items-center gap-2">
-            <Link
-              href={"/courses/" + course.id + "/tutor"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Ask Dana
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/sources"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Sources
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/assessments"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Assessments
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/placement"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Placement
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/analytics"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Analytics
-            </Link>
-            <Link
-              href={"/courses/" + course.id + "/manage"}
-              className="min-h-10 rounded-lg px-3 py-2 text-sm font-semibold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white"
-            >
-              Manage
-            </Link>
-            <ThemeToggle compact />
-          </div>
+          <UserMenu courseId={course.id} />
         </div>
       </header>
 

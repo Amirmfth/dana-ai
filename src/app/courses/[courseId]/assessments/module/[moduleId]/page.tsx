@@ -11,6 +11,7 @@ import { prisma } from "@/lib/db/prisma";
 import { retakeAssessmentAction } from "@/app/courses/[courseId]/assessment-actions";
 import { regenerateModuleAssessmentAction } from "@/app/courses/[courseId]/assessments/actions";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
 function optionsFrom(data: unknown) {
@@ -131,7 +132,7 @@ export default async function ModuleAssessmentPage({
             >
               <p className="mt-3 text-3xl font-semibold">{run.score}%</p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <form
+                <AsyncActionForm
                   action={retakeAssessmentAction.bind(
                     null,
                     courseId,
@@ -145,8 +146,8 @@ export default async function ModuleAssessmentPage({
                   >
                     Retake
                   </PendingActionButton>
-                </form>
-                <form
+                </AsyncActionForm>
+                <AsyncActionForm
                   action={regenerateModuleAssessmentAction.bind(
                     null,
                     courseId,
@@ -160,7 +161,7 @@ export default async function ModuleAssessmentPage({
                   >
                     Regenerate assessment
                   </PendingActionButton>
-                </form>
+                </AsyncActionForm>
               </div>
             </CompletionFeedback>
           </section>

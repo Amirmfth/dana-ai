@@ -10,7 +10,6 @@ export async function getOrCreateCurrentQuizRun(
       userId,
       lessonId,
       quizVersionId,
-      completedAt: null,
     },
     orderBy: { startedAt: "desc" },
   });

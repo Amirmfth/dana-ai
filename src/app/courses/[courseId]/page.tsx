@@ -126,6 +126,15 @@ export default async function CoursePage({
       </header>
 
       <div className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10 lg:pb-16">
+        {query.completedLesson === "1" && (
+          <div className="pt-5">
+            <CompletionFeedback
+              title="Lesson completed"
+              description="Your course progress and prerequisite unlocks have been updated."
+            />
+          </div>
+        )}
+
         {course.status === "ARCHIVED" && (
           <div className="mt-5 rounded-xl border border-neutral-300 bg-neutral-100 px-4 py-3 text-sm font-medium text-neutral-700 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
             This course is archived. You can restore it from Manage.

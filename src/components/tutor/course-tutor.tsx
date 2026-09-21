@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -24,7 +24,7 @@ export function CourseTutor({
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
-  const failed = useRef("");
+  const [failedMessage, setFailedMessage] = useState("");
 
   async function send(raw: string) {
     const message = raw.trim();
@@ -35,7 +35,7 @@ export function CourseTutor({
     setInput("");
     setError(undefined);
     setLoading(true);
-    failed.current = message;
+    setFailedMessage(message);
     setMessages((current) => [
       ...current,
       { id: userId, role: "user", content: message },
@@ -78,7 +78,7 @@ export function CourseTutor({
           item.id === assistantId ? { ...item, content: answer } : item,
         ),
       );
-      failed.current = "";
+      setFailedMessage("");
     } catch {
       setMessages((current) =>
         current.filter((item) => item.id !== assistantId),
@@ -155,8 +155,8 @@ export function CourseTutor({
         {error && (
           <div className="mb-3 flex items-center justify-between gap-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-200">
             <span>{error}</span>
-            {failed.current && (
-              <button type="button" onClick={() => void send(failed.current)} className="font-semibold underline">
+            {failedMessage && (
+              <button type="button" onClick={() => void send(failedMessage)} className="font-semibold underline">
                 Retry
               </button>
             )}

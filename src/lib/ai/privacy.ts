@@ -28,7 +28,7 @@ export async function getPrivacySettings(userId: string) {
 
 export function aiPayloadForStorage<T>(
   value: T,
-  settings: PrivacySettings,
+  settings: Pick<PrivacySettings, "storeAiPayloads">,
 ): T | null {
   return settings.storeAiPayloads ? value : null;
 }

@@ -10,6 +10,8 @@ import {
 import { prisma } from "@/lib/db/prisma";
 import { retakeAssessmentAction } from "@/app/courses/[courseId]/assessment-actions";
 import { regenerateCourseFinalAssessmentAction } from "@/app/courses/[courseId]/assessments/actions";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
 function optionsFrom(data: unknown) {
   if (
@@ -139,16 +141,15 @@ export default async function CourseFinalAssessmentPage({
 
         {run.completedAt ? (
           <section className="py-8">
-            <div className="rounded-2xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-              <p className="text-sm font-medium text-neutral-500">
-                Final result
-              </p>
-              <p className="mt-2 text-4xl font-semibold">{run.score}%</p>
-              <p className="mt-2 font-medium">
-                {run.passed
-                  ? "Passed — the course is complete."
-                  : "Not passed — review weak modules and try again."}
-              </p>
+            <CompletionFeedback
+              title={run.passed ? "Course final passed" : "Final assessment complete"}
+              description={
+                run.passed
+                  ? "You've completed the course requirements."
+                  : "Review weak modules and try again when you're ready."
+              }
+            >
+              <p className="mt-3 text-4xl font-semibold">{run.score}%</p>
 
               {moduleBreakdown.size > 0 && (
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -178,9 +179,12 @@ export default async function CourseFinalAssessmentPage({
                     returnPath,
                   )}
                 >
-                  <button className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white dark:bg-white dark:text-neutral-950">
+                  <PendingActionButton
+                    className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white dark:bg-white dark:text-neutral-950"
+                    pendingLabel="Preparing retake…"
+                  >
                     Retake final
-                  </button>
+                  </PendingActionButton>
                 </form>
                 <form
                   action={regenerateCourseFinalAssessmentAction.bind(
@@ -189,12 +193,15 @@ export default async function CourseFinalAssessmentPage({
                     returnPath,
                   )}
                 >
-                  <button className="min-h-11 rounded-xl border border-neutral-300 px-5 text-sm font-semibold dark:border-neutral-700">
+                  <PendingActionButton
+                    className="min-h-11 rounded-xl border border-neutral-300 px-5 text-sm font-semibold dark:border-neutral-700"
+                    pendingLabel="Regenerating final…"
+                  >
                     Regenerate final
-                  </button>
+                  </PendingActionButton>
                 </form>
               </div>
-            </div>
+            </CompletionFeedback>
           </section>
         ) : (
           <section className="py-8">

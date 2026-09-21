@@ -1,6 +1,7 @@
 import { Prisma } from "@/generated/prisma/client";
 
 import { prisma } from "@/lib/db/prisma";
+import { normalizeWorkspaceSearchQuery } from "@/lib/search/query";
 
 export type WorkspaceSearchResults = Awaited<
   ReturnType<typeof searchLearningWorkspace>
@@ -10,7 +11,7 @@ export async function searchLearningWorkspace(
   userId: string,
   rawQuery: string,
 ) {
-  const query = rawQuery.trim().slice(0, 120);
+  const query = normalizeWorkspaceSearchQuery(rawQuery);
   if (query.length < 2) {
     return {
       query,

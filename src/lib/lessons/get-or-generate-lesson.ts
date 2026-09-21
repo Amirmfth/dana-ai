@@ -11,6 +11,7 @@ import {
   markGenerationReady,
   markObservedGenerationReady,
   waitForGeneratedValue,
+  updateGenerationStage,
 } from "@/lib/generation/coordinator";
 import { persistInitialLessonVersion } from "@/lib/regeneration/lesson";
 
@@ -61,12 +62,16 @@ export async function getOrGenerateLesson(
   }
 
   try {
+    await updateGenerationStage(lessonId, "LESSON_CONTENT", claimToken, "PREPARING_CONTEXT");
     const context = await buildLessonContext(lessonId);
+
+    await updateGenerationStage(lessonId, "LESSON_CONTENT", claimToken, "GENERATING_CONTENT");
     const generated = await generateLesson(
       context,
       lesson.module.courseId,
       userId,
     );
+    await updateGenerationStage(lessonId, "LESSON_CONTENT", claimToken, "SAVING_CONTENT");
     const persisted = await persistInitialLessonVersion(
       userId,
       lessonId,

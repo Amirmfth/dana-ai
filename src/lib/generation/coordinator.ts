@@ -69,6 +69,7 @@ export async function claimGeneration(
     },
     data: {
       status: "FAILED",
+      stage: "FAILED",
       claimToken: null,
       errorMessage: "Generation metadata was ready but generated data was missing.",
       completedAt: null,
@@ -99,6 +100,7 @@ export async function claimGeneration(
     },
     data: {
       status: "GENERATING",
+      stage: kind === "LESSON_CONTENT" ? "PREPARING_CONTEXT" : "PREPARING_QUIZ",
       claimToken,
       attemptCount: {
         increment: 1,
@@ -125,6 +127,7 @@ export async function markObservedGenerationReady(
     },
     data: {
       status: "READY",
+      stage: "READY",
       claimToken: null,
       errorMessage: null,
       completedAt: new Date(),
@@ -146,6 +149,7 @@ export async function markGenerationReady(
     },
     data: {
       status: "READY",
+      stage: "READY",
       claimToken: null,
       errorMessage: null,
       completedAt: new Date(),
@@ -230,4 +234,22 @@ export async function waitForGeneratedValue<T>({
   }
 
   throw new GenerationInProgressError(kind);
+}
+
+
+export async function updateGenerationStage(
+  lessonId: string,
+  kind: GenerationKindValue,
+  claimToken: string,
+  stage: string,
+) {
+  await prisma.generationJob.updateMany({
+    where: {
+      lessonId,
+      kind,
+      status: "GENERATING",
+      claimToken,
+    },
+    data: { stage },
+  });
 }

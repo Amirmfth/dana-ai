@@ -4,6 +4,7 @@ export const maxDuration = 300;
 
 import { createCourseAction } from "@/app/actions/courses";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 import { UserMenu } from "@/components/ui/user-menu";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
@@ -63,7 +64,12 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <form action={createCourseAction} className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7 dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-none">
+          <AsyncActionForm
+            action={createCourseAction}
+            className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7 dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-none"
+            pendingMessage="Creating your course…"
+            errorMessage="Course creation failed. Review the inputs or source material and try again."
+          >
             <div className="mb-5">
               <label htmlFor="learning-goal" className="text-lg font-semibold">Create a course</label>
               <p id="learning-goal-help" className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
@@ -184,7 +190,7 @@ export default async function HomePage() {
                 Create course
               </PendingActionButton>
             </div>
-          </form>
+          </AsyncActionForm>
         </section>
 
         <LearningDashboard dashboard={dashboard} />

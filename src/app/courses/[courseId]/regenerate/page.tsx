@@ -10,6 +10,7 @@ import { requireUser } from "@/lib/auth/server";
 import { getOwnedCourse } from "@/lib/courses/management";
 import { prisma } from "@/lib/db/prisma";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 import { GenerationSkeleton } from "@/components/generation/generation-skeleton";
 
 const buttonClass =
@@ -68,14 +69,14 @@ export default async function CourseRegeneratePage({
               never automatically deletes existing learner work.
             </p>
           </div>
-          <form action={regenerateCourseAction.bind(null, courseId)}>
+          <AsyncActionForm action={regenerateCourseAction.bind(null, courseId)} pendingMessage="Generating course revision…" successMessage="Course revision generated." errorMessage="Course revision generation failed.">
             <PendingActionButton
               className={buttonClass}
               pendingLabel="Generating revision…"
             >
               Generate course revision
             </PendingActionButton>
-          </form>
+          </AsyncActionForm>
         </div>
 
         {courseLock?.status === "GENERATING" && (
@@ -121,12 +122,15 @@ export default async function CourseRegeneratePage({
                     {courseModule.lessons.length} lessons
                   </p>
                 </div>
-                <form
+                <AsyncActionForm
                   action={regenerateModuleAction.bind(
                     null,
                     courseId,
                     courseModule.id,
                   )}
+                  pendingMessage="Generating module revision…"
+                  successMessage="Module revision generated."
+                  errorMessage="Module revision generation failed."
                 >
                   <PendingActionButton
                     className={buttonClass}
@@ -134,7 +138,7 @@ export default async function CourseRegeneratePage({
                   >
                     Regenerate
                   </PendingActionButton>
-                </form>
+                </AsyncActionForm>
                 {moduleLock?.status === "GENERATING" && (
                   <p className="w-full text-xs font-medium text-neutral-500">
                     Regeneration in progress…
@@ -172,12 +176,15 @@ export default async function CourseRegeneratePage({
                       {revision.status} · {revision.createdAt.toLocaleString()}
                     </p>
                   </div>
-                  <form
+                  <AsyncActionForm
                     action={applyRevisionAction.bind(
                       null,
                       courseId,
                       revision.id,
                     )}
+                    pendingMessage="Applying revision…"
+                    successMessage="Revision applied."
+                    errorMessage="Revision could not be applied."
                   >
                     <PendingActionButton
                       className={buttonClass}
@@ -185,7 +192,7 @@ export default async function CourseRegeneratePage({
                     >
                       {revision.status === "APPLIED" ? "Apply again" : "Apply revision"}
                     </PendingActionButton>
-                  </form>
+                  </AsyncActionForm>
                 </article>
               ))}
             </div>

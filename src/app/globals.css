@@ -34,3 +34,29 @@ body {
     Arial,
     sans-serif;
 }
+
+.dana-skeleton {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, currentColor 7%, transparent) 20%,
+    color-mix(in srgb, currentColor 13%, transparent) 45%,
+    color-mix(in srgb, currentColor 7%, transparent) 70%
+  );
+  background-size: 220% 100%;
+  animation: dana-skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes dana-skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dana-skeleton {
+    animation: none;
+  }
+}

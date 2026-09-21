@@ -53,6 +53,9 @@ export function LessonWorkspace({
   const [readingTheme, setReadingThemeState] = useState<LessonReadingTheme>(
     preferences?.readingTheme ?? "DEFAULT",
   );
+  const [dyslexiaFriendly, setDyslexiaFriendlyState] = useState(
+    preferences?.dyslexiaFriendly ?? false,
+  );
   const [isSavingReadingPreferences, startSavingReadingPreferences] =
     useTransition();
 
@@ -96,23 +99,30 @@ export function LessonWorkspace({
   function persistReadingPreferences(
     nextFontSize: LessonFontSize,
     nextTheme: LessonReadingTheme,
+    nextDyslexiaFriendly: boolean,
   ) {
     startSavingReadingPreferences(async () => {
       await updateLessonReadingPreferencesAction({
         fontSize: nextFontSize,
         readingTheme: nextTheme,
+        dyslexiaFriendly: nextDyslexiaFriendly,
       });
     });
   }
 
   function setFontSize(nextFontSize: LessonFontSize) {
     setFontSizeState(nextFontSize);
-    persistReadingPreferences(nextFontSize, readingTheme);
+    persistReadingPreferences(nextFontSize, readingTheme, dyslexiaFriendly);
   }
 
   function setReadingTheme(nextTheme: LessonReadingTheme) {
     setReadingThemeState(nextTheme);
-    persistReadingPreferences(fontSize, nextTheme);
+    persistReadingPreferences(fontSize, nextTheme, dyslexiaFriendly);
+  }
+
+  function setDyslexiaFriendly(enabled: boolean) {
+    setDyslexiaFriendlyState(enabled);
+    persistReadingPreferences(fontSize, readingTheme, enabled);
   }
 
   function toggleFocusMode() {
@@ -137,6 +147,8 @@ export function LessonWorkspace({
         setFontSize,
         readingTheme,
         setReadingTheme,
+        dyslexiaFriendly,
+        setDyslexiaFriendly,
         isSavingReadingPreferences,
       }}
     >
@@ -149,7 +161,7 @@ export function LessonWorkspace({
           "lesson-workspace relative min-h-dvh lg:grid lg:items-start",
           isFocusMode ? "focus-mode" : "",
           preferences?.highContrast ? "dana-high-contrast" : "",
-          preferences?.dyslexiaFriendly ? "dana-dyslexia-friendly" : "",
+          dyslexiaFriendly ? "dana-dyslexia-friendly" : "",
           "dana-reading-theme-" + readingTheme.toLowerCase().replaceAll("_", "-"),
         ].filter(Boolean).join(" ")}
       >

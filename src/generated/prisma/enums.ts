@@ -54,7 +54,8 @@ export const AiOperation = {
   TUTOR: 'TUTOR',
   MEMORY_EXTRACTION: 'MEMORY_EXTRACTION',
   EMBEDDING: 'EMBEDDING',
-  QUIZ_GENERATION: 'QUIZ_GENERATION'
+  QUIZ_GENERATION: 'QUIZ_GENERATION',
+  SOURCE_INGESTION: 'SOURCE_INGESTION'
 } as const
 
 export type AiOperation = (typeof AiOperation)[keyof typeof AiOperation]
@@ -188,3 +189,21 @@ export const AssessmentType = {
 } as const
 
 export type AssessmentType = (typeof AssessmentType)[keyof typeof AssessmentType]
+
+
+export const SourceType = {
+  PDF: 'PDF',
+  TEXT: 'TEXT',
+  URL: 'URL'
+} as const
+
+export type SourceType = (typeof SourceType)[keyof typeof SourceType]
+
+
+export const SourceStatus = {
+  PROCESSING: 'PROCESSING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+} as const
+
+export type SourceStatus = (typeof SourceStatus)[keyof typeof SourceStatus]

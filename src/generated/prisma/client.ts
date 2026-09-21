@@ -176,3 +176,18 @@ export type AssessmentRun = Prisma.AssessmentRunModel
  * 
  */
 export type AssessmentAnswer = Prisma.AssessmentAnswerModel
+/**
+ * Model CourseSource
+ * 
+ */
+export type CourseSource = Prisma.CourseSourceModel
+/**
+ * Model SourceChunk
+ * 
+ */
+export type SourceChunk = Prisma.SourceChunkModel
+/**
+ * Model LessonCitation
+ * 
+ */
+export type LessonCitation = Prisma.LessonCitationModel

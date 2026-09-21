@@ -222,6 +222,7 @@ export type LessonContentVersionWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"LessonContentVersion"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
   activeFor?: Prisma.XOR<Prisma.LessonNullableScalarRelationFilter, Prisma.LessonWhereInput> | null
+  citations?: Prisma.LessonCitationListRelationFilter
 }
 
 export type LessonContentVersionOrderByWithRelationInput = {
@@ -233,6 +234,7 @@ export type LessonContentVersionOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   lesson?: Prisma.LessonOrderByWithRelationInput
   activeFor?: Prisma.LessonOrderByWithRelationInput
+  citations?: Prisma.LessonCitationOrderByRelationAggregateInput
 }
 
 export type LessonContentVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -248,6 +250,7 @@ export type LessonContentVersionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"LessonContentVersion"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
   activeFor?: Prisma.XOR<Prisma.LessonNullableScalarRelationFilter, Prisma.LessonWhereInput> | null
+  citations?: Prisma.LessonCitationListRelationFilter
 }, "id" | "lessonId_version">
 
 export type LessonContentVersionOrderByWithAggregationInput = {
@@ -284,6 +287,7 @@ export type LessonContentVersionCreateInput = {
   createdAt?: Date | string
   lesson: Prisma.LessonCreateNestedOneWithoutContentVersionsInput
   activeFor?: Prisma.LessonCreateNestedOneWithoutActiveContentVersionInput
+  citations?: Prisma.LessonCitationCreateNestedManyWithoutLessonContentVersionInput
 }
 
 export type LessonContentVersionUncheckedCreateInput = {
@@ -294,6 +298,7 @@ export type LessonContentVersionUncheckedCreateInput = {
   instructions?: string | null
   createdAt?: Date | string
   activeFor?: Prisma.LessonUncheckedCreateNestedOneWithoutActiveContentVersionInput
+  citations?: Prisma.LessonCitationUncheckedCreateNestedManyWithoutLessonContentVersionInput
 }
 
 export type LessonContentVersionUpdateInput = {
@@ -304,6 +309,7 @@ export type LessonContentVersionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneRequiredWithoutContentVersionsNestedInput
   activeFor?: Prisma.LessonUpdateOneWithoutActiveContentVersionNestedInput
+  citations?: Prisma.LessonCitationUpdateManyWithoutLessonContentVersionNestedInput
 }
 
 export type LessonContentVersionUncheckedUpdateInput = {
@@ -314,6 +320,7 @@ export type LessonContentVersionUncheckedUpdateInput = {
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeFor?: Prisma.LessonUncheckedUpdateOneWithoutActiveContentVersionNestedInput
+  citations?: Prisma.LessonCitationUncheckedUpdateManyWithoutLessonContentVersionNestedInput
 }
 
 export type LessonContentVersionCreateManyInput = {
@@ -395,6 +402,11 @@ export type LessonContentVersionSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
 }
 
+export type LessonContentVersionScalarRelationFilter = {
+  is?: Prisma.LessonContentVersionWhereInput
+  isNot?: Prisma.LessonContentVersionWhereInput
+}
+
 export type LessonContentVersionCreateNestedOneWithoutActiveForInput = {
   create?: Prisma.XOR<Prisma.LessonContentVersionCreateWithoutActiveForInput, Prisma.LessonContentVersionUncheckedCreateWithoutActiveForInput>
   connectOrCreate?: Prisma.LessonContentVersionCreateOrConnectWithoutActiveForInput
@@ -453,6 +465,20 @@ export type LessonContentVersionUncheckedUpdateManyWithoutLessonNestedInput = {
   deleteMany?: Prisma.LessonContentVersionScalarWhereInput | Prisma.LessonContentVersionScalarWhereInput[]
 }
 
+export type LessonContentVersionCreateNestedOneWithoutCitationsInput = {
+  create?: Prisma.XOR<Prisma.LessonContentVersionCreateWithoutCitationsInput, Prisma.LessonContentVersionUncheckedCreateWithoutCitationsInput>
+  connectOrCreate?: Prisma.LessonContentVersionCreateOrConnectWithoutCitationsInput
+  connect?: Prisma.LessonContentVersionWhereUniqueInput
+}
+
+export type LessonContentVersionUpdateOneRequiredWithoutCitationsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonContentVersionCreateWithoutCitationsInput, Prisma.LessonContentVersionUncheckedCreateWithoutCitationsInput>
+  connectOrCreate?: Prisma.LessonContentVersionCreateOrConnectWithoutCitationsInput
+  upsert?: Prisma.LessonContentVersionUpsertWithoutCitationsInput
+  connect?: Prisma.LessonContentVersionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonContentVersionUpdateToOneWithWhereWithoutCitationsInput, Prisma.LessonContentVersionUpdateWithoutCitationsInput>, Prisma.LessonContentVersionUncheckedUpdateWithoutCitationsInput>
+}
+
 export type LessonContentVersionCreateWithoutActiveForInput = {
   id?: string
   version: number
@@ -460,6 +486,7 @@ export type LessonContentVersionCreateWithoutActiveForInput = {
   instructions?: string | null
   createdAt?: Date | string
   lesson: Prisma.LessonCreateNestedOneWithoutContentVersionsInput
+  citations?: Prisma.LessonCitationCreateNestedManyWithoutLessonContentVersionInput
 }
 
 export type LessonContentVersionUncheckedCreateWithoutActiveForInput = {
@@ -469,6 +496,7 @@ export type LessonContentVersionUncheckedCreateWithoutActiveForInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   instructions?: string | null
   createdAt?: Date | string
+  citations?: Prisma.LessonCitationUncheckedCreateNestedManyWithoutLessonContentVersionInput
 }
 
 export type LessonContentVersionCreateOrConnectWithoutActiveForInput = {
@@ -483,6 +511,7 @@ export type LessonContentVersionCreateWithoutLessonInput = {
   instructions?: string | null
   createdAt?: Date | string
   activeFor?: Prisma.LessonCreateNestedOneWithoutActiveContentVersionInput
+  citations?: Prisma.LessonCitationCreateNestedManyWithoutLessonContentVersionInput
 }
 
 export type LessonContentVersionUncheckedCreateWithoutLessonInput = {
@@ -492,6 +521,7 @@ export type LessonContentVersionUncheckedCreateWithoutLessonInput = {
   instructions?: string | null
   createdAt?: Date | string
   activeFor?: Prisma.LessonUncheckedCreateNestedOneWithoutActiveContentVersionInput
+  citations?: Prisma.LessonCitationUncheckedCreateNestedManyWithoutLessonContentVersionInput
 }
 
 export type LessonContentVersionCreateOrConnectWithoutLessonInput = {
@@ -522,6 +552,7 @@ export type LessonContentVersionUpdateWithoutActiveForInput = {
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneRequiredWithoutContentVersionsNestedInput
+  citations?: Prisma.LessonCitationUpdateManyWithoutLessonContentVersionNestedInput
 }
 
 export type LessonContentVersionUncheckedUpdateWithoutActiveForInput = {
@@ -531,6 +562,7 @@ export type LessonContentVersionUncheckedUpdateWithoutActiveForInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  citations?: Prisma.LessonCitationUncheckedUpdateManyWithoutLessonContentVersionNestedInput
 }
 
 export type LessonContentVersionUpsertWithWhereUniqueWithoutLessonInput = {
@@ -561,6 +593,62 @@ export type LessonContentVersionScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"LessonContentVersion"> | Date | string
 }
 
+export type LessonContentVersionCreateWithoutCitationsInput = {
+  id?: string
+  version: number
+  content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  instructions?: string | null
+  createdAt?: Date | string
+  lesson: Prisma.LessonCreateNestedOneWithoutContentVersionsInput
+  activeFor?: Prisma.LessonCreateNestedOneWithoutActiveContentVersionInput
+}
+
+export type LessonContentVersionUncheckedCreateWithoutCitationsInput = {
+  id?: string
+  lessonId: string
+  version: number
+  content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  instructions?: string | null
+  createdAt?: Date | string
+  activeFor?: Prisma.LessonUncheckedCreateNestedOneWithoutActiveContentVersionInput
+}
+
+export type LessonContentVersionCreateOrConnectWithoutCitationsInput = {
+  where: Prisma.LessonContentVersionWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonContentVersionCreateWithoutCitationsInput, Prisma.LessonContentVersionUncheckedCreateWithoutCitationsInput>
+}
+
+export type LessonContentVersionUpsertWithoutCitationsInput = {
+  update: Prisma.XOR<Prisma.LessonContentVersionUpdateWithoutCitationsInput, Prisma.LessonContentVersionUncheckedUpdateWithoutCitationsInput>
+  create: Prisma.XOR<Prisma.LessonContentVersionCreateWithoutCitationsInput, Prisma.LessonContentVersionUncheckedCreateWithoutCitationsInput>
+  where?: Prisma.LessonContentVersionWhereInput
+}
+
+export type LessonContentVersionUpdateToOneWithWhereWithoutCitationsInput = {
+  where?: Prisma.LessonContentVersionWhereInput
+  data: Prisma.XOR<Prisma.LessonContentVersionUpdateWithoutCitationsInput, Prisma.LessonContentVersionUncheckedUpdateWithoutCitationsInput>
+}
+
+export type LessonContentVersionUpdateWithoutCitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneRequiredWithoutContentVersionsNestedInput
+  activeFor?: Prisma.LessonUpdateOneWithoutActiveContentVersionNestedInput
+}
+
+export type LessonContentVersionUncheckedUpdateWithoutCitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeFor?: Prisma.LessonUncheckedUpdateOneWithoutActiveContentVersionNestedInput
+}
+
 export type LessonContentVersionCreateManyLessonInput = {
   id?: string
   version: number
@@ -576,6 +664,7 @@ export type LessonContentVersionUpdateWithoutLessonInput = {
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeFor?: Prisma.LessonUpdateOneWithoutActiveContentVersionNestedInput
+  citations?: Prisma.LessonCitationUpdateManyWithoutLessonContentVersionNestedInput
 }
 
 export type LessonContentVersionUncheckedUpdateWithoutLessonInput = {
@@ -585,6 +674,7 @@ export type LessonContentVersionUncheckedUpdateWithoutLessonInput = {
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeFor?: Prisma.LessonUncheckedUpdateOneWithoutActiveContentVersionNestedInput
+  citations?: Prisma.LessonCitationUncheckedUpdateManyWithoutLessonContentVersionNestedInput
 }
 
 export type LessonContentVersionUncheckedUpdateManyWithoutLessonInput = {
@@ -596,6 +686,35 @@ export type LessonContentVersionUncheckedUpdateManyWithoutLessonInput = {
 }
 
 
+/**
+ * Count Type LessonContentVersionCountOutputType
+ */
+
+export type LessonContentVersionCountOutputType = {
+  citations: number
+}
+
+export type LessonContentVersionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  citations?: boolean | LessonContentVersionCountOutputTypeCountCitationsArgs
+}
+
+/**
+ * LessonContentVersionCountOutputType without action
+ */
+export type LessonContentVersionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonContentVersionCountOutputType
+   */
+  select?: Prisma.LessonContentVersionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * LessonContentVersionCountOutputType without action
+ */
+export type LessonContentVersionCountOutputTypeCountCitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonCitationWhereInput
+}
+
 
 export type LessonContentVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -606,6 +725,8 @@ export type LessonContentVersionSelect<ExtArgs extends runtime.Types.Extensions.
   createdAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
   activeFor?: boolean | Prisma.LessonContentVersion$activeForArgs<ExtArgs>
+  citations?: boolean | Prisma.LessonContentVersion$citationsArgs<ExtArgs>
+  _count?: boolean | Prisma.LessonContentVersionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lessonContentVersion"]>
 
 export type LessonContentVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -641,6 +762,8 @@ export type LessonContentVersionOmit<ExtArgs extends runtime.Types.Extensions.In
 export type LessonContentVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
   activeFor?: boolean | Prisma.LessonContentVersion$activeForArgs<ExtArgs>
+  citations?: boolean | Prisma.LessonContentVersion$citationsArgs<ExtArgs>
+  _count?: boolean | Prisma.LessonContentVersionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonContentVersionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
@@ -654,6 +777,7 @@ export type $LessonContentVersionPayload<ExtArgs extends runtime.Types.Extension
   objects: {
     lesson: Prisma.$LessonPayload<ExtArgs>
     activeFor: Prisma.$LessonPayload<ExtArgs> | null
+    citations: Prisma.$LessonCitationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1058,6 +1182,7 @@ export interface Prisma__LessonContentVersionClient<T, Null = never, ExtArgs ext
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lesson<T extends Prisma.LessonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LessonDefaultArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   activeFor<T extends Prisma.LessonContentVersion$activeForArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LessonContentVersion$activeForArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  citations<T extends Prisma.LessonContentVersion$citationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LessonContentVersion$citationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonCitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1510,6 +1635,30 @@ export type LessonContentVersion$activeForArgs<ExtArgs extends runtime.Types.Ext
    */
   include?: Prisma.LessonInclude<ExtArgs> | null
   where?: Prisma.LessonWhereInput
+}
+
+/**
+ * LessonContentVersion.citations
+ */
+export type LessonContentVersion$citationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonCitation
+   */
+  select?: Prisma.LessonCitationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonCitation
+   */
+  omit?: Prisma.LessonCitationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonCitationInclude<ExtArgs> | null
+  where?: Prisma.LessonCitationWhereInput
+  orderBy?: Prisma.LessonCitationOrderByWithRelationInput | Prisma.LessonCitationOrderByWithRelationInput[]
+  cursor?: Prisma.LessonCitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonCitationScalarFieldEnum | Prisma.LessonCitationScalarFieldEnum[]
 }
 
 /**

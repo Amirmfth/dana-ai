@@ -77,7 +77,10 @@ export const ModelName = {
   AssessmentVersion: 'AssessmentVersion',
   AssessmentQuestion: 'AssessmentQuestion',
   AssessmentRun: 'AssessmentRun',
-  AssessmentAnswer: 'AssessmentAnswer'
+  AssessmentAnswer: 'AssessmentAnswer',
+  CourseSource: 'CourseSource',
+  SourceChunk: 'SourceChunk',
+  LessonCitation: 'LessonCitation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -480,6 +483,53 @@ export const AssessmentAnswerScalarFieldEnum = {
 } as const
 
 export type AssessmentAnswerScalarFieldEnum = (typeof AssessmentAnswerScalarFieldEnum)[keyof typeof AssessmentAnswerScalarFieldEnum]
+
+
+export const CourseSourceScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  courseId: 'courseId',
+  type: 'type',
+  status: 'status',
+  title: 'title',
+  originalUrl: 'originalUrl',
+  storagePath: 'storagePath',
+  mimeType: 'mimeType',
+  byteSize: 'byteSize',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseSourceScalarFieldEnum = (typeof CourseSourceScalarFieldEnum)[keyof typeof CourseSourceScalarFieldEnum]
+
+
+export const SourceChunkScalarFieldEnum = {
+  id: 'id',
+  sourceId: 'sourceId',
+  chunkIndex: 'chunkIndex',
+  content: 'content',
+  pageStart: 'pageStart',
+  pageEnd: 'pageEnd',
+  heading: 'heading',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type SourceChunkScalarFieldEnum = (typeof SourceChunkScalarFieldEnum)[keyof typeof SourceChunkScalarFieldEnum]
+
+
+export const LessonCitationScalarFieldEnum = {
+  id: 'id',
+  lessonContentVersionId: 'lessonContentVersionId',
+  sourceChunkId: 'sourceChunkId',
+  marker: 'marker',
+  location: 'location',
+  createdAt: 'createdAt'
+} as const
+
+export type LessonCitationScalarFieldEnum = (typeof LessonCitationScalarFieldEnum)[keyof typeof LessonCitationScalarFieldEnum]
 
 
 export const SortOrder = {

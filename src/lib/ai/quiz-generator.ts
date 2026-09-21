@@ -91,6 +91,11 @@ GENERAL RULES
 13. Prefer using all five types when they fit naturally.
 14. Do not force MATCHING or ORDERING when the lesson does not contain suitable material.
 
+LANGUAGE
+
+Write every learner-facing quiz field in the course content language: ${lesson.module.course.contentLanguage}.
+This includes questions, options, matching labels, ordering labels, and explanations.
+
 The quiz will be automatically graded, so correctness and unambiguity are critical.
       `.trim(),
     },

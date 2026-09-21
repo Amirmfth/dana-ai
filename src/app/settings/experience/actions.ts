@@ -10,6 +10,7 @@ const LINE_HEIGHTS = ["TIGHT", "NORMAL", "RELAXED"] as const;
 const READING_WIDTHS = ["NARROW", "STANDARD", "WIDE"] as const;
 const DENSITIES = ["COMPACT", "COMFORTABLE", "SPACIOUS"] as const;
 const MOTION = ["SYSTEM", "REDUCED", "FULL"] as const;
+const READING_THEMES = ["DEFAULT", "PAPER", "SEPIA", "DARK", "HIGH_CONTRAST"] as const;
 
 function enumValue<T extends readonly string[]>(
   value: FormDataEntryValue | null,
@@ -41,12 +42,41 @@ export async function updateExperienceSettingsAction(formData: FormData) {
     motionPreference: enumValue(formData.get("motionPreference"), MOTION, "SYSTEM"),
     highContrast: formData.get("highContrast") === "on",
     dyslexiaFriendly: formData.get("dyslexiaFriendly") === "on",
+    readingTheme: enumValue(formData.get("readingTheme"), READING_THEMES, "DEFAULT"),
   };
 
   await prisma.userExperienceSettings.upsert({
     where: { userId: user.id },
     create: { userId: user.id, ...data },
     update: data,
+  });
+
+  revalidatePath("/settings/experience");
+}
+
+
+export async function updateLessonReadingPreferencesAction(input: {
+  fontSize: (typeof FONT_SIZES)[number];
+  readingTheme: (typeof READING_THEMES)[number];
+}) {
+  const user = await requireUser();
+
+  const fontSize = FONT_SIZES.includes(input.fontSize) ? input.fontSize : "DEFAULT";
+  const readingTheme = READING_THEMES.includes(input.readingTheme)
+    ? input.readingTheme
+    : "DEFAULT";
+
+  await prisma.userExperienceSettings.upsert({
+    where: { userId: user.id },
+    create: {
+      userId: user.id,
+      fontSize,
+      readingTheme,
+    },
+    update: {
+      fontSize,
+      readingTheme,
+    },
   });
 
   revalidatePath("/settings/experience");

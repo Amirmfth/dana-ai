@@ -28,8 +28,26 @@ function lessonTextWords(content: unknown) {
       words += wordCount(section.content);
     } else if (section.type === "example") {
       words += wordCount(section.example) + wordCount(section.explanation);
-    } else {
-      words += section.items.reduce((sum, item) => sum + wordCount(item), 0);
+    } else if (section.type === "list") {
+      words += section.items.reduce(
+        (sum, item) => sum + wordCount(item),
+        0,
+      );
+    } else if (section.type === "diagram") {
+      words +=
+        section.nodes.reduce(
+          (sum, node) =>
+            sum +
+            wordCount(node.label) +
+            wordCount(node.detail ?? "") +
+            wordCount(node.group ?? ""),
+          0,
+        ) +
+        section.edges.reduce(
+          (sum, edge) => sum + wordCount(edge.label ?? ""),
+          0,
+        ) +
+        wordCount(section.caption ?? "");
     }
   }
 

@@ -9,6 +9,7 @@ import {
 } from "@/app/courses/[courseId]/regenerate/actions";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 const buttonClass =
   "inline-flex min-h-10 items-center justify-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold transition hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800";
@@ -77,7 +78,12 @@ export default async function LessonVersionsPage({
               </p>
             </div>
             <form action={regenerateLessonAction.bind(null, courseId, lessonId)}>
-              <button className={buttonClass}>Regenerate lesson</button>
+              <PendingActionButton
+                className={buttonClass}
+                pendingLabel="Regenerating lesson…"
+              >
+                Regenerate lesson
+              </PendingActionButton>
             </form>
           </div>
 
@@ -105,7 +111,12 @@ export default async function LessonVersionsPage({
                       version.id,
                     )}
                   >
-                    <button className={buttonClass}>Restore</button>
+                    <PendingActionButton
+                      className={buttonClass}
+                      pendingLabel="Restoring…"
+                    >
+                      Restore
+                    </PendingActionButton>
                   </form>
                 )}
               </article>
@@ -122,7 +133,12 @@ export default async function LessonVersionsPage({
               </p>
             </div>
             <form action={regenerateQuizAction.bind(null, courseId, lessonId)}>
-              <button className={buttonClass}>Regenerate quiz</button>
+              <PendingActionButton
+                className={buttonClass}
+                pendingLabel="Regenerating quiz…"
+              >
+                Regenerate quiz
+              </PendingActionButton>
             </form>
           </div>
 

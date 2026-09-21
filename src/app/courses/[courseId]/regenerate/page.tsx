@@ -9,6 +9,8 @@ import {
 import { requireUser } from "@/lib/auth/server";
 import { getOwnedCourse } from "@/lib/courses/management";
 import { prisma } from "@/lib/db/prisma";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { GenerationSkeleton } from "@/components/generation/generation-skeleton";
 
 const buttonClass =
   "inline-flex min-h-10 items-center justify-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold transition hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800";
@@ -22,10 +24,28 @@ export default async function CourseRegeneratePage({
 
   if (!course) notFound();
 
-  const revisions = await prisma.curriculumRevision.findMany({
-    where: { courseId },
-    orderBy: { createdAt: "desc" },
-  });
+  const [revisions, regenerationLocks] = await Promise.all([
+    prisma.curriculumRevision.findMany({
+      where: { courseId },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.regenerationLock.findMany({
+      where: {
+        ownerId: user.id,
+        OR: [
+          { target: "CURRICULUM", targetId: courseId },
+          {
+            target: "MODULE",
+            targetId: { in: course.modules.map((item) => item.id) },
+          },
+        ],
+      },
+    }),
+  ]);
+
+  const courseLock = regenerationLocks.find(
+    (lock) => lock.target === "CURRICULUM" && lock.targetId === courseId,
+  );
 
   return (
     <main className="min-h-dvh bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
@@ -49,14 +69,48 @@ export default async function CourseRegeneratePage({
             </p>
           </div>
           <form action={regenerateCourseAction.bind(null, courseId)}>
-            <button className={buttonClass}>Generate course revision</button>
+            <PendingActionButton
+              className={buttonClass}
+              pendingLabel="Generating revision…"
+            >
+              Generate course revision
+            </PendingActionButton>
           </form>
         </div>
+
+        {courseLock?.status === "GENERATING" && (
+          <div className="mt-8">
+            <GenerationSkeleton
+              title="Course revision in progress"
+              description="Dana is preparing a reviewable curriculum revision. Existing curriculum remains active until you apply it."
+              stages={[
+                "Reading current curriculum",
+                "Retrieving relevant course sources",
+                "Generating the revision",
+                "Saving revision history",
+              ]}
+              activeStage={2}
+            />
+          </div>
+        )}
+
+        {courseLock?.status === "FAILED" && courseLock.errorMessage && (
+          <div className="mt-8 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
+            Course regeneration failed: {courseLock.errorMessage}
+          </div>
+        )}
 
         <section className="mt-8">
           <h2 className="text-xl font-semibold">Regenerate a module</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {course.modules.map((courseModule) => (
+            {course.modules.map((courseModule) => {
+              const moduleLock = regenerationLocks.find(
+                (lock) =>
+                  lock.target === "MODULE" &&
+                  lock.targetId === courseModule.id,
+              );
+
+              return (
               <article
                 key={courseModule.id}
                 className="flex items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900"
@@ -74,10 +128,26 @@ export default async function CourseRegeneratePage({
                     courseModule.id,
                   )}
                 >
-                  <button className={buttonClass}>Regenerate</button>
+                  <PendingActionButton
+                    className={buttonClass}
+                    pendingLabel="Regenerating…"
+                  >
+                    Regenerate
+                  </PendingActionButton>
                 </form>
+                {moduleLock?.status === "GENERATING" && (
+                  <p className="w-full text-xs font-medium text-neutral-500">
+                    Regeneration in progress…
+                  </p>
+                )}
+                {moduleLock?.status === "FAILED" && moduleLock.errorMessage && (
+                  <p className="w-full text-xs text-red-600 dark:text-red-300">
+                    {moduleLock.errorMessage}
+                  </p>
+                )}
               </article>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -109,9 +179,12 @@ export default async function CourseRegeneratePage({
                       revision.id,
                     )}
                   >
-                    <button className={buttonClass}>
+                    <PendingActionButton
+                      className={buttonClass}
+                      pendingLabel="Applying revision…"
+                    >
                       {revision.status === "APPLIED" ? "Apply again" : "Apply revision"}
-                    </button>
+                    </PendingActionButton>
                   </form>
                 </article>
               ))}

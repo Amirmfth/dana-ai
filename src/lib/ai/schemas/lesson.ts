@@ -25,6 +25,40 @@ const listBlockSchema = z.object({
   items: z.array(z.string()),
 });
 
+export const lessonDiagramSchema = z.object({
+  type: z.literal("diagram"),
+  title: z.string().nullable(),
+  diagramType: z.enum([
+    "FLOW",
+    "SEQUENCE",
+    "HIERARCHY",
+    "RELATIONSHIP",
+    "COMPARISON",
+  ]),
+  direction: z.enum(["HORIZONTAL", "VERTICAL"]).default("VERTICAL"),
+  nodes: z
+    .array(
+      z.object({
+        id: z.string().min(1).max(80),
+        label: z.string().min(1).max(160),
+        detail: z.string().max(300).nullable(),
+        group: z.string().max(80).nullable(),
+      }),
+    )
+    .min(2)
+    .max(12),
+  edges: z
+    .array(
+      z.object({
+        from: z.string().min(1).max(80),
+        to: z.string().min(1).max(80),
+        label: z.string().max(120).nullable(),
+      }),
+    )
+    .max(20),
+  caption: z.string().max(500).nullable(),
+});
+
 export const lessonContentSchema = z.object({
   title: z.string(),
 
@@ -36,6 +70,7 @@ export const lessonContentSchema = z.object({
       exampleBlockSchema,
       noteBlockSchema,
       listBlockSchema,
+      lessonDiagramSchema,
     ]),
   ),
 

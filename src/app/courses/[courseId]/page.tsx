@@ -7,10 +7,18 @@ import { MobileCourseAction } from "@/components/courses/mobile-course-action";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
-export default async function CoursePage({ params }: PageProps<"/courses/[courseId]">) {
+export default async function CoursePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ courseId: string }>;
+  searchParams: Promise<{ completedLesson?: string }>;
+}) {
   const user = await requireUser();
   const { courseId } = await params;
+  const query = await searchParams;
   const course = await prisma.course.findFirst({
     where: { id: courseId, ownerId: user.id },
     include: {
@@ -118,6 +126,15 @@ export default async function CoursePage({ params }: PageProps<"/courses/[course
       </header>
 
       <div className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10 lg:pb-16">
+        {query.completedLesson === "1" && (
+          <div className="pt-5">
+            <CompletionFeedback
+              title="Lesson completed"
+              description="Your course progress and prerequisite unlocks have been updated."
+            />
+          </div>
+        )}
+
         {course.status === "ARCHIVED" && (
           <div className="mt-5 rounded-xl border border-neutral-300 bg-neutral-100 px-4 py-3 text-sm font-medium text-neutral-700 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
             This course is archived. You can restore it from Manage.

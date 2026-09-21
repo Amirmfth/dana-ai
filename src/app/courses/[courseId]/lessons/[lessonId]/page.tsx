@@ -15,17 +15,25 @@ import { LessonQuiz } from "@/components/exercises/lesson-quiz";
 import { LessonStudyTracker } from "@/components/analytics/lesson-study-tracker";
 import { estimateLessonMinutes } from "@/lib/analytics/estimates";
 import { skipLessonAction } from "@/app/actions/lessons";
+import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
 type LessonPageProps = {
   params: Promise<{
     courseId: string;
     lessonId: string;
   }>;
+  searchParams: Promise<{
+    completedPrevious?: string;
+  }>;
 };
 
-export default async function LessonPage({ params }: LessonPageProps) {
+export default async function LessonPage({
+  params,
+  searchParams,
+}: LessonPageProps) {
   const user = await requireUser();
   const { courseId, lessonId } = await params;
+  const query = await searchParams;
 
   const lessonInfo = await prisma.lesson.findFirst({
     where: { id: lessonId, module: { courseId, course: { ownerId: user.id } } },
@@ -189,6 +197,15 @@ export default async function LessonPage({ params }: LessonPageProps) {
               <ThemeToggle />
             </div>
           </div>
+
+          {query.completedPrevious === "1" && (
+            <div className="mx-auto mb-8 w-full max-w-2xl lg:translate-x-8">
+              <CompletionFeedback
+                title="Previous lesson completed"
+                description="Your progress was saved. This lesson is now available based on your prerequisites."
+              />
+            </div>
+          )}
 
           <header className="mb-10 border-b border-neutral-200 pb-9 sm:mb-12 sm:pb-10 dark:border-neutral-800">
             <div className="mx-auto w-full max-w-2xl lg:translate-x-8">

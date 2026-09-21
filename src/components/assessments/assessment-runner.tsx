@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AnimatedProgress } from "@/components/ui/animated-progress";
+import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
 type Question = {
   id: string;
@@ -75,12 +77,10 @@ export function AssessmentRunner({
         <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
           Question {index + 1} of {questions.length}
         </p>
-        <div className="h-1.5 w-32 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
-          <div
-            className="h-full bg-neutral-950 dark:bg-white"
-            style={{ width: ((index + 1) / questions.length) * 100 + "%" }}
-          />
-        </div>
+        <AnimatedProgress
+          className="w-32"
+          value={((index + 1) / questions.length) * 100}
+        />
       </div>
 
       <h2 className="mt-5 text-xl font-semibold leading-8">
@@ -115,9 +115,12 @@ export function AssessmentRunner({
             {feedback.explanation}
           </p>
           {feedback.completed && (
-            <p className="mt-3 font-semibold">
-              Score: {feedback.score}% · {feedback.passed ? "Passed" : "Not passed"}
-            </p>
+            <div className="mt-4">
+              <CompletionFeedback
+                title={feedback.passed ? "Assessment passed" : "Assessment complete"}
+                description={"Score: " + feedback.score + "%"}
+              />
+            </div>
           )}
         </div>
       )}

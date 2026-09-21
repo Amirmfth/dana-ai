@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { createCourseAction } from "@/app/actions/courses";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 import { signOutAction } from "@/app/auth/actions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { requireUser } from "@/lib/auth/server";
@@ -177,12 +178,12 @@ export default async function HomePage() {
             />
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
               <p className="text-xs leading-5 text-neutral-500 dark:text-neutral-400">A clear goal creates a more useful plan.</p>
-              <button
-                type="submit"
-                className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 dark:focus-visible:outline-white"
+              <PendingActionButton
+                pendingLabel="Creating course…"
+                className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 dark:focus-visible:outline-white"
               >
                 Create course
-              </button>
+              </PendingActionButton>
             </div>
           </form>
         </section>

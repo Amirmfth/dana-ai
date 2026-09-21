@@ -9,6 +9,7 @@ import {
 import { requireUser } from "@/lib/auth/server";
 import { getOwnedCourse } from "@/lib/courses/management";
 import { prisma } from "@/lib/db/prisma";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 const buttonClass =
   "inline-flex min-h-10 items-center justify-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold transition hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800";
@@ -49,7 +50,12 @@ export default async function CourseRegeneratePage({
             </p>
           </div>
           <form action={regenerateCourseAction.bind(null, courseId)}>
-            <button className={buttonClass}>Generate course revision</button>
+            <PendingActionButton
+              className={buttonClass}
+              pendingLabel="Generating revision…"
+            >
+              Generate course revision
+            </PendingActionButton>
           </form>
         </div>
 
@@ -74,7 +80,12 @@ export default async function CourseRegeneratePage({
                     courseModule.id,
                   )}
                 >
-                  <button className={buttonClass}>Regenerate</button>
+                  <PendingActionButton
+                    className={buttonClass}
+                    pendingLabel="Regenerating…"
+                  >
+                    Regenerate
+                  </PendingActionButton>
                 </form>
               </article>
             ))}
@@ -109,9 +120,12 @@ export default async function CourseRegeneratePage({
                       revision.id,
                     )}
                   >
-                    <button className={buttonClass}>
+                    <PendingActionButton
+                      className={buttonClass}
+                      pendingLabel="Applying revision…"
+                    >
                       {revision.status === "APPLIED" ? "Apply again" : "Apply revision"}
-                    </button>
+                    </PendingActionButton>
                   </form>
                 </article>
               ))}

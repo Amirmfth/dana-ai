@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type CSSProperties, type ReactNode } from "react";
+import { useRef, useState, useTransition, type CSSProperties, type ReactNode } from "react";
 
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -56,6 +56,11 @@ export function LessonWorkspace({
   const [dyslexiaFriendly, setDyslexiaFriendlyState] = useState(
     preferences?.dyslexiaFriendly ?? false,
   );
+  const readingPreferencesRef = useRef({
+    fontSize,
+    readingTheme,
+    dyslexiaFriendly,
+  });
   const [isSavingReadingPreferences, startSavingReadingPreferences] =
     useTransition();
 
@@ -112,17 +117,23 @@ export function LessonWorkspace({
 
   function setFontSize(nextFontSize: LessonFontSize) {
     setFontSizeState(nextFontSize);
-    persistReadingPreferences(nextFontSize, readingTheme, dyslexiaFriendly);
+    const next = { ...readingPreferencesRef.current, fontSize: nextFontSize };
+    readingPreferencesRef.current = next;
+    persistReadingPreferences(next.fontSize, next.readingTheme, next.dyslexiaFriendly);
   }
 
   function setReadingTheme(nextTheme: LessonReadingTheme) {
     setReadingThemeState(nextTheme);
-    persistReadingPreferences(fontSize, nextTheme, dyslexiaFriendly);
+    const next = { ...readingPreferencesRef.current, readingTheme: nextTheme };
+    readingPreferencesRef.current = next;
+    persistReadingPreferences(next.fontSize, next.readingTheme, next.dyslexiaFriendly);
   }
 
   function setDyslexiaFriendly(enabled: boolean) {
     setDyslexiaFriendlyState(enabled);
-    persistReadingPreferences(fontSize, readingTheme, enabled);
+    const next = { ...readingPreferencesRef.current, dyslexiaFriendly: enabled };
+    readingPreferencesRef.current = next;
+    persistReadingPreferences(next.fontSize, next.readingTheme, next.dyslexiaFriendly);
   }
 
   function toggleFocusMode() {

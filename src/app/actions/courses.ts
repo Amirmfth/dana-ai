@@ -23,6 +23,7 @@ export async function createCourseAction(formData: FormData) {
     targetLevel: formData.get("targetLevel"),
     weeklyStudyMinutes: Number(formData.get("weeklyStudyMinutes")),
     learningStyle: formData.get("learningStyle"),
+    contentLanguage: formData.get("contentLanguage") || "English",
   });
 
   const draftCourse = await prisma.course.create({
@@ -35,6 +36,7 @@ export async function createCourseAction(formData: FormData) {
       targetLevel: parsed.targetLevel,
       weeklyStudyMinutes: parsed.weeklyStudyMinutes,
       learningStyle: parsed.learningStyle,
+      contentLanguage: parsed.contentLanguage,
       status: "DRAFT",
     },
     select: { id: true },

@@ -54,11 +54,20 @@ export async function getOrGenerateQuiz(userId: string, lessonId: string) {
     select: {
       id: true,
       activeQuizVersionId: true,
+      module: {
+        select: {
+          course: { select: { mode: true } },
+        },
+      },
     },
   });
 
   if (!lesson) {
     throw new Error("Lesson not found or locked.");
+  }
+
+  if (lesson.module.course.mode === "FLEXIBLE") {
+    throw new Error("Quizzes are disabled for flexible courses.");
   }
 
   let activeQuizVersionId = lesson.activeQuizVersionId;

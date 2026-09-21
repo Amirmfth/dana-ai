@@ -11,6 +11,7 @@ import { prisma } from "@/lib/db/prisma";
 import { retakeAssessmentAction } from "@/app/courses/[courseId]/assessment-actions";
 import { regenerateCourseFinalAssessmentAction } from "@/app/courses/[courseId]/assessments/actions";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
 function optionsFrom(data: unknown) {
@@ -171,7 +172,7 @@ export default async function CourseFinalAssessmentPage({
               )}
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <form
+                <AsyncActionForm
                   action={retakeAssessmentAction.bind(
                     null,
                     courseId,
@@ -185,8 +186,8 @@ export default async function CourseFinalAssessmentPage({
                   >
                     Retake final
                   </PendingActionButton>
-                </form>
-                <form
+                </AsyncActionForm>
+                <AsyncActionForm
                   action={regenerateCourseFinalAssessmentAction.bind(
                     null,
                     courseId,
@@ -199,7 +200,7 @@ export default async function CourseFinalAssessmentPage({
                   >
                     Regenerate final
                   </PendingActionButton>
-                </form>
+                </AsyncActionForm>
               </div>
             </CompletionFeedback>
           </section>

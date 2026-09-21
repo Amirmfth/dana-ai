@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { completeLessonAction } from "@/app/actions/lessons";
 import { CompletionFeedback } from "@/components/ui/completion-feedback";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 type LessonCompletionProps = {
@@ -49,9 +50,11 @@ export function LessonCompletion({
           progress and unlock the next lesson.
         </p>
 
-        <form
+        <AsyncActionForm
           action={completeLessonAction}
           className="mt-6"
+          pendingMessage="Completing lesson and updating progress…"
+          errorMessage="The lesson could not be completed. Please try again."
         >
           <input
             type="hidden"
@@ -72,7 +75,7 @@ export function LessonCompletion({
             Complete and continue
             <ArrowIcon />
           </PendingActionButton>
-        </form>
+        </AsyncActionForm>
       </div>
     </section>
   );

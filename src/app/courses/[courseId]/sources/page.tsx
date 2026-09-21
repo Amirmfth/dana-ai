@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+export const maxDuration = 300;
+
 import {
   addFileSourceAction,
   addTextSourceAction,

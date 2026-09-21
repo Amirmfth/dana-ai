@@ -7,10 +7,18 @@ import { MobileCourseAction } from "@/components/courses/mobile-course-action";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { CompletionFeedback } from "@/components/ui/completion-feedback";
 
-export default async function CoursePage({ params }: PageProps<"/courses/[courseId]">) {
+export default async function CoursePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ courseId: string }>;
+  searchParams: Promise<{ completedLesson?: string }>;
+}) {
   const user = await requireUser();
   const { courseId } = await params;
+  const query = await searchParams;
   const course = await prisma.course.findFirst({
     where: { id: courseId, ownerId: user.id },
     include: {

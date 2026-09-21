@@ -7,13 +7,11 @@ import {
   useEffect,
   useRef,
   useState,
-  useTransition,
   type FormEvent,
   type ReactNode,
 } from "react";
 
 export type AsyncActionStatus = "idle" | "pending" | "success" | "error";
-
 export type FormAction = (formData: FormData) => Promise<unknown>;
 
 type ActionState = {
@@ -25,7 +23,7 @@ type AsyncActionContextValue = {
   state: ActionState;
   isPending: boolean;
   runAction: (
-    action: ServerAction,
+    action: FormAction,
     formData: FormData,
     options?: {
       successMessage?: string;
@@ -36,14 +34,18 @@ type AsyncActionContextValue = {
 
 const AsyncActionContext = createContext<AsyncActionContextValue | null>(null);
 
-function redirectDigest(error: unknown) {
+function isRedirectError(error: unknown) {
   if (!error || typeof error !== "object" || !("digest" in error)) return false;
   const digest = (error as { digest?: unknown }).digest;
   return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT");
 }
 
-function errorMessage(error: unknown, fallback: string) {
-  if (error instanceof Error && error.message && error.message !== "Failed to execute server action.") {
+function getErrorMessage(error: unknown, fallback: string) {
+  if (
+    error instanceof Error &&
+    error.message &&
+    error.message !== "Failed to execute server action."
+  ) {
     return error.message;
   }
 
@@ -55,6 +57,7 @@ export function AsyncActionForm({
   children,
   className,
   successMessage = "Done",
+  pendingMessage = "Working…",
   errorMessage: fallbackErrorMessage = "Something went wrong. Please try again.",
   successDurationMs = 2500,
 }: {
@@ -62,6 +65,7 @@ export function AsyncActionForm({
   children: ReactNode;
   className?: string;
   successMessage?: string;
+  pendingMessage?: string;
   errorMessage?: string;
   successDurationMs?: number;
 }) {
@@ -69,8 +73,8 @@ export function AsyncActionForm({
     status: "idle",
     message: null,
   });
-  const [isPending, startTransition] = useTransition();
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isPending = state.status === "pending";
 
   useEffect(() => {
     return () => {
@@ -87,44 +91,37 @@ export function AsyncActionForm({
         successTimer.current = null;
       }
 
-      setState({ status: "pending", message: null });
+      setState({ status: "pending", message: pendingMessage });
 
-      await new Promise<void>((resolve, reject) => {
-        startTransition(async () => {
-          try {
-            await targetAction(formData);
-            const message = options?.successMessage ?? successMessage;
-            setState({ status: "success", message });
+      try {
+        await targetAction(formData);
 
-            if (successDurationMs > 0) {
-              successTimer.current = setTimeout(() => {
-                setState({ status: "idle", message: null });
-              }, successDurationMs);
-            }
+        const message = options?.successMessage ?? successMessage;
+        setState({ status: "success", message });
 
-            resolve();
-          } catch (error) {
-            if (redirectDigest(error)) {
-              reject(error);
-              return;
-            }
+        if (successDurationMs > 0) {
+          successTimer.current = setTimeout(() => {
+            setState({ status: "idle", message: null });
+          }, successDurationMs);
+        }
+      } catch (error) {
+        if (isRedirectError(error)) {
+          throw error;
+        }
 
-            setState({
-              status: "error",
-              message: errorMessage(
-                error,
-                options?.errorMessage ?? fallbackErrorMessage,
-              ),
-            });
-            resolve();
-          }
+        setState({
+          status: "error",
+          message: getErrorMessage(
+            error,
+            options?.errorMessage ?? fallbackErrorMessage,
+          ),
         });
-      });
+      }
     },
     [
       fallbackErrorMessage,
       isPending,
-      startTransition,
+      pendingMessage,
       successDurationMs,
       successMessage,
     ],
@@ -160,31 +157,36 @@ export function useAsyncActionContext() {
 
 function AsyncActionFeedback() {
   const context = useAsyncActionContext();
-  if (!context || context.state.status === "idle" || context.state.status === "pending") {
-    return (
-      <span className="sr-only" aria-live="polite">
-        {context?.state.status === "pending" ? "Action in progress" : ""}
-      </span>
-    );
-  }
+  if (!context || context.state.status === "idle") return null;
 
-  const isSuccess = context.state.status === "success";
+  const { status, message } = context.state;
+  const isPending = status === "pending";
+  const isSuccess = status === "success";
 
   return (
     <div
-      role={isSuccess ? "status" : "alert"}
-      aria-live={isSuccess ? "polite" : "assertive"}
+      role={status === "error" ? "alert" : "status"}
+      aria-live={status === "error" ? "assertive" : "polite"}
       className={
         "mt-3 flex items-start gap-2 rounded-lg border px-3 py-2 text-sm " +
-        (isSuccess
-          ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200"
-          : "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200")
+        (isPending
+          ? "border-neutral-200 bg-neutral-50 text-neutral-700 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200"
+          : isSuccess
+            ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200"
+            : "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200")
       }
     >
-      <span aria-hidden="true" className="mt-0.5 shrink-0 font-semibold">
-        {isSuccess ? "✓" : "!"}
-      </span>
-      <span>{context.state.message}</span>
+      {isPending ? (
+        <span
+          aria-hidden="true"
+          className="mt-0.5 inline-block size-3.5 shrink-0 rounded-full border-2 border-current border-r-transparent motion-safe:animate-spin"
+        />
+      ) : (
+        <span aria-hidden="true" className="shrink-0 font-semibold">
+          {isSuccess ? "✓" : "!"}
+        </span>
+      )}
+      <span>{message}</span>
     </div>
   );
 }

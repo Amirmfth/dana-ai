@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const maxDuration = 300;
+
 import { createCourseAction } from "@/app/actions/courses";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
 import { signOutAction } from "@/app/auth/actions";

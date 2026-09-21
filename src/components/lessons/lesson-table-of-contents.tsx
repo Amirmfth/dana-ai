@@ -54,6 +54,8 @@ export function LessonTableOfContents({
     setFontSize,
     readingTheme,
     setReadingTheme,
+    dyslexiaFriendly,
+    setDyslexiaFriendly,
     isSavingReadingPreferences,
   } = useLessonMobileControls();
 
@@ -258,6 +260,40 @@ export function LessonTableOfContents({
                       {label}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                  Font family
+                </p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDyslexiaFriendly(false)}
+                    aria-pressed={!dyslexiaFriendly}
+                    className={
+                      "min-h-10 rounded-xl border px-3 text-sm font-medium " +
+                      (!dyslexiaFriendly
+                        ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                        : "border-neutral-200 dark:border-neutral-700")
+                    }
+                  >
+                    Default
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDyslexiaFriendly(true)}
+                    aria-pressed={dyslexiaFriendly}
+                    className={
+                      "min-h-10 rounded-xl border px-3 text-sm font-medium " +
+                      (dyslexiaFriendly
+                        ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                        : "border-neutral-200 dark:border-neutral-700")
+                    }
+                  >
+                    Dyslexia friendly
+                  </button>
                 </div>
               </div>
 

@@ -1,4 +1,5 @@
 import type { GeneratedLessonContent } from "@/lib/ai/schemas/lesson";
+import { LessonDiagramView } from "@/components/lessons/lesson-diagram";
 
 type LessonCitationView = {
   id: string;
@@ -82,6 +83,18 @@ export function LessonContent({
                   {section.content}
                 </p>
               </aside>
+            );
+          }
+
+          if (section.type === "diagram") {
+            return (
+              <section
+                id={`lesson-section-${index}`}
+                key={index}
+                className="scroll-mt-8"
+              >
+                <LessonDiagramView diagram={section} />
+              </section>
             );
           }
 

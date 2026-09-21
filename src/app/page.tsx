@@ -13,13 +13,17 @@ import { LearningDashboard } from "@/components/analytics/learning-dashboard";
 export default async function HomePage() {
   const user = await requireUser();
 
-  const [courses, dashboard] = await Promise.all([
+  const [courses, dashboard, experienceSettings] = await Promise.all([
     prisma.course.findMany({
     where: { ownerId: user.id },
     orderBy: { updatedAt: "desc" },
       include: { modules: { include: { lessons: true } } },
     }),
     getUserDashboard(user.id),
+    prisma.userExperienceSettings.findUnique({
+      where: { userId: user.id },
+      select: { defaultContentLanguage: true },
+    }),
   ]);
 
   const activeCourses = courses.filter((course) => course.status === "ACTIVE");
@@ -108,7 +112,7 @@ export default async function HomePage() {
                 Course teaching language
                 <input
                   name="contentLanguage"
-                  defaultValue="English"
+                  defaultValue={experienceSettings?.defaultContentLanguage ?? "English"}
                   placeholder="English, German, Persian…"
                   className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950"
                 />

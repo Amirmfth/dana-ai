@@ -41,7 +41,7 @@ export default async function HomePage() {
           <UserMenu />
         </header>
 
-        <section className="py-14 sm:py-18 lg:py-24">
+        <section className="py-14 sm:py-20 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
               Your learning studio

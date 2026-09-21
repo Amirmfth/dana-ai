@@ -22,7 +22,8 @@ export default async function HomePage() {
     getUserDashboard(user.id),
   ]);
 
-  const activeCourses = courses.filter((course) => course.status !== "ARCHIVED");
+  const activeCourses = courses.filter((course) => course.status === "ACTIVE");
+  const draftCourses = courses.filter((course) => course.status === "DRAFT");
   const archivedCourses = courses.filter((course) => course.status === "ARCHIVED");
 
   const lessonCount = activeCourses.reduce(
@@ -206,6 +207,42 @@ export default async function HomePage() {
             </div>
           )}
         </section>
+
+        {draftCourses.length > 0 && (
+          <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">
+            <h2 className="text-lg font-semibold">Incomplete course setup</h2>
+            <p className="mt-1 text-sm text-neutral-500">
+              These courses were created but setup did not finish. Open Sources to inspect attached material.
+            </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {draftCourses.map((course) => (
+                <article
+                  key={course.id}
+                  className="rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/30"
+                >
+                  <p className="font-semibold">{course.title}</p>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    Draft · setup incomplete
+                  </p>
+                  <div className="mt-3 flex gap-3">
+                    <Link
+                      href={"/courses/" + course.id + "/sources"}
+                      className="text-sm font-semibold underline underline-offset-4"
+                    >
+                      Open sources
+                    </Link>
+                    <Link
+                      href={"/courses/" + course.id + "/manage"}
+                      className="text-sm font-semibold underline underline-offset-4"
+                    >
+                      Manage
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
         {archivedCourses.length > 0 && (
           <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">

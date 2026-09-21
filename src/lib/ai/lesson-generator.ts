@@ -71,6 +71,12 @@ Use note sections for warnings, important distinctions, common mistakes, or espe
 
 Use list sections when information is naturally enumerable.
 
+Use diagram sections only when a process, sequence, hierarchy, comparison, or relationship is materially easier to understand visually.
+Diagrams must be declarative structured data only. Never emit HTML, SVG, Mermaid, executable markup, URLs, scripts, or styling instructions.
+Keep diagrams compact: normally 2–8 nodes and only the edges needed to teach the concept.
+Every edge must reference node IDs that exist in the same diagram.
+If sourceContext is present, source-specific diagram facts must remain grounded in the supplied evidence.
+
 End with meaningful key takeaways and a concise summary.
 
 LEARNER ADAPTATION

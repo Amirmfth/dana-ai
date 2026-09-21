@@ -14,6 +14,8 @@ export const learningStyleSchema = z.enum([
   "PROJECT_BASED",
 ]);
 
+export const courseModeSchema = z.enum(["GUIDED", "FLEXIBLE"]);
+
 export const lessonDifficultySchema = z.enum([
   "INTRODUCTORY",
   "EASY",
@@ -54,6 +56,7 @@ export const courseOnboardingSchema = z.object({
   weeklyStudyMinutes: z.number().int().min(30).max(2400),
   learningStyle: learningStyleSchema,
   contentLanguage: z.string().trim().min(2).max(80).default("English"),
+  courseMode: courseModeSchema.default("GUIDED"),
 });
 
 export type CoursePlan = z.infer<typeof coursePlanSchema>;

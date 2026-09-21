@@ -9,6 +9,7 @@ import {
 } from "@/app/courses/[courseId]/sources/actions";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 const fieldClass = "mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-950";
 const buttonClass = "min-h-10 rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700";
@@ -44,7 +45,12 @@ export default async function CourseSourcesPage({ params }: PageProps<"/courses/
             <h2 className="font-semibold">Upload file</h2>
             <p className="mt-1 text-xs text-neutral-500">PDF, TXT, or Markdown · max 8 MB</p>
             <input className="mt-4 block w-full text-sm" type="file" name="file" accept=".pdf,.txt,.md,application/pdf,text/plain,text/markdown" required />
-            <button className={buttonClass + " mt-4"}>Add source</button>
+            <PendingActionButton
+              className={buttonClass + " mt-4"}
+              pendingLabel="Processing source…"
+            >
+              Add source
+            </PendingActionButton>
           </form>
 
           <form action={addUrlSourceAction.bind(null, courseId)} className="rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">

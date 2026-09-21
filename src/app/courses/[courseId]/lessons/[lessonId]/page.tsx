@@ -44,7 +44,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const conversation = await prisma.conversation.findFirst({
     where: {
+      courseId,
       lessonId,
+      scope: "LESSON",
     },
 
     orderBy: {

@@ -19,6 +19,8 @@ type LessonMobileControls = {
   setFontSize: (fontSize: LessonFontSize) => void;
   readingTheme: LessonReadingTheme;
   setReadingTheme: (theme: LessonReadingTheme) => void;
+  dyslexiaFriendly: boolean;
+  setDyslexiaFriendly: (enabled: boolean) => void;
   isSavingReadingPreferences: boolean;
 };
 

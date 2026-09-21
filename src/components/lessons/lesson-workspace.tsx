@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 import { LessonMobileControlsContext } from "@/components/lessons/lesson-mobile-controls";
 import { tutorPanelTransition } from "@/components/lessons/tutor-panel-motion";
@@ -11,6 +11,15 @@ import { LessonTutor } from "@/components/tutor/lesson-tutor";
 type LessonWorkspaceProps = {
   children: ReactNode;
   lessonId: string;
+  preferences?: {
+    fontSize: "SMALL" | "DEFAULT" | "LARGE" | "EXTRA_LARGE";
+    lineHeight: "TIGHT" | "NORMAL" | "RELAXED";
+    readingWidth: "NARROW" | "STANDARD" | "WIDE";
+    readingDensity: "COMPACT" | "COMFORTABLE" | "SPACIOUS";
+    motionPreference: "SYSTEM" | "REDUCED" | "FULL";
+    highContrast: boolean;
+    dyslexiaFriendly: boolean;
+  };
   conversation?: {
     id: string;
     messages: Array<{
@@ -26,16 +35,59 @@ export function LessonWorkspace({
   children,
   lessonId,
   conversation,
+  preferences,
 }: LessonWorkspaceProps) {
+  const systemReducedMotion = useReducedMotion();
   const [isTutorOpen, setTutorOpenState] = useState(false);
   const [isTutorMounted, setTutorMounted] = useState(false);
+  const [isFocusMode, setFocusMode] = useState(false);
+
+  const reduceMotion =
+    preferences?.motionPreference === "REDUCED" ||
+    (preferences?.motionPreference !== "FULL" && systemReducedMotion);
+
+  const style = {
+    "--dana-reading-font-size": {
+      SMALL: "0.9375rem",
+      DEFAULT: "1rem",
+      LARGE: "1.125rem",
+      EXTRA_LARGE: "1.25rem",
+    }[preferences?.fontSize ?? "DEFAULT"],
+    "--dana-reading-line-height": {
+      TIGHT: "1.55",
+      NORMAL: "1.75",
+      RELAXED: "1.95",
+    }[preferences?.lineHeight ?? "NORMAL"],
+    "--dana-reading-width": {
+      NARROW: "36rem",
+      STANDARD: "42rem",
+      WIDE: "52rem",
+    }[preferences?.readingWidth ?? "STANDARD"],
+    "--dana-section-gap": {
+      COMPACT: "2rem",
+      COMFORTABLE: "3rem",
+      SPACIOUS: "4rem",
+    }[preferences?.readingDensity ?? "COMFORTABLE"],
+  } as CSSProperties;
 
   function setTutorOpen(isOpen: boolean) {
+    if (isFocusMode && isOpen) return;
     if (isOpen) {
       setTutorMounted(true);
     }
 
     setTutorOpenState(isOpen);
+  }
+
+  function toggleFocusMode() {
+    setFocusMode((current) => {
+      const next = !current;
+      if (next) {
+        setTutorOpenState(false);
+        setTutorMounted(false);
+      }
+      return next;
+    });
   }
 
   return (
@@ -46,12 +98,25 @@ export function LessonWorkspace({
       }}
     >
       <motion.div
-        animate={{
-          gridTemplateColumns: isTutorOpen ? "50% 50%" : "100% 0%",
-        }}
-        transition={tutorPanelTransition}
-        className="relative min-h-dvh lg:grid lg:items-start"
+        style={style}
+        data-reduced-motion={reduceMotion ? "true" : "false"}
+        animate={{ gridTemplateColumns: isTutorOpen ? "50% 50%" : "100% 0%" }}
+        transition={reduceMotion ? { duration: 0 } : tutorPanelTransition}
+        className={[
+          "lesson-workspace relative min-h-dvh lg:grid lg:items-start",
+          isFocusMode ? "focus-mode" : "",
+          preferences?.highContrast ? "dana-high-contrast" : "",
+          preferences?.dyslexiaFriendly ? "dana-dyslexia-friendly" : "",
+        ].filter(Boolean).join(" ")}
       >
+        <button
+          type="button"
+          onClick={toggleFocusMode}
+          className="fixed right-5 top-5 z-40 min-h-10 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold shadow-sm dark:border-neutral-700 dark:bg-neutral-900"
+          aria-pressed={isFocusMode}
+        >
+          {isFocusMode ? "Exit focus" : "Focus"}
+        </button>
         <div className="min-w-0">{children}</div>
 
         {isTutorMounted && (
@@ -76,7 +141,7 @@ export function LessonWorkspace({
           />
         )}
 
-        {!isTutorMounted && (
+        {!isTutorMounted && !isFocusMode && (
           <button
             id="ask-dana-trigger-desktop"
             type="button"

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AnimatedProgress } from "@/components/ui/animated-progress";
 
 type CourseContinueCardProps = {
   actionHref?: string;
@@ -25,8 +26,10 @@ export function CourseContinueCard({ actionHref, completedCount, hasProgress, le
 
       {hasProgress && lessonCount > 0 && (
         <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between gap-3 text-xs font-medium text-neutral-500 dark:text-neutral-400"><span>{completedCount} of {lessonCount} lessons complete</span><span>{percent}%</span></div>
-          <div role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent} aria-label="Course progress" className="h-1.5 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700"><div className="h-full rounded-full bg-neutral-950 transition-[width] duration-300 motion-reduce:transition-none dark:bg-white" style={{ width: `${percent}%` }} /></div>
+          <AnimatedProgress
+            value={percent}
+            label={completedCount + " of " + lessonCount + " lessons complete"}
+          />
         </div>
       )}
 

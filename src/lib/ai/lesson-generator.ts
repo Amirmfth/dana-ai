@@ -136,6 +136,13 @@ When sourceContext is present:
 
 When sourceContext is empty, generate the lesson normally and leave citations empty.
 
+LANGUAGE
+
+The course context includes course.contentLanguage.
+Write every learner-facing lesson field in exactly course.contentLanguage, including the title, introduction, section content, key takeaways, and summary.
+Tutor metadata may use the same language for consistency.
+Do not switch languages merely because source material or prior context uses another language.
+
 Do NOT generate a quiz yet. Assessment is handled separately.
         `.trim(),
       },

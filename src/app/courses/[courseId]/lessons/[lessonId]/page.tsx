@@ -16,6 +16,7 @@ import { LessonStudyTracker } from "@/components/analytics/lesson-study-tracker"
 import { estimateLessonMinutes } from "@/lib/analytics/estimates";
 import { skipLessonAction } from "@/app/actions/lessons";
 import { CompletionFeedback } from "@/components/ui/completion-feedback";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 
 type LessonPageProps = {
   params: Promise<{
@@ -262,13 +263,13 @@ export default async function LessonPage({
                   Test out of this lesson
                 </Link>
                 {lessonInfo.isOptional && lessonInfo.status !== "COMPLETED" && (
-                  <form action={skipLessonAction}>
+                  <AsyncActionForm action={skipLessonAction}>
                     <input type="hidden" name="courseId" value={courseId} />
                     <input type="hidden" name="lessonId" value={lessonId} />
                     <button className="min-h-10 rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700">
                       Skip optional lesson
                     </button>
-                  </form>
+                  </AsyncActionForm>
                 )}
               </div>
               <LessonContent lesson={lesson} citations={citations} />

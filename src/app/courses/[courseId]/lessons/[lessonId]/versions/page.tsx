@@ -10,6 +10,7 @@ import {
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 import { GenerationSkeleton } from "@/components/generation/generation-skeleton";
 
 const buttonClass =
@@ -120,14 +121,14 @@ export default async function LessonVersionsPage({
                 Active version: {lesson.contentVersions.find((item) => item.id === lesson.activeContentVersionId)?.version ?? "none"}
               </p>
             </div>
-            <form action={regenerateLessonAction.bind(null, courseId, lessonId)}>
+            <AsyncActionForm action={regenerateLessonAction.bind(null, courseId, lessonId)}>
               <PendingActionButton
                 className={buttonClass}
                 pendingLabel="Regenerating lesson…"
               >
                 Regenerate lesson
               </PendingActionButton>
-            </form>
+            </AsyncActionForm>
           </div>
 
           <div className="mt-5 space-y-3">
@@ -146,7 +147,7 @@ export default async function LessonVersionsPage({
                   </p>
                 </div>
                 {version.id !== lesson.activeContentVersionId && (
-                  <form
+                  <AsyncActionForm
                     action={activateLessonVersionAction.bind(
                       null,
                       courseId,
@@ -160,7 +161,7 @@ export default async function LessonVersionsPage({
                     >
                       Restore
                     </PendingActionButton>
-                  </form>
+                  </AsyncActionForm>
                 )}
               </article>
             ))}
@@ -201,14 +202,14 @@ export default async function LessonVersionsPage({
                 Active version: {lesson.quizVersions.find((item) => item.id === lesson.activeQuizVersionId)?.version ?? "none"}
               </p>
             </div>
-            <form action={regenerateQuizAction.bind(null, courseId, lessonId)}>
+            <AsyncActionForm action={regenerateQuizAction.bind(null, courseId, lessonId)}>
               <PendingActionButton
                 className={buttonClass}
                 pendingLabel="Regenerating quiz…"
               >
                 Regenerate quiz
               </PendingActionButton>
-            </form>
+            </AsyncActionForm>
           </div>
 
           <div className="mt-5 space-y-3">
@@ -227,7 +228,7 @@ export default async function LessonVersionsPage({
                   </p>
                 </div>
                 {version.id !== lesson.activeQuizVersionId && (
-                  <form
+                  <AsyncActionForm
                     action={activateQuizVersionAction.bind(
                       null,
                       courseId,
@@ -235,8 +236,8 @@ export default async function LessonVersionsPage({
                       version.id,
                     )}
                   >
-                    <button className={buttonClass}>Restore</button>
-                  </form>
+                    <PendingActionButton className={buttonClass} pendingLabel="Restoring…" successLabel="Restored" errorLabel="Try again">Restore</PendingActionButton>
+                  </AsyncActionForm>
                 )}
               </article>
             ))}

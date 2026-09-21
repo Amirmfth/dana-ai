@@ -9,6 +9,8 @@ import {
 import { getPrivacySettings } from "@/lib/ai/privacy";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 const fieldClass =
   "mt-2 min-h-10 w-full rounded-lg border border-neutral-300 bg-transparent px-3 py-2 text-sm dark:border-neutral-700";
@@ -91,7 +93,13 @@ export default async function MemorySettingsPage() {
                 </span>
               </div>
 
-              <form action={updateMemoryAction.bind(null, memory.id)} className="space-y-4">
+              <AsyncActionForm
+                action={updateMemoryAction.bind(null, memory.id)}
+                className="space-y-4"
+                pendingMessage="Updating memory…"
+                successMessage="Memory updated."
+                errorMessage="Memory could not be updated."
+              >
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="text-sm font-medium">
                     Type
@@ -140,23 +148,38 @@ export default async function MemorySettingsPage() {
                 </label>
 
                 <div className="flex flex-wrap gap-3">
-                  <button className="min-h-10 rounded-lg bg-neutral-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-neutral-950">
+                  <PendingActionButton
+                    className="min-h-10 rounded-lg bg-neutral-950 px-4 text-sm font-semibold text-white disabled:opacity-60 dark:bg-white dark:text-neutral-950"
+                    pendingLabel="Saving…"
+                    successLabel="Saved"
+                    errorLabel="Try again"
+                  >
                     Save changes
-                  </button>
-                  <button
+                  </PendingActionButton>
+                  <PendingActionButton
                     formAction={toggleMemoryAction.bind(null, memory.id, !memory.isActive)}
-                    className="min-h-10 rounded-lg border border-neutral-300 px-4 text-sm font-semibold dark:border-neutral-700"
+                    className="min-h-10 rounded-lg border border-neutral-300 px-4 text-sm font-semibold disabled:opacity-60 dark:border-neutral-700"
+                    pendingLabel={memory.isActive ? "Deactivating…" : "Activating…"}
+                    successLabel={memory.isActive ? "Deactivated" : "Activated"}
+                    errorLabel="Try again"
+                    successMessage={memory.isActive ? "Memory deactivated." : "Memory activated."}
+                    errorMessage="Memory state could not be changed."
                   >
                     {memory.isActive ? "Deactivate" : "Activate"}
-                  </button>
-                  <button
+                  </PendingActionButton>
+                  <PendingActionButton
                     formAction={deleteMemoryAction.bind(null, memory.id)}
-                    className="min-h-10 rounded-lg px-4 text-sm font-semibold text-red-700 dark:text-red-300"
+                    className="min-h-10 rounded-lg px-4 text-sm font-semibold text-red-700 disabled:opacity-60 dark:text-red-300"
+                    pendingLabel="Deleting…"
+                    successLabel="Deleted"
+                    errorLabel="Try again"
+                    successMessage="Memory deleted."
+                    errorMessage="Memory could not be deleted."
                   >
                     Delete
-                  </button>
+                  </PendingActionButton>
                 </div>
-              </form>
+              </AsyncActionForm>
             </article>
           ))}
         </div>
@@ -168,11 +191,11 @@ export default async function MemorySettingsPage() {
           <p className="mt-2 text-sm text-neutral-500">
             This permanently removes every learner memory across your courses.
           </p>
-          <form action={clearMemoriesAction} className="mt-4">
-            <button className="min-h-10 rounded-lg border border-red-300 px-4 text-sm font-semibold text-red-700 dark:border-red-900 dark:text-red-300">
+          <AsyncActionForm action={clearMemoriesAction} className="mt-4" pendingMessage="Deleting all learner memories…" successMessage="All learner memories deleted." errorMessage="Learner memories could not be deleted.">
+            <PendingActionButton className="min-h-10 rounded-lg border border-red-300 px-4 text-sm font-semibold text-red-700 disabled:opacity-60 dark:border-red-900 dark:text-red-300" pendingLabel="Deleting…" successLabel="Deleted" errorLabel="Try again">
               Delete all memories
-            </button>
-          </form>
+            </PendingActionButton>
+          </AsyncActionForm>
         </section>
       )}
     </main>

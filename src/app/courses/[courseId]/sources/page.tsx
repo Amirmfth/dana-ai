@@ -13,6 +13,7 @@ import {
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 
 const fieldClass = "mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-950";
 const buttonClass = "min-h-10 rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700";
@@ -63,7 +64,7 @@ export default async function CourseSourcesPage({ params }: PageProps<"/courses/
         <p className="mt-2 max-w-2xl text-neutral-600 dark:text-neutral-300">Dana retrieves relevant chunks from these materials during curriculum, lesson, regeneration, and tutor work.</p>
 
         <section className="mt-8 grid gap-4 lg:grid-cols-3">
-          <form action={addFileSourceAction.bind(null, courseId)} className="rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+          <AsyncActionForm action={addFileSourceAction.bind(null, courseId)} className="rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900" pendingMessage="Uploading and processing source…" successMessage="Source added." errorMessage="Source upload failed.">
             <h2 className="font-semibold">Upload file</h2>
             <p className="mt-1 text-xs text-neutral-500">PDF, TXT, or Markdown · max 8 MB</p>
             <input className="mt-4 block w-full text-sm" type="file" name="file" accept=".pdf,.txt,.md,application/pdf,text/plain,text/markdown" required />
@@ -73,20 +74,20 @@ export default async function CourseSourcesPage({ params }: PageProps<"/courses/
             >
               Add source
             </PendingActionButton>
-          </form>
+          </AsyncActionForm>
 
-          <form action={addUrlSourceAction.bind(null, courseId)} className="rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+          <AsyncActionForm action={addUrlSourceAction.bind(null, courseId)} className="rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900" pendingMessage="Fetching and processing URL…" successMessage="URL source added." errorMessage="URL source could not be added.">
             <h2 className="font-semibold">Public URL</h2>
             <label className="mt-3 block text-sm font-medium">URL<input name="url" type="url" required placeholder="https://docs.example.com/guide" className={fieldClass} /></label>
-            <button className={buttonClass + " mt-4"}>Add URL</button>
-          </form>
+            <PendingActionButton className={buttonClass + " mt-4"} pendingLabel="Adding URL…" successLabel="Added" errorLabel="Try again">Add URL</PendingActionButton>
+          </AsyncActionForm>
 
-          <form action={addTextSourceAction.bind(null, courseId)} className="rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+          <AsyncActionForm action={addTextSourceAction.bind(null, courseId)} className="rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900" pendingMessage="Processing notes…" successMessage="Notes added." errorMessage="Notes could not be added.">
             <h2 className="font-semibold">Paste notes</h2>
             <input name="title" placeholder="Notes title" className={fieldClass} />
             <textarea name="content" required rows={5} placeholder="Paste notes or course material…" className={fieldClass} />
-            <button className={buttonClass + " mt-4"}>Add notes</button>
-          </form>
+            <PendingActionButton className={buttonClass + " mt-4"} pendingLabel="Adding notes…" successLabel="Added" errorLabel="Try again">Add notes</PendingActionButton>
+          </AsyncActionForm>
         </section>
 
         {unattachedSources.length > 0 && (
@@ -112,11 +113,11 @@ export default async function CourseSourcesPage({ params }: PageProps<"/courses/
                       </p>
                     )}
                   </div>
-                  <form action={deleteOrphanSourceAction.bind(null, source.id)}>
-                    <button className="text-sm font-semibold text-red-700 dark:text-red-300">
+                  <AsyncActionForm action={deleteOrphanSourceAction.bind(null, source.id)} pendingMessage="Deleting source…" successMessage="Orphan source deleted." errorMessage="Source could not be deleted.">
+                    <PendingActionButton className="text-sm font-semibold text-red-700 disabled:opacity-60 dark:text-red-300" pendingLabel="Deleting…" successLabel="Deleted" errorLabel="Try again">
                       Delete orphan
-                    </button>
-                  </form>
+                    </PendingActionButton>
+                  </AsyncActionForm>
                 </article>
               ))}
             </div>
@@ -140,7 +141,7 @@ export default async function CourseSourcesPage({ params }: PageProps<"/courses/
                       {source.errorMessage && <p className="mt-2 text-xs text-red-600">{source.errorMessage}</p>}
                     </div>
                     {citations === 0 ? (
-                      <form action={deleteSourceAction.bind(null, courseId, source.id)}><button className="text-sm font-semibold text-red-700 dark:text-red-300">Delete</button></form>
+                      <AsyncActionForm action={deleteSourceAction.bind(null, courseId, source.id)} pendingMessage="Deleting source…" successMessage="Source deleted." errorMessage="Source could not be deleted."><PendingActionButton className="text-sm font-semibold text-red-700 disabled:opacity-60 dark:text-red-300" pendingLabel="Deleting…" successLabel="Deleted" errorLabel="Try again">Delete</PendingActionButton></AsyncActionForm>
                     ) : (
                       <span className="text-xs text-neutral-500">Preserved because lesson versions cite it</span>
                     )}

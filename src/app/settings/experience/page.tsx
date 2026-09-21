@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { updateExperienceSettingsAction } from "@/app/settings/experience/actions";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
 
@@ -36,7 +38,13 @@ export default async function ExperienceSettingsPage() {
         Keep interface language, course teaching language, and tutor response language independent. Reading preferences are applied to lesson pages.
       </p>
 
-      <form action={updateExperienceSettingsAction} className="mt-8 space-y-8">
+      <AsyncActionForm
+        action={updateExperienceSettingsAction}
+        className="mt-8 space-y-8"
+        pendingMessage="Saving language and reading settings…"
+        successMessage="Language and reading settings saved."
+        errorMessage="Language and reading settings could not be saved."
+      >
         <section className="rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800">
           <h2 className="text-lg font-semibold">Languages</h2>
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
@@ -61,10 +69,15 @@ export default async function ExperienceSettingsPage() {
           </div>
         </section>
 
-        <button className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white dark:bg-white dark:text-neutral-950">
+        <PendingActionButton
+          className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white disabled:opacity-60 dark:bg-white dark:text-neutral-950"
+          pendingLabel="Saving…"
+          successLabel="Saved"
+          errorLabel="Try again"
+        >
           Save language & reading settings
-        </button>
-      </form>
+        </PendingActionButton>
+      </AsyncActionForm>
     </main>
   );
 }

@@ -18,6 +18,7 @@ import {
 } from "@/app/courses/[courseId]/manage/actions";
 import { requireUser } from "@/lib/auth/server";
 import { getOwnedCourse } from "@/lib/courses/management";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 
 const fieldClass =
   "mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-950 dark:border-neutral-700 dark:bg-neutral-950 dark:focus:border-white";
@@ -80,15 +81,15 @@ export default async function ManageCoursePage({
             >
               Export JSON
             </a>
-            <form action={duplicateCourseAction.bind(null, course.id)}>
+            <AsyncActionForm action={duplicateCourseAction.bind(null, course.id)}>
               <button className={buttonClass}>Duplicate</button>
-            </form>
+            </AsyncActionForm>
           </div>
         </header>
 
         <section className="py-8">
           <h2 className="text-xl font-semibold">Course settings</h2>
-          <form
+          <AsyncActionForm
             action={updateCourseAction.bind(null, course.id)}
             className="mt-5 grid gap-5 rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900 sm:p-6"
           >
@@ -137,7 +138,7 @@ export default async function ManageCoursePage({
             <div>
               <button className={primaryButtonClass}>Save course settings</button>
             </div>
-          </form>
+          </AsyncActionForm>
         </section>
 
         <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">
@@ -148,7 +149,7 @@ export default async function ManageCoursePage({
                 Add, edit, remove, or reorder modules and lessons.
               </p>
             </div>
-            <form
+            <AsyncActionForm
               action={saveCourseAsTemplateAction.bind(null, course.id)}
               className="flex flex-wrap gap-2"
             >
@@ -159,7 +160,7 @@ export default async function ManageCoursePage({
                 className="min-h-10 rounded-lg border border-neutral-300 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
               />
               <button className={buttonClass}>Save as template</button>
-            </form>
+            </AsyncActionForm>
           </div>
 
           <div className="mt-6 space-y-5">
@@ -181,7 +182,7 @@ export default async function ManageCoursePage({
                     )}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <form
+                    <AsyncActionForm
                       action={moveModuleAction.bind(
                         null,
                         course.id,
@@ -196,8 +197,8 @@ export default async function ManageCoursePage({
                       >
                         ↑
                       </button>
-                    </form>
-                    <form
+                    </AsyncActionForm>
+                    <AsyncActionForm
                       action={moveModuleAction.bind(
                         null,
                         course.id,
@@ -212,7 +213,7 @@ export default async function ManageCoursePage({
                       >
                         ↓
                       </button>
-                    </form>
+                    </AsyncActionForm>
                   </div>
                 </div>
 
@@ -220,7 +221,7 @@ export default async function ManageCoursePage({
                   <summary className="cursor-pointer text-sm font-semibold">
                     Edit module
                   </summary>
-                  <form
+                  <AsyncActionForm
                     action={updateModuleAction.bind(
                       null,
                       course.id,
@@ -261,8 +262,8 @@ export default async function ManageCoursePage({
                     <div className="flex flex-wrap gap-2">
                       <button className={primaryButtonClass}>Save module</button>
                     </div>
-                  </form>
-                  <form
+                  </AsyncActionForm>
+                  <AsyncActionForm
                     action={deleteModuleAction.bind(
                       null,
                       course.id,
@@ -273,7 +274,7 @@ export default async function ManageCoursePage({
                     <button className="text-sm font-semibold text-red-700 dark:text-red-300">
                       Delete module and its lessons
                     </button>
-                  </form>
+                  </AsyncActionForm>
                 </details>
 
                 <div className="mt-5 space-y-3">
@@ -296,7 +297,7 @@ export default async function ManageCoursePage({
                           )}
                         </div>
                         <div className="flex gap-2">
-                          <form
+                          <AsyncActionForm
                             action={moveLessonAction.bind(
                               null,
                               course.id,
@@ -312,8 +313,8 @@ export default async function ManageCoursePage({
                             >
                               ↑
                             </button>
-                          </form>
-                          <form
+                          </AsyncActionForm>
+                          <AsyncActionForm
                             action={moveLessonAction.bind(
                               null,
                               course.id,
@@ -329,7 +330,7 @@ export default async function ManageCoursePage({
                             >
                               ↓
                             </button>
-                          </form>
+                          </AsyncActionForm>
                         </div>
                       </div>
 
@@ -337,7 +338,7 @@ export default async function ManageCoursePage({
                         <summary className="cursor-pointer text-sm font-semibold text-neutral-600 dark:text-neutral-300">
                           Edit lesson
                         </summary>
-                        <form
+                        <AsyncActionForm
                           action={updateLessonAction.bind(
                             null,
                             course.id,
@@ -437,8 +438,8 @@ export default async function ManageCoursePage({
                             />
                           </label>
                           <button className={primaryButtonClass}>Save lesson</button>
-                        </form>
-                        <form
+                        </AsyncActionForm>
+                        <AsyncActionForm
                           action={deleteLessonAction.bind(
                             null,
                             course.id,
@@ -450,7 +451,7 @@ export default async function ManageCoursePage({
                           <button className="text-sm font-semibold text-red-700 dark:text-red-300">
                             Delete lesson
                           </button>
-                        </form>
+                        </AsyncActionForm>
                       </details>
                     </article>
                   ))}
@@ -459,7 +460,7 @@ export default async function ManageCoursePage({
                     <summary className="cursor-pointer text-sm font-semibold">
                       Add lesson
                     </summary>
-                    <form
+                    <AsyncActionForm
                       action={createLessonAction.bind(
                         null,
                         course.id,
@@ -504,7 +505,7 @@ export default async function ManageCoursePage({
                         </label>
                       </div>
                       <button className={primaryButtonClass}>Add lesson</button>
-                    </form>
+                    </AsyncActionForm>
                   </details>
                 </div>
               </section>
@@ -512,7 +513,7 @@ export default async function ManageCoursePage({
 
             <details className="rounded-2xl border border-dashed border-neutral-300 bg-white p-5 dark:border-neutral-700 dark:bg-neutral-900">
               <summary className="cursor-pointer font-semibold">Add module</summary>
-              <form
+              <AsyncActionForm
                 action={createModuleAction.bind(null, course.id)}
                 className="mt-4 grid gap-4"
               >
@@ -529,7 +530,7 @@ export default async function ManageCoursePage({
                   <textarea name="objective" rows={3} maxLength={2000} className={fieldClass} />
                 </label>
                 <button className={primaryButtonClass}>Add module</button>
-              </form>
+              </AsyncActionForm>
             </details>
           </div>
         </section>
@@ -537,7 +538,7 @@ export default async function ManageCoursePage({
         <section className="border-t border-neutral-200 py-8 dark:border-neutral-800">
           <h2 className="text-xl font-semibold">Course lifecycle</h2>
           <div className="mt-5 flex flex-wrap gap-3">
-            <form
+            <AsyncActionForm
               action={archiveCourseAction.bind(
                 null,
                 course.id,
@@ -547,7 +548,7 @@ export default async function ManageCoursePage({
               <button className={buttonClass}>
                 {course.status === "ARCHIVED" ? "Restore course" : "Archive course"}
               </button>
-            </form>
+            </AsyncActionForm>
           </div>
 
           <details className="mt-6 rounded-xl border border-red-200 p-4 dark:border-red-900">
@@ -558,11 +559,11 @@ export default async function ManageCoursePage({
               This permanently deletes the curriculum, generated lessons, quizzes,
               attempts, tutor conversations, and course memories.
             </p>
-            <form action={deleteCourseAction.bind(null, course.id)} className="mt-4">
+            <AsyncActionForm action={deleteCourseAction.bind(null, course.id)} className="mt-4">
               <button className="min-h-10 rounded-lg bg-red-700 px-4 text-sm font-semibold text-white">
                 Permanently delete
               </button>
-            </form>
+            </AsyncActionForm>
           </details>
         </section>
       </div>

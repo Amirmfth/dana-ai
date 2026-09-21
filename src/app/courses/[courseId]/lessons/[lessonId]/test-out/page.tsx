@@ -9,6 +9,8 @@ import {
 } from "@/lib/assessments/service";
 import { prisma } from "@/lib/db/prisma";
 import { retakeAssessmentAction } from "@/app/courses/[courseId]/assessment-actions";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 function optionsFrom(data: unknown) {
   if (
@@ -128,7 +130,7 @@ export default async function TestOutPage({
                 Back to course
               </Link>
               {!run.passed && (
-                <form
+                <AsyncActionForm
                   action={retakeAssessmentAction.bind(
                     null,
                     courseId,
@@ -139,7 +141,7 @@ export default async function TestOutPage({
                   <button className="min-h-11 rounded-xl border border-neutral-300 px-5 text-sm font-semibold dark:border-neutral-700">
                     Retake
                   </button>
-                </form>
+                </AsyncActionForm>
               )}
             </div>
           </section>

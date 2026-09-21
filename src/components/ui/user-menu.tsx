@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { signOutAction } from "@/app/auth/actions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 
 export function UserMenu({
   courseId,
@@ -42,14 +43,14 @@ export function UserMenu({
           <ThemeToggle />
         </div>
 
-        <form action={signOutAction}>
+        <AsyncActionForm action={signOutAction}>
           <button
             type="submit"
             className="flex min-h-10 w-full items-center rounded-xl px-3 text-left text-sm font-medium text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-950 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white dark:focus-visible:outline-white"
           >
             Sign out
           </button>
-        </form>
+        </AsyncActionForm>
       </div>
     </details>
   );

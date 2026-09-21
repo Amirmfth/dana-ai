@@ -7,6 +7,7 @@ import {
 } from "@/app/courses/[courseId]/manage/actions";
 import { requireUser } from "@/lib/auth/server";
 import { prisma } from "@/lib/db/prisma";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
 
 export default async function TemplatesPage() {
   const user = await requireUser();
@@ -51,16 +52,16 @@ export default async function TemplatesPage() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <form action={createCourseFromTemplateAction.bind(null, template.id)}>
+                    <AsyncActionForm action={createCourseFromTemplateAction.bind(null, template.id)}>
                       <button className="min-h-10 rounded-lg bg-neutral-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-neutral-950">
                         Create course
                       </button>
-                    </form>
-                    <form action={deleteTemplateAction.bind(null, template.id)}>
+                    </AsyncActionForm>
+                    <AsyncActionForm action={deleteTemplateAction.bind(null, template.id)}>
                       <button className="min-h-10 rounded-lg border border-neutral-300 px-3 text-sm font-semibold dark:border-neutral-700">
                         Delete
                       </button>
-                    </form>
+                    </AsyncActionForm>
                   </div>
                 </article>
               ))}
@@ -74,7 +75,7 @@ export default async function TemplatesPage() {
             Paste a Dana curriculum export. The structure is validated before any
             course is created.
           </p>
-          <form action={importCourseAction} className="mt-4">
+          <AsyncActionForm action={importCourseAction} className="mt-4">
             <textarea
               name="structure"
               required
@@ -85,7 +86,7 @@ export default async function TemplatesPage() {
             <button className="mt-3 min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white dark:bg-white dark:text-neutral-950">
               Import as new course
             </button>
-          </form>
+          </AsyncActionForm>
         </section>
       </div>
     </main>

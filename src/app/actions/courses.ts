@@ -212,7 +212,24 @@ export async function finishCourseGenerationAction(courseId: string) {
       where: { id: courseId, ownerId: user.id, status: { in: ["ACTIVE", "COMPLETED"] } },
       select: { id: true },
     });
-    if (ready) return { courseId: ready.id };
+    if (ready) {
+      await prisma.courseGenerationJob.upsert({
+        where: { courseId },
+        create: {
+          courseId,
+          status: "READY",
+          stage: "READY",
+          completedAt: new Date(),
+        },
+        update: {
+          status: "READY",
+          stage: "READY",
+          completedAt: new Date(),
+          errorMessage: null,
+        },
+      });
+      return { courseId: ready.id };
+    }
     throw new Error("Course draft not found.");
   }
 

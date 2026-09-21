@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { completeLessonAction } from "@/app/actions/lessons";
+import { CompletionFeedback } from "@/components/ui/completion-feedback";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 
 type LessonCompletionProps = {
   lessonId: string;
@@ -16,30 +18,17 @@ export function LessonCompletion({
   if (isCompleted) {
     return (
       <section className="mt-16 border-t border-neutral-200 pt-10 dark:border-neutral-800">
-        <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-800 dark:bg-neutral-900">
-          <div className="flex items-start gap-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neutral-950 text-white dark:bg-white dark:text-neutral-950">
-              <CheckIcon />
-            </span>
-
-            <div>
-              <h2 className="font-semibold">
-                Lesson completed
-              </h2>
-
-              <p className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-                You&apos;ve completed this lesson.
-              </p>
-
+        <CompletionFeedback
+          title="Lesson completed"
+          description="Your progress is saved and prerequisite unlocks have been recalculated."
+        >
               <Link
                 href={`/courses/${courseId}`}
                 className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4"
               >
                 Back to course
               </Link>
-            </div>
-          </div>
-        </div>
+        </CompletionFeedback>
       </section>
     );
   }
@@ -76,13 +65,13 @@ export function LessonCompletion({
             value={courseId}
           />
 
-          <button
-            type="submit"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white dark:bg-neutral-950 dark:text-white dark:hover:bg-neutral-800 dark:focus-visible:outline-neutral-950"
+          <PendingActionButton
+            pendingLabel="Completing lesson…"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white dark:bg-neutral-950 dark:text-white dark:hover:bg-neutral-800 dark:focus-visible:outline-neutral-950"
           >
             Complete and continue
             <ArrowIcon />
-          </button>
+          </PendingActionButton>
         </form>
       </div>
     </section>

@@ -116,6 +116,19 @@ enum LearningStyle {
   PROJECT_BASED
 }
 
+enum ReadingFontSize {
+  SMALL
+  DEFAULT
+  LARGE
+  EXTRA_LARGE
+}
+
+enum ReadingDensity {
+  COMPACT
+  COMFORTABLE
+  SPACIOUS
+}
+
 enum LessonDifficulty {
   INTRODUCTORY
   EASY
@@ -163,6 +176,7 @@ model Course {
   targetLevel        CourseLevel?
   weeklyStudyMinutes Int?
   learningStyle      LearningStyle?
+  contentLanguage    String        @default("English")
 
   modules         Module[]
   courseMemories  CourseMemory[]
@@ -506,8 +520,17 @@ model UserPrivacySettings {
   storeAiPayloads   Boolean  @default(false)
   retentionDays     Int      @default(30)
   useLearnerMemory  Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model UserExperienceSettings {
+  userId         String          @id @db.Uuid
+  fontSize       ReadingFontSize @default(DEFAULT)
+  readingDensity ReadingDensity  @default(COMFORTABLE)
+  highContrast   Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model GenerationJob {

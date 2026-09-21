@@ -253,10 +253,14 @@ export async function finishCourseGenerationAction(courseId: string) {
     update: {},
   });
 
+  const staleBefore = new Date(Date.now() - 10 * 60 * 1000);
   const claimed = await prisma.courseGenerationJob.updateMany({
     where: {
       courseId,
-      status: { in: ["NOT_STARTED", "FAILED"] },
+      OR: [
+        { status: { in: ["NOT_STARTED", "FAILED"] } },
+        { status: "GENERATING", startedAt: { lt: staleBefore } },
+      ],
     },
     data: {
       status: "GENERATING",

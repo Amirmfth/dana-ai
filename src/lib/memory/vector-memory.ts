@@ -148,6 +148,7 @@ export async function findRelevantMemories({
     FROM "CourseMemory"
     WHERE
       "courseId" = ${courseId}
+      AND "isActive" = true
       AND "embedding" IS NOT NULL
     ORDER BY
       ("embedding" <=> ${vector}::vector) ASC,

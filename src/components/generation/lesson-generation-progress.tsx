@@ -81,6 +81,9 @@ export function LessonGenerationProgress() {
       <section className="rounded-2xl border border-red-200 bg-white p-6 text-red-800 dark:border-red-900 dark:bg-neutral-900 dark:text-red-200">
         <p className="text-xs font-semibold uppercase tracking-wider">Generation failed</p>
         <h2 className="mt-2 text-xl font-semibold">This lesson could not be prepared.</h2>
+        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-300">
+          Failed during {stages.find((item) => item.key === failed.stage)?.label ?? "generation"}
+        </p>
         <p className="mt-3 text-sm">{failed.errorMessage || "Retry the lesson from the course page."}</p>
       </section>
     );

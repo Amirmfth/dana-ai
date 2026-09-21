@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 type RouteLoadingVariant =
   | "home"
   | "analytics"
@@ -21,7 +23,7 @@ export function RouteLoadingSkeleton({
   return <ListSkeleton titleWidth={titleWidth} />;
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children }: { children: ReactNode }) {
   return (
     <main className="min-h-dvh bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
       <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 lg:px-10">

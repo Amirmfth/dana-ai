@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { updatePrivacySettingsAction } from "@/app/settings/privacy/actions";
+import { AsyncActionForm } from "@/components/ui/async-action-form";
+import { PendingActionButton } from "@/components/ui/pending-action-button";
 import { getPrivacySettings } from "@/lib/ai/privacy";
 import { requireUser } from "@/lib/auth/server";
 
@@ -23,7 +25,13 @@ export default async function PrivacySettingsPage() {
         stored only when you opt in below.
       </p>
 
-      <form action={updatePrivacySettingsAction} className="mt-8 space-y-6 rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800">
+      <AsyncActionForm
+        action={updatePrivacySettingsAction}
+        className="mt-8 space-y-6 rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800"
+        pendingMessage="Saving privacy settings…"
+        successMessage="Privacy settings saved."
+        errorMessage="Privacy settings could not be saved."
+      >
         <label className="flex items-start gap-3">
           <input
             name="storeAiPayloads"
@@ -67,10 +75,15 @@ export default async function PrivacySettingsPage() {
           </select>
         </label>
 
-        <button className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white dark:bg-white dark:text-neutral-950">
+        <PendingActionButton
+          className="min-h-11 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white disabled:opacity-60 dark:bg-white dark:text-neutral-950"
+          pendingLabel="Saving…"
+          successLabel="Saved"
+          errorLabel="Try again"
+        >
           Save privacy settings
-        </button>
-      </form>
+        </PendingActionButton>
+      </AsyncActionForm>
     </main>
   );
 }

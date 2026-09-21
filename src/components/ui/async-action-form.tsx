@@ -14,7 +14,7 @@ import {
 
 export type AsyncActionStatus = "idle" | "pending" | "success" | "error";
 
-type ServerAction = (...args: never[]) => Promise<unknown>;
+export type FormAction = (formData: FormData) => Promise<unknown>;
 
 type ActionState = {
   status: AsyncActionStatus;
@@ -58,7 +58,7 @@ export function AsyncActionForm({
   errorMessage: fallbackErrorMessage = "Something went wrong. Please try again.",
   successDurationMs = 2500,
 }: {
-  action: ServerAction;
+  action: FormAction;
   children: ReactNode;
   className?: string;
   successMessage?: string;
@@ -92,7 +92,7 @@ export function AsyncActionForm({
       await new Promise<void>((resolve, reject) => {
         startTransition(async () => {
           try {
-            await targetAction(formData as never);
+            await targetAction(formData);
             const message = options?.successMessage ?? successMessage;
             setState({ status: "success", message });
 

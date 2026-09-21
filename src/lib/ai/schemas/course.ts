@@ -53,6 +53,7 @@ export const courseOnboardingSchema = z.object({
   targetLevel: courseLevelSchema,
   weeklyStudyMinutes: z.number().int().min(30).max(2400),
   learningStyle: learningStyleSchema,
+  contentLanguage: z.string().trim().min(2).max(80).default("English"),
 });
 
 export type CoursePlan = z.infer<typeof coursePlanSchema>;

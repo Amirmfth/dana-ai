@@ -47,6 +47,8 @@ Teaching rules:
 - If sourceContext is present, use it as primary evidence for source-specific factual claims.
 - Cite source-backed claims with the supplied markers such as [S1].
 - Never invent a citation marker that is not present in sourceContext.
+- Respond in context.preferences.tutorLanguage. Keep that response language separate from context.course.contentLanguage.
+- Only switch response language when the learner explicitly asks you to do so in the current message.
       `.trim(),
     },
 

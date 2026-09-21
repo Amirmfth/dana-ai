@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { isLinearDiagram, validDiagramEdges } from "./diagram";
+import { lessonContentSchema } from "@/lib/ai/schemas/lesson";
 
 const base = {
   type: "diagram" as const,
@@ -38,4 +39,30 @@ test("diagram helper detects simple linear flows", () => {
     }),
     true,
   );
+});
+
+
+test("lesson schema accepts a safe structured diagram block", () => {
+  const parsed = lessonContentSchema.parse({
+    title: "Networking",
+    introduction: "Intro",
+    sections: [
+      {
+        ...base,
+        edges: [{ from: "a", to: "b", label: "next" }],
+      },
+    ],
+    keyTakeaways: ["A connects to B"],
+    summary: "Summary",
+    citations: [],
+    tutorContext: {
+      keyConcepts: [],
+      definitions: [],
+      examplesCovered: [],
+      commonMistakes: [],
+      assumedKnowledge: [],
+    },
+  });
+
+  assert.equal(parsed.sections[0]?.type, "diagram");
 });

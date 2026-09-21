@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
-import { createCourseAction } from "@/app/actions/courses";
-import { AsyncActionForm } from "@/components/ui/async-action-form";
-import { PendingActionButton } from "@/components/ui/pending-action-button";
+import { createCourseDraftAction } from "@/app/actions/courses";
 
 type AttachmentMode = "file" | "url" | "notes" | null;
 
@@ -19,6 +18,9 @@ export function CourseComposer({
   const [sourceUrl, setSourceUrl] = useState("");
   const [sourceTitle, setSourceTitle] = useState("");
   const [sourceText, setSourceText] = useState("");
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const hasAttachments = Boolean(fileName || sourceUrl.trim() || sourceText.trim());
 
@@ -38,12 +40,32 @@ export function CourseComposer({
     if (attachmentMode === "notes") setAttachmentMode(null);
   }
 
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (isPending) return;
+
+    const formData = new FormData(event.currentTarget);
+    setSubmitError(null);
+
+    startTransition(async () => {
+      try {
+        const result = await createCourseDraftAction(formData);
+        router.push("/courses/" + result.courseId + "/generating");
+      } catch (error) {
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : "Course setup failed. Please review your inputs and try again.",
+        );
+      }
+    });
+  }
+
   return (
-    <AsyncActionForm
-      action={createCourseAction}
+    <form
+      onSubmit={handleSubmit}
       className="mx-auto w-full max-w-3xl"
-      pendingMessage="Creating your course…"
-      errorMessage="Course creation failed. Review the prompt or attached source and try again."
+      aria-busy={isPending}
     >
       <div className="overflow-hidden rounded-[2rem] border border-neutral-200 bg-white shadow-sm transition focus-within:border-neutral-400 focus-within:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:focus-within:border-neutral-600">
         {hasAttachments && (
@@ -161,6 +183,7 @@ export function CourseComposer({
                   <OptionSelect name="targetLevel" label="Target level" defaultValue="INTERMEDIATE" options={[["BEGINNER","Beginner"],["INTERMEDIATE","Intermediate"],["ADVANCED","Advanced"],["EXPERT","Expert"]]} />
                   <OptionSelect name="weeklyStudyMinutes" label="Weekly study time" defaultValue="300" options={[["120","2 hours / week"],["300","5 hours / week"],["600","10 hours / week"],["900","15 hours / week"]]} />
                   <OptionSelect name="learningStyle" label="Learning style" defaultValue="BALANCED" options={[["BALANCED","Balanced"],["PRACTICAL","Practical"],["CONCEPTUAL","Conceptual"],["PROJECT_BASED","Project-based"]]} />
+                  <OptionSelect name="courseMode" label="Course mode" defaultValue="GUIDED" options={[["GUIDED","Guided · quizzes, assessments, progression"],["FLEXIBLE","Flexible · no quizzes or tests, all lessons unlocked"]]} />
                   <label className="text-sm font-medium sm:col-span-2">
                     Course teaching language
                     <input
@@ -174,14 +197,16 @@ export function CourseComposer({
             </details>
           </div>
 
-          <PendingActionButton
-            pendingLabel="Creating…"
-            successLabel="Created"
-            errorLabel="Try again"
-            className="flex min-h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:opacity-60 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200"
+          <button
+            type="submit"
+            disabled={isPending}
+            className="flex min-h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200"
           >
-            Create course
-          </PendingActionButton>
+            {isPending && (
+              <span aria-hidden="true" className="mr-2 inline-block size-3.5 rounded-full border-2 border-current border-r-transparent motion-safe:animate-spin" />
+            )}
+            {isPending ? "Preparing…" : "Create course"}
+          </button>
         </div>
       </div>
 
@@ -216,10 +241,16 @@ export function CourseComposer({
         </>
       )}
 
+      {submitError && (
+        <div role="alert" className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
+          {submitError}
+        </div>
+      )}
+
       <p id="learning-goal-help" className="mt-3 text-center text-xs leading-5 text-neutral-500">
         Describe the outcome you want. Sources and detailed preferences are optional.
       </p>
-    </AsyncActionForm>
+    </form>
   );
 }
 

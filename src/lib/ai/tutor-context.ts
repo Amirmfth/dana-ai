@@ -1,6 +1,7 @@
 import { lessonContentSchema } from "@/lib/ai/schemas/lesson";
 import { prisma } from "@/lib/db/prisma";
 import { findRelevantSourceChunks, sourceLocation } from "@/lib/sources/rag";
+import { getPrivacySettings } from "@/lib/ai/privacy";
 
 export async function buildTutorContext(
   lessonId: string,
@@ -70,10 +71,14 @@ export async function buildTutorContext(
     .filter(Boolean)
     .join("\n");
 
+  const privacy = await getPrivacySettings(lesson.module.course.ownerId);
+
   const [memories, relevantSources] = await Promise.all([
-    prisma.courseMemory.findMany({
+    privacy.useLearnerMemory
+      ? prisma.courseMemory.findMany({
     where: {
       courseId: lesson.module.course.id,
+      isActive: true,
     },
 
     orderBy: [
@@ -92,7 +97,8 @@ export async function buildTutorContext(
         content: true,
         importance: true,
       },
-    }),
+    })
+      : Promise.resolve([]),
     findRelevantSourceChunks({
       ownerId: lesson.module.course.ownerId,
       courseId: lesson.module.course.id,

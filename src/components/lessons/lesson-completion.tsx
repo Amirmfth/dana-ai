@@ -78,25 +78,6 @@ export function LessonCompletion({
   );
 }
 
-function CheckIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className="size-5"
-    >
-      <path
-        d="m5 10 3 3 7-7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 function ArrowIcon() {
   return (
     <svg

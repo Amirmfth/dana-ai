@@ -104,6 +104,18 @@ export default async function HomePage() {
                   <option value="PROJECT_BASED">Project-based</option>
                 </select>
               </label>
+              <label className="text-sm font-medium sm:col-span-2">
+                Course teaching language
+                <input
+                  name="contentLanguage"
+                  defaultValue="English"
+                  placeholder="English, German, Persian…"
+                  className="mt-2 min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 dark:border-neutral-700 dark:bg-neutral-950"
+                />
+                <span className="mt-1 block text-xs font-normal text-neutral-500">
+                  Lesson content is generated in this language. Tutor response language is configured separately.
+                </span>
+              </label>
             </div>
 
             <details className="mb-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">

@@ -28,10 +28,16 @@ export async function completeLessonAction(formData: FormData) {
   revalidatePath("/courses/" + courseId + "/lessons/" + lessonId);
 
   if (result.nextLessonId) {
-    redirect("/courses/" + courseId + "/lessons/" + result.nextLessonId);
+    redirect(
+      "/courses/" +
+        courseId +
+        "/lessons/" +
+        result.nextLessonId +
+        "?completedPrevious=1",
+    );
   }
 
-  redirect("/courses/" + courseId);
+  redirect("/courses/" + courseId + "?completedLesson=1");
 }
 
 

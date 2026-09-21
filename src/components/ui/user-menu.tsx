@@ -6,8 +6,10 @@ import { AsyncActionForm } from "@/components/ui/async-action-form";
 
 export function UserMenu({
   courseId,
+  courseMode,
 }: {
   courseId?: string;
+  courseMode?: "GUIDED" | "FLEXIBLE";
 }) {
   return (
     <details className="relative">
@@ -23,8 +25,12 @@ export function UserMenu({
           <>
             <MenuLink href={"/courses/" + courseId + "/tutor"}>Ask Dana</MenuLink>
             <MenuLink href={"/courses/" + courseId + "/sources"}>Sources</MenuLink>
-            <MenuLink href={"/courses/" + courseId + "/assessments"}>Assessments</MenuLink>
-            <MenuLink href={"/courses/" + courseId + "/placement"}>Placement</MenuLink>
+            {courseMode !== "FLEXIBLE" && (
+              <>
+                <MenuLink href={"/courses/" + courseId + "/assessments"}>Assessments</MenuLink>
+                <MenuLink href={"/courses/" + courseId + "/placement"}>Placement</MenuLink>
+              </>
+            )}
             <MenuLink href={"/courses/" + courseId + "/analytics"}>Analytics</MenuLink>
             <MenuLink href={"/courses/" + courseId + "/manage"}>Manage course</MenuLink>
             <div className="my-2 border-t border-neutral-200 dark:border-neutral-800" />
